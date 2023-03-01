@@ -1,11 +1,17 @@
 var heaterState = new PersistentStorage("heater-states", {global: true});
 var lightState = new PersistentStorage("light-states", {global: true});
 
-heaterState["gmHousHeater"] = "auto";
-lightState["gmOutdoorLight"] = "auto";
-var h_counter = 0;
-var l_counter = 0;
+heaterState["gmHousHeater"] = "OFF";
+lightState["gmOutdoorLight"] = "OFF";
 
+var heaterHisteresis = 0.5;
+
+var gmHousTemp = "wb-ms_132/Temperature";
+var gmHousHeaterOn = "wb-mr3_34/K1";
+var gmHousTempSet = "grandmas-hous/HeaterControl";
+var gmHousHeaterButton = "grandmas-hous/HeaterButton";
+var gmHousHeaterHeader = "grandmas-hous/HeaterHeader";
+var gmHousHeaterMemoryCell = heaterState["gmHousHeater"];
 
 defineVirtualDevice('grandmas-hous', {
     title: 'GrandmasHaus' ,
@@ -35,12 +41,12 @@ defineVirtualDevice('grandmas-hous', {
           type: "pushbutton",
           value: false
       },
-      HeaderL: {
+      LightHeader: {
           title: "header",
           type: "text",
           value: lightState["gmOutdoorLight"]
       },
-      HeaderH: {
+      HeaterHeader: {
           title: "header",
           type: "text",
           value: heaterState["gmHousHeater"]
@@ -48,32 +54,83 @@ defineVirtualDevice('grandmas-hous', {
     }
 })
 
-function buttonsLogic(name, button_control, holding_cell, button_counter, control_to_be_edit) {
-  defineRule(name, {
+function buttonsLogic(device) {
+  defineRule({
       when: function() {
-          return dev["grandmas-hous/" + button_control];
+          return dev[device.button_control];
       },
       then: function() {
-          button_counter++;
-          if(button_counter == 1) {
-              heaterState[holding_cell] = "auto";
-              getControl("grandmas-hous/" + control_to_be_edit).setValue(heaterState[holding_cell]);
-              return;
-          }
-          if(button_counter == 2) {
-              heaterState[holding_cell] = "On";
-              getControl("grandmas-hous/" + control_to_be_edit).setValue(heaterState[holding_cell]);
-              return;            
-          }
-          if(button_counter == 3) {
-              heaterState[holding_cell] = "Off";
-              getControl("grandmas-hous/" + control_to_be_edit).setValue(heaterState[holding_cell]);
-              button_counter = 0;
-              return;            
-          }        
+          switch(device.getMode()) {
+              case "AUTO":
+                  device.setMode("ON");
+                  device.checkState();
+                  break;
+              case "ON":
+                  device.setMode("OFF");
+                  device.checkState();
+                  break;
+              case "OFF":
+                  device.setMode("AUTO");
+                  device.checkState();
+                break;
+          }    
       }
   });
 }
 
-buttonsLogic("1", "HeaterButton", "gmHousHeater", h_counter, "HeaderH");
-buttonsLogic("2", "OutdoorLightButton", "gmOutdoorLight", l_counter, "HeaderL");
+function Device(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis) {
+  this.set_param = set_param;
+  this.actual_param = actual_param;
+  this.device_control = device_control;
+  this.button_control = button_control;
+  this.memory_cell = memory_cell;
+  this.header_control = header_control;
+  this.histeresis = histeresis;
+}
+
+Device.prototype.setMode = function(mode) {
+  this.memory_cell = mode;
+  getControl(this.header_control).setValue(this.memory_cell);
+}
+
+Device.prototype.getMode = function() {
+  return this.memory_cell;	
+}
+
+Device.prototype.checkState = function() {
+  switch(this.memory_cell) {
+      case "AUTO":
+          if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
+            dev[this.device_control] = false;
+            return;
+          }
+          if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
+            dev[this.device_control] = true;
+            return;
+          }
+          break;
+      case "ON":
+          dev[this.device_control] = true;
+          break;
+      case "OFF":
+          dev[this.device_control] = false;
+          break;
+  }
+}
+
+var gmHousHeater = new Device(gmHousTempSet, gmHousTemp, gmHousHeaterOn, gmHousHeaterButton, gmHousHeaterMemoryCell, gmHousHeaterHeader, heaterHisteresis);
+
+function stateCheck(device) {
+  defineRule({
+      whenChanged: function() {
+          return dev[device.set_param] || dev[device.actual_param];
+      },
+      then: function() {
+          device.checkState();
+          log(device.memory_cell + " check");
+      }
+  })
+}
+
+buttonsLogic(gmHousHeater);
+stateCheck(gmHousHeater);

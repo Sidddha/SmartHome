@@ -1,12 +1,21 @@
-var heaterState = new PersistentStorage("heater-states", {global: true});
-var lightState = new PersistentStorage("light-states", {global: true});
+var heaterState = new PersistentStorage("heater-states", {global: true}); 
+var lightState = new PersistentStorage("light-states", {global: true}); 
+lightState["baniaOutdoorLight"] = "OFF";
 
-heaterState["baniaMediumHeater"] = "auto";
-heaterState["baniaTamburHeater"] = "auto";
-heaterState["baniaMainHeater"] = "auto";
-heaterState["baniaWaterPrepareHeater"] = "auto";
+var heaterHisteresis = 0.5;
 
-lightState["baniaOutdoorLight"] = "auto";
+
+////////////////////////////////////
+
+heaterState["baniaMediumHeater"];
+heaterState["baniaTamburHeater"];
+heaterState["baniaMainHeater"];
+heaterState["baniaWaterPrepareHeater"];
+
+var mainHeaterMemoryCell = heaterState["baniaMainHeater"];
+var mediumHeaterMemoryCell = heaterState["baniaMediumHeater"];
+var tamburHeaterMemoryCell = heaterState["baniaTamburHeater"];
+var waterPrepareMemoryCell = heaterState["baniaWaterPrepareHeater"];
 
 var mainHeaterOn = "wb-mr6c_214/K3";
 var mediumHeaterOn = "wb-mr6c_214/K4";
@@ -16,11 +25,15 @@ var waterPrepareHeaterOn = "wb-mr6c_214/K6";
 var restRoomTemp = "wb-msw-v3_49/Temperature";
 var waterPrepareTemp = "wb-ms_187/Temperature";
 
-var globalHeaterButton = "global-heater/GlobalHeaterButton";
 var mainHeaterButton = "rest-room/MainHeaterButton";
 var mediumHeaterButton = "rest-room/MediumHeaterButton";
 var tamburHeaterButton = "rest-room/TamburHeaterButton";
 var waterPrepareHeaterButton = "rest-room/WaterPrepareHeaterButton";
+
+var mainHeaterHeader = "rest-room/MainHeaterHeader";
+var mediumHeaterHeader = "rest-room/MediumHeaterHeader";
+var tamburHeaterHeader = "rest-room/TamburHeaterHeader";
+var waterPrepareHeaterHeader = "rest-room/WaterPrepareHeaterHeader";
 
 var restRoomTempSet = "rest-room/MainHeaterControl";
 var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
@@ -144,70 +157,96 @@ defineVirtualDevice('rest-room', {
     }
 })
 
-function Heater(set_temp, room_temp, heater_control, button_control, memory_cell, header_control) {
-    this.set_temp = set_temp;
-    this.room_temp = room_temp;
-    this.heater_control = heater_control;
+function Device(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis) {
+    this.set_param = set_param;
+    this.actual_param = actual_param;
+    this.device_control = device_control;
     this.button_control = button_control;
     this.memory_cell = memory_cell;
     this.header_control = header_control;
-}
-
-Heater.prototype.setMode = function(mode) {
-heaterState[this.memory_cell] = mode;
-getControl(this.header_control).setValue(heaterState[this.memory_cell]);
-}
-
-Heater.prototype.getMode = function() {
-return heaterState[this.memory_cell];
-}
-
-Heater.prototype.checkState = function() {
-    switch(heaterState[this.memory_cell]) {
-        case "auto":
-            if((dev[this.room_temp] < (dev[this.set_temp]- 0.5)) && !dev[this.heater_control]) getControl(this.heater_control).setValue(true);
-            if((dev[this.room_temp] < (dev[this.set_temp] + 0.5)) && dev[this.heater_control]) getControl(this.heater_control).setValue(false);
-            else getControl(this.heater_control).setValue(false);
+    this.histeresis = histeresis;
+  }
+  
+  Device.prototype.setMode = function(mode) {
+    this.memory_cell = mode;
+    getControl(this.header_control).setValue(this.memory_cell);
+  }
+  
+  Device.prototype.getMode = function() {
+    return this.memory_cell;	
+  }
+  
+  Device.prototype.checkState = function() {
+    switch(this.memory_cell) {
+        case "AUTO":
+            if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
+              dev[this.device_control] = false;
+              return;
+            }
+            if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
+              dev[this.device_control] = true;
+              return;
+            }
             break;
-        case "On":
-            getControl(this.heater_control).setValue(true);
+        case "ON":
+            dev[this.device_control] = true;
             break;
-        case "Off":
-            getControl(this.heater_control).setValue(false)
+        case "OFF":
+            dev[this.device_control] = false;
             break;
     }
-}
+  }
 
 
-function buttonsLogic(heater) {
+function buttonsLogic(device) {
     defineRule({
         when: function() {
-            return dev[heater.button_control];
+            return dev[device.button_control];
         },
         then: function() {
-            switch(heater.getMode()) {
-                case "auto":
-                    heater.setMode("On");
+            switch(device.getMode()) {
+                case "AUTO":
+                    device.setMode("ON");
+                	device.checkState();
                     break;
-                case "On":
-                    heater.setMode("Off");
+                case "ON":
+                    device.setMode("OFF");
+                	device.checkState();
                     break;
-                case "Off":
-                    heater.setMode("Auto");
-                    break;
+                case "OFF":
+                    device.setMode("AUTO");
+                    device.checkState();
+                	break;
             }    
         }
     });
 }
 
 
+var MainHeater = new Device(restRoomTempSet, restRoomTemp, mainHeaterOn, mainHeaterButton, mainHeaterMemoryCell, mainHeaterHeader, heaterHisteresis);
+var MediumHeater = new Device(restRoomTempSet, restRoomTemp, mediumHeaterOn, mediumHeaterButton, mediumHeaterMemoryCell, mediumHeaterHeader, heaterHisteresis);
+var TamburHeater = new Device(restRoomTempSet, restRoomTemp, tamburHeaterOn, tamburHeaterButton, tamburHeaterMemoryCell, tamburHeaterHeader, heaterHisteresis);
+var WaterPrepareHeater = new Device(waterPrepareTempSet, waterPrepareTemp, waterPrepareHeaterOn, waterPrepareHeaterButton, waterPrepareMemoryCell, waterPrepareHeaterHeader, heaterHisteresis);
 
-var MainHeater = new Heater(restRoomTempSet, restRoomTemp, mainHeaterOn, mainHeaterButton, "baniaMainHeater", "rest-room/MainHeaterHeader");
-var MediumHeater = new Heater(restRoomTempSet, restRoomTemp, mediumHeaterOn, mediumHeaterButton, "baniaMeduimHeater", "rest-room/MediumHeaterHeader");
-var TamburHeater = new Heater(restRoomTempSet, restRoomTemp, tamburHeaterOn, tamburHeaterButton, "baniaTamburHeater", "rest-room/TamburHeaterHeader");
-var WaterPrepareHeater = new Heater(waterPrepareTempSet, waterPrepareTemp, waterPrepareHeaterOn, waterPrepareHeaterButton, "baniaWaterPrepareHeater", "rest-room/WaterPrepareHeaterHeader");
+function stateCheck(device) {
+    defineRule({
+        whenChanged: function() {
+            return dev[device.set_param] || dev[device.actual_param];
+        },
+        then: function() {
+            device.checkState();
+            log(device.memory_cell + " check");
+        }
+    })
+}
+
 
 buttonsLogic(MainHeater);
 buttonsLogic(MediumHeater);
 buttonsLogic(TamburHeater);
 buttonsLogic(WaterPrepareHeater);
+
+stateCheck(MainHeater);
+stateCheck(MediumHeater);
+stateCheck(TamburHeater);
+stateCheck(WaterPrepareHeater);
