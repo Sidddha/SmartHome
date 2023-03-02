@@ -86,7 +86,7 @@ var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
-var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis) {
+var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis, external_topic) {
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
@@ -94,6 +94,12 @@ var Device = function(set_param, actual_param, device_control, button_control, m
     this.memory_cell = memory_cell;
     this.header_control = header_control;
     this.histeresis = histeresis;
+    if(external_topic == undefined) {
+        this.external_topic = false;
+    } else {
+        this.external_topic = external_topic;
+    }
+
   }
   
   Device.prototype.setMode = function(mode) {
@@ -120,39 +126,84 @@ var Device = function(set_param, actual_param, device_control, button_control, m
   }
   
   Device.prototype.checkState = function() {
-    switch(this.memory_cell) {
-        case "AUTO":
-            if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
-              dev[this.device_control] = false;
-              return;
+    debug(this.header_control + "external is: " + this.external_topic);
+    switch(this.external_topic) {
+        case false:
+            switch(this.memory_cell) {
+                case "AUTO":
+                    if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
+                      dev[this.device_control] = false;
+                      debug(this.header_control + " set to " + false);
+                      return;
+                    }
+                    if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
+                      dev[this.device_control] = true;
+                      debug(this.header_control + " set to " + true);
+                      return;
+                    }
+                    break;
+                case "ON":
+                    dev[this.device_control] = true;
+                    debug(this.header_control + " set to " + true);
+                    break;
+                case "OFF":
+                    dev[this.device_control] = false;
+                    debug(this.header_control + " set to " + false);
+                    break;
+                default:
+                    dev[this.device_control] = false;
+                    debug(this.header_control + " set to " + false);
+                    break;           
             }
-            if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
-              dev[this.device_control] = true;
-              return;
+            break;
+        case true:
+            switch(this.memory_cell) {
+                case "AUTO":
+                    if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
+                        publish(this.device_control, "false");
+                        log("publish to: " + this.device_control);
+                        debug(this.header_control + " set to " + false);
+                        return;
+                    }
+                    if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
+                        publish(this.device_control, "true");
+                        log("publish to: " + this.device_control);
+                        debug(this.header_control + " set to " + true);
+                        return;
+                    }
+                    break;
+                case "ON":
+                    publish(this.device_control, "true");
+                    log("publish to: " + this.device_control);
+                    debug(this.header_control + " set to " + true);
+                    break;
+                case "OFF":
+                    publish(this.device_control, "false");
+                    log("publish to: " + this.device_control);
+                    debug(this.header_control + " set to " + false);
+                    break;
+                default:
+                    publish(this.device_control, "false");
+                    log("publish to: " + this.device_control);
+                    debug(this.header_control + " set to " + false);
+                    break;           
             }
             break;
-        case "ON":
-            dev[this.device_control] = true;
-            break;
-        case "OFF":
-            dev[this.device_control] = false;
-            break;
-        default:
-            dev[this.device_control] = false;
-            break;           
     }
+
   }
 
 function checkState(device) {
-    defineRule({
-        whenChanged: function() {
-            return dev[device.set_param] || dev[device.actual_param];
-        },
-        then: function() {
-            device.checkState();
-        }
-    })
-}
+        defineRule({
+            whenChanged: function() {
+                return dev[device.set_param] || dev[device.actual_param];
+            },
+            then: function() {
+                device.checkState();
+            }
+        })  
+    }
+
 
 function button(device) {
     defineRule({
@@ -223,7 +274,7 @@ function globalButton(devices) {
     })
 }
 
-var mainRoomHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomHeaterOn, mainRoomHeaterButton, mainRoomHeaterMemoryCell, mainRoomHeaterHeader, heaterHisteresis);
+var mainRoomHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomHeaterOn, mainRoomHeaterButton, mainRoomHeaterMemoryCell, mainRoomHeaterHeader, heaterHisteresis, true);
 var mainRoomTamburCarpet = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburCarpetOn, mainRoomTamburCarpetButton, mainRoomTamburCarpetMemoryCell, mainRoomTamburCarpetHeader, heaterHisteresis);
 var mainRoomTamburHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburHeaterOn, mainRoomTamburHeaterButton, mainRoomTamburHeaterMemoryCell, mainRoomTamburHeaterHeader, heaterHisteresis);
 var baniaMainHeater = new Device(restRoomTempSet, restRoomTemp, mainHeaterOn, mainHeaterButton, mainHeaterMemoryCell, mainHeaterHeader, heaterHisteresis);
