@@ -6,9 +6,20 @@ var heaterState = new PersistentStorage("heater-states", {global: true});
 var lightState = new PersistentStorage("light-states", {global: true});
 
 GlobalHeaterState["globalHeater"] = "OFF";
+lightState["global"] = "OFF";
 
-var globalHeaterButton = "global-heater/GlobalHeaterButton";
-var globalHeaterHeader = "global-heater/HeaderGH";
+var globalHeaterButton = "global/GlobalHeaterButton";
+var globalHeaterHeader = "global/HeaderGH";
+var globalHeaterMemoryCell = GlobalHeaterState["globalHeater"];
+
+var outdoorLightLux = "wb-ms_138/Illuminance";
+
+var illuminanceHisteresis = 50;
+
+var globalLightButton = "global/GlobalLightButton";
+var globalLightHeader = "global/GlobalLightHeader";
+var globalLightSet = "global/LightControl";
+var globalLightMemoryCell = lightState["global"];
 
 ////////////////////////////////////
 
@@ -27,6 +38,7 @@ var mainRoomOutdoorLightMemoryCell = lightState["mainRoomOutdoorLight"];
 var mainRoomTamburCarpetOn = "wb-mr6c_24/K3";
 var mainRoomTamburHeaterOn = "wb-mr6c_24/K2";
 var mainRoomHeaterOn = "cmnd/tasmota_C6208D/POWER";
+var mainRoomOutdoorLightOn = "wb-mr6c_24/K4";
 
 var mainRoomTemp = "wb-msw-v3_201/Temperature";
 var mainRoomTempSet = "main-room/HeaterControl";
@@ -34,10 +46,13 @@ var mainRoomTempSet = "main-room/HeaterControl";
 var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
 var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
 var mainRoomHeaterButton = "main-room/HeaterButton";
+var mainOutdoorLightButton = "main-room/OutdoorLightButton";
 
 var mainRoomTamburCarpetHeader = "main-room/TamburCarpetHeader";
 var mainRoomTamburHeaterHeader = "main-room/TamburHeaterHeader";
 var mainRoomHeaterHeader = "main-room/HeaterHeader";
+var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
+
 
 ////////////////////////////////////
 
@@ -47,8 +62,14 @@ var gmHousTempSet = "grandmas-hous/HeaterControl";
 var gmHousHeaterButton = "grandmas-hous/HeaterButton";
 var gmHousHeaterHeader = "grandmas-hous/HeaterHeader";
 
-heaterState["gmHousHeater"] = "OFF";
+var gmOutdoorLightOn = "wb-mr3_34/K3";
+var gmOutdoorLightButton = "grandmas-hous/OutdoorLightButton";
+var gmOutdoorLightHeader = "grandmas-hous/OutdoorLightHeader";
 
+heaterState["gmHousHeater"] = "OFF";
+lightState["gmOutdoorLight"] = "OFF";
+
+var gmHousOutdoorLightMemoryCell = lightState["gmOutdoorLight"];
 var gmHousHeaterMemoryCell = heaterState["gmHousHeater"];
 
 ////////////////////////////////////
@@ -236,36 +257,36 @@ function button(device) {
 
 
 
-function globalButton(devices) {
+function globalButton(devices, global_button, global_memory_cell, global_header) {
 
     defineRule({
         when: function() {
-        return dev[globalHeaterButton];
+        return dev[global_button];
         },
         then: function() {
-        switch(GlobalHeaterState["globalHeater"]) {
+        switch(global_memory_cell) {
             case "AUTO":    
-                GlobalHeaterState["globalHeater"] = "ON";
-                getControl(globalHeaterHeader).setValue(GlobalHeaterState["globalHeater"]);
+                global_memory_cell = "ON";
+                getControl(global_header).setValue(global_memory_cell);
                 break;
             case "ON":
-                GlobalHeaterState["globalHeater"] = "OFF";
-                getControl(globalHeaterHeader).setValue(GlobalHeaterState["globalHeater"]);
+                global_memory_cell = "OFF";
+                getControl(global_header).setValue(global_memory_cell);
                 break;
             case "OFF":
-                GlobalHeaterState["globalHeater"] = "AUTO";
-                getControl(globalHeaterHeader).setValue(GlobalHeaterState["globalHeater"]);
+                global_memory_cell = "AUTO";
+                getControl(global_header).setValue(global_memory_cell);
                 break;
             default:
-                GlobalHeaterState["globalHeater"] = "OFF";
-                getControl(globalHeaterHeader).setValue(GlobalHeaterState["globalHeater"]);
+                global_memory_cell = "OFF";
+                getControl(global_header).setValue(global_memory_cell);
                 break;
 
         };
 
         for( i = 0; i < devices.length; ++i) {
             device = devices[i];
-            device.setMode(GlobalHeaterState["globalHeater"]);
+            device.setMode(global_memory_cell);
             device.checkState();
             log(i + " " + device.getButton())
         }
@@ -273,6 +294,9 @@ function globalButton(devices) {
         }
     })
 }
+
+var mainOutdoorLight = new Device(globalLightSet, outdoorLightLux, mainRoomOutdoorLightOn, mainOutdoorLightButton, mainRoomOutdoorLightMemoryCell, mainRoomOutdoorLightHeader, illuminanceHisteresis);
+var gmOutdoorLight = new Device(globalLightSet, outdoorLightLux, gmOutdoorLightOn, gmOutdoorLightButton, gmHousOutdoorLightMemoryCell, gmOutdoorLightHeader, illuminanceHisteresis);
 
 var mainRoomHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomHeaterOn, mainRoomHeaterButton, mainRoomHeaterMemoryCell, mainRoomHeaterHeader, heaterHisteresis, true);
 var mainRoomTamburCarpet = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburCarpetOn, mainRoomTamburCarpetButton, mainRoomTamburCarpetMemoryCell, mainRoomTamburCarpetHeader, heaterHisteresis);
@@ -283,7 +307,7 @@ var baniaTamburHeater = new Device(restRoomTempSet, restRoomTemp, tamburHeaterOn
 var waterPrepareHeater = new Device(waterPrepareTempSet, waterPrepareTemp, waterPrepareHeaterOn, waterPrepareHeaterButton, waterPrepareMemoryCell, waterPrepareHeaterHeader, heaterHisteresis);
 var gmHousHeater = new Device(gmHousTempSet, gmHousTemp, gmHousHeaterOn, gmHousHeaterButton, gmHousHeaterMemoryCell, gmHousHeaterHeader, heaterHisteresis);
 
-var devices = [
+var heaters = [
     baniaMainHeater,
     baniaMediumHeater,
     baniaTamburHeater,
@@ -294,7 +318,13 @@ var devices = [
     mainRoomTamburHeater
 ]
 
-globalButton(devices);
+var lights = [
+    mainOutdoorLight,
+    gmOutdoorLight
+]
+
+globalButton(heaters, globalHeaterButton, globalHeaterMemoryCell, globalHeaterHeader);
+globalButton(lights, globalLightButton, globalLightMemoryCell, globalLightHeader);
 
 button(baniaMainHeater);
 button(baniaMediumHeater);
@@ -305,6 +335,9 @@ button(mainRoomHeater);
 button(mainRoomTamburCarpet);
 button(mainRoomTamburHeater);
 
+button(mainOutdoorLight);
+button(gmOutdoorLight);
+
 
 checkState(baniaMainHeater);
 checkState(baniaMediumHeater);
@@ -314,3 +347,6 @@ checkState(gmHousHeater);
 checkState(mainRoomHeater);
 checkState(mainRoomTamburCarpet);
 checkState(mainRoomTamburHeater);
+
+checkState(mainOutdoorLight);
+checkState(gmOutdoorLight);

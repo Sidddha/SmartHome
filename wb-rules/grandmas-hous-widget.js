@@ -32,7 +32,7 @@ defineVirtualDevice('grandmas-hous', {
           type: "pushbutton",
           value: false
       },
-      LightHeader: {
+      OutdoorLightHeader: {
           title: "header",
           type: "text",
           value: gmHousOutdoorLightMemoryCell

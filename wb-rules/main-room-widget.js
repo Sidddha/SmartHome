@@ -45,7 +45,7 @@ defineVirtualDevice('main-room', {
             type: "pushbutton",
             value: false
         },
-        LightsButton: {
+        OutdoorLightButton: {
             type: "pushbutton",
             value: false
         },
