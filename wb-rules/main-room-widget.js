@@ -1,15 +1,11 @@
 var heaterState = new PersistentStorage("heater-states", {global: true});
 var lightState = new PersistentStorage("light-states", {global: true});
 
-heaterState["tamburCarpet"] = "auto";
-heaterState["tamburHeater"] = "auto";
-heaterState["mainHeater"] = "auto";
-var tc_counter = 0;
-var th_counter = 0;
-var mh_counter = 0;
+var mainRoomTamburCarpetMemoryCell = heaterState["mainRoomTamburCarpet"];
+var mainRoomTamburHeaterMemoryCell = heaterState["mainRoomTamburHeater"];
+var mainRoomHeaterMemoryCell = heaterState["mainRoomHeater"];
 
-lightState["mainOutdoorLight"] = "auto";
-var l_counter = 0;
+var mainRoomOutdoorLightMemoryCell = lightState["mainRoomOutdoorLight"];
 
 defineVirtualDevice('main-room', {
     title: 'MainRoom' ,
@@ -45,7 +41,7 @@ defineVirtualDevice('main-room', {
             type: "pushbutton",
             value: false
         },
-        MainHeaterButton: {
+        HeaterButton: {
             type: "pushbutton",
             value: false
         },
@@ -53,27 +49,27 @@ defineVirtualDevice('main-room', {
             type: "pushbutton",
             value: false
         },
-        HeaderL: {
+        OutdoorLightHeader: {
             title: "header",
             type: "text",
             value: lightState["mainOutdoorLight"]
         },
-        HeaderTC: {
+        TamburCarpetHeader: {
             title: "header",
             type: "text",
             value: heaterState["tamburCarpet"]
           }, 
-        HeaderTH: {
+        TamburHeaterHeader: {
             title: "header",
             type: "text",
             value: heaterState["tamburHeater"]
           }, 
-        HeaderMH: {
+        HeaterHeader: {
             title: "header",
             type: "text",
             value: heaterState["mainHeater"]
           },  
-        Header2: {
+        SecondFloorHeader: {
             title: "header",
             type: "text",
             value: "Второй этаж"
@@ -91,35 +87,3 @@ defineVirtualDevice('main-room', {
                                                  
     }
 })
-
-function buttonsLogic(name, button_control, holding_cell, button_counter, control_to_be_edit) {
-    defineRule(name, {
-        when: function() {
-            return dev["main-room/" + button_control];
-        },
-        then: function() {
-            button_counter++;
-            if(button_counter == 1) {
-                heaterState[holding_cell] = "auto";
-                getControl("main-room/" + control_to_be_edit).setValue(heaterState[holding_cell]);
-                return;
-            }
-            if(button_counter == 2) {
-                heaterState[holding_cell] = "On";
-                getControl("main-room/" + control_to_be_edit).setValue(heaterState[holding_cell]);
-                return;            
-            }
-            if(button_counter == 3) {
-                heaterState[holding_cell] = "Off";
-                getControl("main-room/" + control_to_be_edit).setValue(heaterState[holding_cell]);
-                button_counter = 0;
-                return;            
-            }        
-        }
-    });
-}
-
-buttonsLogic("1", "TamburCarpetButton", "tamburCarpet", tc_counter, "HeaderTC");
-buttonsLogic("2", "TamburHeaterButton", "tamburHeater", th_counter, "HeaderTH");
-buttonsLogic("3", "MainHeaterButton", "mainHeater", mh_counter, "HeaderMH");
-buttonsLogic("4", "LightsButton", "mainOutdoorLight", l_counter, "HeaderL");
