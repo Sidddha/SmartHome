@@ -126,7 +126,7 @@ var Device = function(set_param, actual_param, device_control, button_control, m
   Device.prototype.setMode = function(mode) {
     this.memory_cell = mode;
     getControl(this.header_control).setValue(this.memory_cell);
-    log(this.header_control);
+    debug(this.header_control);
   }
   
   Device.prototype.getMode = function() {
@@ -182,30 +182,30 @@ var Device = function(set_param, actual_param, device_control, button_control, m
                 case "AUTO":
                     if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
                         publish(this.device_control, "false");
-                        log("publish to: " + this.device_control);
+                        debug("publish to: " + this.device_control);
                         debug(this.header_control + " set to " + false);
                         return;
                     }
                     if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
                         publish(this.device_control, "true");
-                        log("publish to: " + this.device_control);
+                        debug("publish to: " + this.device_control);
                         debug(this.header_control + " set to " + true);
                         return;
                     }
                     break;
                 case "ON":
                     publish(this.device_control, "true");
-                    log("publish to: " + this.device_control);
+                    debug("publish to: " + this.device_control);
                     debug(this.header_control + " set to " + true);
                     break;
                 case "OFF":
                     publish(this.device_control, "false");
-                    log("publish to: " + this.device_control);
+                    debug("publish to: " + this.device_control);
                     debug(this.header_control + " set to " + false);
                     break;
                 default:
                     publish(this.device_control, "false");
-                    log("publish to: " + this.device_control);
+                    debug("publish to: " + this.device_control);
                     debug(this.header_control + " set to " + false);
                     break;           
             }
@@ -219,8 +219,9 @@ function checkState(device) {
             whenChanged: function() {
                 return dev[device.set_param] || dev[device.actual_param];
             },
-            then: function() {
+            then: function(newValue, devName, cellName) {
                 device.checkState();
+                log("function: checkState. Device: {}, trigger: {}/{}, newValue: {}, device state: {}, device mode: {}", device.header_control, devName, cellName, newValue, device.memory_cell, getValue(device.device_control));
             }
         })  
     }
@@ -231,7 +232,7 @@ function button(device) {
         when: function() {
             return dev[device.button_control];
         },
-        then: function() {
+        then: function(newValue, devName, cellName) {
             switch(device.memory_cell) {
                 case "AUTO":
                     device.setMode("ON");
@@ -250,6 +251,7 @@ function button(device) {
                     device.checkState();
                     break;                   
             }  
+            log("function: button. Device: {}, trigger: {}/{}, newValue: {}, device state: {}, device mode: {}", device.header_control, devName, cellName, newValue, device.memory_cell, getValue(device.device_control));
         }
     })
 }
@@ -288,7 +290,7 @@ function globalButton(devices, global_button, global_memory_cell, global_header)
             device = devices[i];
             device.setMode(global_memory_cell);
             device.checkState();
-            log(i + " " + device.getButton())
+            debug(i + " " + device.getButton())
         }
 
         }
