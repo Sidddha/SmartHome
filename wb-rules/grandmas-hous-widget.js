@@ -4,8 +4,9 @@ var lightState = new PersistentStorage("light-states", {global: true});
 var gmHousHeaterMemoryCell = heaterState["gmHousHeater"];
 var gmHousOutdoorLightMemoryCell = lightState["gmOutdoorLight"];
 
-defineVirtualDevice('grandmas-hous', {
-    title: 'GrandmasHaus' ,
+
+defineVirtualDevice("grandmas-hous", {
+    title: "GrandmasHaus" ,
     readonly: false,
     cells: {
       Temperature: {
@@ -15,7 +16,7 @@ defineVirtualDevice('grandmas-hous', {
 	    },
       Humidity: {
           title: "Humidity",
-	        type: "rel_humidity",
+	        type: "rel_humidity", 
 	        value: dev["wb-ms_132/Humidity"]
 	    },
       HeaterControl: {
@@ -41,7 +42,7 @@ defineVirtualDevice('grandmas-hous', {
           title: "header",
           type: "text",
           value: gmHousHeaterMemoryCell
-      }   
+      } 
     }
 })
 

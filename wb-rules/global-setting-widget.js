@@ -7,12 +7,13 @@ lightState["global"] = "OFF";
 var globalHeaterButton = "global/GlobalHeaterButton";
 var globalHeaterHeader = "global/HeaderGH";
 
-defineVirtualDevice('global', {
-    title: 'Global' ,
+defineVirtualDevice("global", {
+    title: "Global" ,
     readonly: false,
     cells: {
       GlobalHeaterButton: {
           type: "pushbutton",
+          value: false
       },
       HeaderGH: {
           title: "header",
@@ -20,7 +21,8 @@ defineVirtualDevice('global', {
           value: GlobalHeaterState["globalHeater"]
       },
       GlobalLightButton: {
-        type: "pushbutton"
+        type: "pushbutton",
+        value: false
       },
       GlobalLightHeader: {
         title: "header",
@@ -29,7 +31,7 @@ defineVirtualDevice('global', {
       },
       LightControl: {
         type: "range",
-        value: 500,
+        value: 11,
         min: 0,
         max: 5000
       }

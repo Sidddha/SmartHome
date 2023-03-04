@@ -8,8 +8,8 @@ var mediumHeaterMemoryCell = heaterState["baniaMediumHeater"];
 var tamburHeaterMemoryCell = heaterState["baniaTamburHeater"];
 var waterPrepareMemoryCell = heaterState["baniaWaterPrepareHeater"];
 
-defineVirtualDevice('rest-room', {
-    title: 'RestRoom' ,
+defineVirtualDevice("rest-room", {
+    title: "RestRoom" ,
     readonly: false, 
     cells: {
         HeaderRestRoom: {

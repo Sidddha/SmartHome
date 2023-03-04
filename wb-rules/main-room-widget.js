@@ -7,8 +7,8 @@ var mainRoomHeaterMemoryCell = heaterState["mainRoomHeater"];
 
 var mainRoomOutdoorLightMemoryCell = lightState["mainRoomOutdoorLight"];
 
-defineVirtualDevice('main-room', {
-    title: 'MainRoom' ,
+defineVirtualDevice("main-room", {
+    title: "MainRoom" ,
     readonly: false, 
     cells: {
         Header: {
@@ -83,7 +83,6 @@ defineVirtualDevice('main-room', {
             title: "Humidity2",
             type: "rel_humidity",
             value: dev["wb-ms_90/Humidity"]
-            }    
-                                                 
+            }                                             
     }
 })

@@ -1,3 +1,8 @@
+////////////////////////////////////
+//*********Global variables****** */
+////////////////////////////////////
+
+var firstStart = "start/FirstStart";
 
 var heaterHisteresis = 0.5;
 
@@ -21,6 +26,8 @@ var globalLightHeader = "global/GlobalLightHeader";
 var globalLightSet = "global/LightControl";
 var globalLightMemoryCell = lightState["global"];
 
+////////////////////////////////////
+//*********Main room variables*****/
 ////////////////////////////////////
 
 heaterState["mainRoomTamburCarpet"] = "OFF";
@@ -53,7 +60,10 @@ var mainRoomTamburHeaterHeader = "main-room/TamburHeaterHeader";
 var mainRoomHeaterHeader = "main-room/HeaterHeader";
 var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
 
+var main
 
+////////////////////////////////////
+//***Grandmothers hous variables****/
 ////////////////////////////////////
 
 var gmHousTemp = "wb-ms_132/Temperature";
@@ -72,6 +82,8 @@ lightState["gmOutdoorLight"] = "OFF";
 var gmHousOutdoorLightMemoryCell = lightState["gmOutdoorLight"];
 var gmHousHeaterMemoryCell = heaterState["gmHousHeater"];
 
+////////////////////////////////////
+//*********Bania variables*********/
 ////////////////////////////////////
 
 heaterState["baniaMainHeater"] = "OFF";
@@ -107,7 +119,7 @@ var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
-var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis, external_topic) {
+var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis, external_topic, track_mqtt) {
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
@@ -119,6 +131,7 @@ var Device = function(set_param, actual_param, device_control, button_control, m
         this.external_topic = false;
     } else {
         this.external_topic = external_topic;
+        this.track_mqtt = track_mqtt;
     }
 
   }
@@ -132,7 +145,17 @@ var Device = function(set_param, actual_param, device_control, button_control, m
   Device.prototype.getMode = function() {
     return this.memory_cell;	
   }
-
+  Device.prototype.getValue = function() {
+    switch(this.external_topic) {
+        case false: 
+            return dev[this.device_control];
+        case true:
+            trackMqtt(this.track_mqtt, function(message){
+                return message.value;
+              });
+              break;
+    }
+  }
   Device.prototype.getSetParam = function() {
     return this.set_param;	
   }
@@ -216,12 +239,10 @@ var Device = function(set_param, actual_param, device_control, button_control, m
 
 function checkState(device) {
         defineRule({
-            whenChanged: function() {
-                return dev[device.set_param] || dev[device.actual_param];
-            },
-            then: function(newValue, devName, cellName) {
+            whenChanged: device.set_param || device.actual_param,
+            then: function(newValue, devName) {
                 device.checkState();
-                log("function: checkState. Device: {}, trigger: {}/{}, newValue: {}, device state: {}, device mode: {}", device.header_control, devName, cellName, newValue, device.memory_cell, getValue(device.device_control));
+                log("function: checkState. Device: {}, trigger: {}, device mode: {}, device state: {}", device.header_control, devName, device.memory_cell, device.getValue());
             }
         })  
     }
@@ -232,7 +253,11 @@ function button(device) {
         when: function() {
             return dev[device.button_control];
         },
-        then: function(newValue, devName, cellName) {
+        then: function() {
+            if(dev[firstStart] == true) {
+                log("function: button, {} firstStart", device.button_control);
+                return;
+            }
             switch(device.memory_cell) {
                 case "AUTO":
                     device.setMode("ON");
@@ -251,7 +276,7 @@ function button(device) {
                     device.checkState();
                     break;                   
             }  
-            log("function: button. Device: {}, trigger: {}/{}, newValue: {}, device state: {}, device mode: {}", device.header_control, devName, cellName, newValue, device.memory_cell, getValue(device.device_control));
+            log("function: button. Device: {}, trigger: {}, device mode: {}, device state: {}", device.header_control, device.button_control, device.memory_cell, device.getValue());
         }
     })
 }
@@ -266,6 +291,10 @@ function globalButton(devices, global_button, global_memory_cell, global_header)
         return dev[global_button];
         },
         then: function() {
+            if(dev[firstStart] == true) {
+                log("function: globalButton, {}, firstStart", global_button);
+                return;
+            }
         switch(global_memory_cell) {
             case "AUTO":    
                 global_memory_cell = "ON";
@@ -291,6 +320,8 @@ function globalButton(devices, global_button, global_memory_cell, global_header)
             device.setMode(global_memory_cell);
             device.checkState();
             debug(i + " " + device.getButton())
+            log("function: globalButton. Device: {}, trigger: {}, device mode: {}, device state: {}", device.header_control, device.button_control, device.memory_cell, device.getValue());
+
         }
 
         }
@@ -300,7 +331,7 @@ function globalButton(devices, global_button, global_memory_cell, global_header)
 var mainOutdoorLight = new Device(globalLightSet, outdoorLightLux, mainRoomOutdoorLightOn, mainOutdoorLightButton, mainRoomOutdoorLightMemoryCell, mainRoomOutdoorLightHeader, illuminanceHisteresis);
 var gmOutdoorLight = new Device(globalLightSet, outdoorLightLux, gmOutdoorLightOn, gmOutdoorLightButton, gmHousOutdoorLightMemoryCell, gmOutdoorLightHeader, illuminanceHisteresis);
 
-var mainRoomHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomHeaterOn, mainRoomHeaterButton, mainRoomHeaterMemoryCell, mainRoomHeaterHeader, heaterHisteresis, true);
+var mainRoomHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomHeaterOn, mainRoomHeaterButton, mainRoomHeaterMemoryCell, mainRoomHeaterHeader, heaterHisteresis, true, "stat/tasmota_C6208D/POWER");
 var mainRoomTamburCarpet = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburCarpetOn, mainRoomTamburCarpetButton, mainRoomTamburCarpetMemoryCell, mainRoomTamburCarpetHeader, heaterHisteresis);
 var mainRoomTamburHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburHeaterOn, mainRoomTamburHeaterButton, mainRoomTamburHeaterMemoryCell, mainRoomTamburHeaterHeader, heaterHisteresis);
 var baniaMainHeater = new Device(restRoomTempSet, restRoomTemp, mainHeaterOn, mainHeaterButton, mainHeaterMemoryCell, mainHeaterHeader, heaterHisteresis);
@@ -352,3 +383,13 @@ checkState(mainRoomTamburHeater);
 
 checkState(mainOutdoorLight);
 checkState(gmOutdoorLight);
+
+defineRule({
+    when: function() {
+        return dev["start/Trigger"];
+    },
+    then: function() {
+        dev["start/FirstStart"] = false;
+        log("dev['start/FirstStart'] = {}", dev["start/FirstStart"]);
+    }
+})
