@@ -19,7 +19,7 @@ var globalHeaterMemoryCell = GlobalHeaterState["globalHeater"];
 
 var outdoorLightLux = "wb-ms_138/Illuminance";
 
-var illuminanceHisteresis = 50;
+var illuminanceHisteresis = 2;
 
 var globalLightButton = "global/GlobalLightButton";
 var globalLightHeader = "global/GlobalLightHeader";
@@ -172,34 +172,7 @@ var Device = function(set_param, actual_param, device_control, button_control, m
   Device.prototype.checkState = function() {
     debug(this.header_control + "external is: " + this.external_topic);
     switch(this.external_topic) {
-        case false:
-            switch(this.memory_cell) {
-                case "AUTO":
-                    if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
-                      dev[this.device_control] = false;
-                      debug(this.header_control + " set to " + false);
-                      return;
-                    }
-                    if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
-                      dev[this.device_control] = true;
-                      debug(this.header_control + " set to " + true);
-                      return;
-                    }
-                    break;
-                case "ON":
-                    dev[this.device_control] = true;
-                    debug(this.header_control + " set to " + true);
-                    break;
-                case "OFF":
-                    dev[this.device_control] = false;
-                    debug(this.header_control + " set to " + false);
-                    break;
-                default:
-                    dev[this.device_control] = false;
-                    debug(this.header_control + " set to " + false);
-                    break;           
-            }
-            break;
+
         case true:
             switch(this.memory_cell) {
                 case "AUTO":
@@ -232,17 +205,48 @@ var Device = function(set_param, actual_param, device_control, button_control, m
                     debug(this.header_control + " set to " + false);
                     break;           
             }
-            break;
+                break;
+            default:
+                switch(this.memory_cell) {
+                    case "AUTO":
+                        if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
+                          dev[this.device_control] = false;
+                          debug(this.header_control + " set to " + false);
+                          return;
+                        }
+                        if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
+                          dev[this.device_control] = true;
+                          debug(this.header_control + " set to " + true);
+                          return;
+                        }
+                        break;
+                    case "ON":
+                        dev[this.device_control] = true;
+                        debug(this.header_control + " set to " + true);
+                        break;
+                    case "OFF":
+                        dev[this.device_control] = false;
+                        debug(this.header_control + " set to " + false);
+                        break;
+                    default:
+                        dev[this.device_control] = false;
+                        debug(this.header_control + " set to " + false);
+                        break;           
+                }
+                break;
     }
 
   }
 
 function checkState(device) {
         defineRule({
-            whenChanged: device.set_param || device.actual_param,
-            then: function(newValue, devName) {
+            whenChanged: function() {
+                log("function: checkState. Device: {},device mode: {}, device state: {}, set value {}, actual value {}", device.device_control, device.memory_cell, device.getValue(), dev[device.set_param], dev[device.actual_param]);
+                return dev[device.set_param, device.actual_param];
+            },
+            then: function() {
                 device.checkState();
-                log("function: checkState. Device: {}, trigger: {}, device mode: {}, device state: {}", device.header_control, devName, device.memory_cell, device.getValue());
+                log("Device {} set to {}", device.header_control, device.getValue());
             }
         })  
     }
