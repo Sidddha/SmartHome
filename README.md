@@ -1,2 +1,7 @@
 # SmartHome
-Hello. This initial commit pushed from local machine for test.
+## Telegram bot dependencys
+Operate under python-telegram-bot libruarry
+installation:
+```
+$pip install python-telegram-bot
+```
