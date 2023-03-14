@@ -3,5 +3,5 @@
 Operate under python-telegram-bot libruarry
 installation:
 ```
-$pip install python-telegram-bot
+pip install python-telegram-bot
 ```
