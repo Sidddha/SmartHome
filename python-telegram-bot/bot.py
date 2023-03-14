@@ -1,12 +1,12 @@
+#!/usr/bin/env python
+# pylint: disable=unused-argument, wrong-import-position
+
 import os
 import json
 from json.decoder import JSONDecodeError
 
 token = os.environ['BOT_TOKEN']
 PASSWORD = 1234
-#!/usr/bin/env python
-# pylint: disable=unused-argument, wrong-import-position
-# This program is dedicated to the public domain under the CC0 license.
 
 """
 First, a few callback functions are defined. Then, those functions are passed to
@@ -60,6 +60,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+#  User data constants
+(
+    UNKNOWN_USER,
+    USER,
+    ADMIN,
+    REQUEST_NONE,
+    REQUEST_SENT
+) = map(int, range(5))
+
 # Conversatin states
 (
     START,
@@ -68,7 +77,7 @@ logger = logging.getLogger(__name__)
     GREETINGS, 
     MAIN_MENU,
     BACK
-) = map(chr, range(6))
+) = map(chr, range(5, 11))
 
 # Callback constants
 (
@@ -78,11 +87,11 @@ logger = logging.getLogger(__name__)
     SUBMIT_REQUEST,
     DECLINE_REQUEST,
     WAITING_FOR_APPROVE
-) = map(chr, range(6, 12))
+) = map(chr, range(11, 17))
 
 class UserData:
 
-    def __init__(self, id, name, chat, access_level, request_status):
+    def __init__(self, id, name, chat, access_level=UNKNOWN_USER, request_status=REQUEST_NONE):
         self.id = id
         self.name = name
         self.chat = chat
@@ -90,6 +99,9 @@ class UserData:
         self.request = request_status   
 
     def isExist(self):
+
+        """Поиск соответствующего id в user-data.json"""
+
         with open("./user-data.json", 'r') as infile:
             try:
                 users = json.loads(infile.read())
@@ -108,20 +120,37 @@ class UserData:
                 return False    
 
     def accessLevel(self):
+
+        """Возвращает текущий уровень доступа"""
+        
         logger.info(f"User {self.name} has access level {self.access}")
         return self.access
     
     def requestStatus(self):
+        
+        """Возвращает статус запроса на доступ к боту"""
+        
+        logger.info(f"User {self.name} request status is {self.request}")
         return self.request
     
     def changeAccessLevel(self, level):
-        logger.info(f"Users {self.name} access level changed to {self.access}")
+
+        """Изменить уровень доступа. Варианты: UNKNOWN_USER/USER/ADMIN"""
+
+        logger.info(f"Users {self.name} access level changed to {level}")
         self.access = level
 
     def changeRequestStatus(self, status):
+
+        """Изменить статус запроса на доступ к боту. Варианты: REQUEST_SENT/REQUEST_NONE"""
+
+        logger.info(f"Users {self.name} request status changed to {status}")
         self.request = status
 
     def update(self):
+
+        """Загрузить данные пользователя из файла и обновить"""
+
         with open("./user-data.json", "r") as infile:
             try:
                 users = json.loads(infile.read())
@@ -135,6 +164,9 @@ class UserData:
 
       
     def dump(self):
+
+        """Сохранить данные пользователя в файл"""
+
         with open("./user-data.json", 'r') as infile, open("./user-data.json", 'w') as writefile:
             try:
                 users = json.loads(infile.read())
@@ -167,6 +199,9 @@ class UserData:
                 pass
 
 def getAdmins(self):
+
+    """Возвращает список пользователей с уровнем доступа ADMIN"""
+
     with open("./user-data.json", 'r') as infile:
         try:
             users = json.loads(infile.read())
@@ -181,20 +216,27 @@ def getAdmins(self):
 
 
 async def startCommand(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+
+    """Create callback to enter a conversation"""
+
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(text="Начать", callback_data=str(START))]])
     await update.message.reply_text(text="Нажмите чтоб начать", reply_markup=keyboard)
 
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+
     """Starts the conversation and check access."""
-    user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance, None, None)
+
+    user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance)
     user.update()
     if user.isExist() and (user.accessLevel() > 0):
         keyboard = InlineKeyboardMarkup([InlineKeyboardButton(text="Начать", callback_data=str(MAIN_MENU))])
         await update.callback_query.edit_message_text("Добро пожаловать. Снова", reply_markup=keyboard)
         return MAIN_MENU
     else:    
-        user.access = 0
-        user.request = 0
+        user.changeAccessLevel(UNKNOWN_USER)
+        user.changeRequestStatus(REQUEST_NONE)
         user.dump()
         buttons = [
             [InlineKeyboardButton(text="Ввести пароль", callback_data=str(ENTER_PASSWORD))],
@@ -225,9 +267,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 async def passCheck(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+ 
     """Check the password."""
-    user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance, None, None)
-
+  
+    user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance)
     query = update.callback_query
     await query.edit_message_text("Введите пароль администратора")
     await query.answer()
@@ -250,9 +293,12 @@ async def passCheck(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         await query.edit_message_text("Пароль не верный", reply_markup=keyboard2)
         return REGISTRATION_REPLY
 
+
 async def sendRequest(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the location and asks for some info about the user."""
-    user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance, None, None)
+ 
+    """Sending request with user data to admins"""
+ 
+    user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance)
     admins = getAdmins()
     buttons = [
         [InlineKeyboardButton(text="Принять", callback_data=str(SUBMIT_REQUEST))],
@@ -270,7 +316,7 @@ async def sendRequest(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 
 async def requestAlreadySent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id, None, None)
+    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id)
     user.update()
     if user.requestStatus() == 1:
         update.message.reply_text("Вы уже отправили запрос, имейте терпение")
@@ -278,27 +324,28 @@ async def requestAlreadySent(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def submitRequest(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id, None, None)
+    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id)
     user.changeAccessLevel(1)
     user.changeRequestStatus(0)
     update.message.reply_text("Доступ разрешен")
 
 
 async def declineRequest(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id, None, None)
+    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id)
     user.changeAccessLevel(0)
     user.changeRequestStatus(0)
     update.message.reply_text("Доступ запрещен")
 
 
 async def mainMenu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id, None, None)
+    user = UserData(update.message.from_user.id, update.message.from_user.username, update.message.chat.id)
     user.update()
-    if user.accessLevel() == 1:
+    if user.accessLevel() == USER:
         update.message.reply_text("уровень доступа: пользователь")
-    elif user.accessLevel() == 2:
+    elif user.accessLevel() == ADMIN:
         update.message.reply_text("уровень доступа: администратор")        
     
+
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Cancels and ends the conversation."""
     user = update.message.from_user
@@ -311,8 +358,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 def main() -> None:
-    # isFileExist("./user-data.json", "{"user":}")
-    # open("./user-data.json", "w")
 
     """Run the bot."""
     # Create the Application and pass it your bot's token.
@@ -322,7 +367,7 @@ def main() -> None:
 
     conv_handler = ConversationHandler(
         per_message=True,
-        # allow_reentry=True,
+        allow_reentry=True,
         entry_points=[CallbackQueryHandler(start, pattern=str(START))],
         states={
             REGISTRATION_REPLY: [
@@ -334,11 +379,6 @@ def main() -> None:
                 [CallbackQueryHandler(declineRequest, pattern=str(DECLINE_REQUEST))]
             ],
             MAIN_MENU: [CallbackQueryHandler(mainMenu, pattern=str(MAIN_MENU))]
-            # LOCATION: [
-            #     MessageHandler(filters.LOCATION, location),
-            #     CommandHandler("skip", skip_location),
-            # ],
-            # BIO: [MessageHandler(filters.TEXT & ~filters.COMMAND, bio)],
         },
         fallbacks=[
             [CallbackQueryHandler(cancel, pattern=None)],
