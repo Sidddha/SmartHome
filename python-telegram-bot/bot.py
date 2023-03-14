@@ -104,13 +104,12 @@ class UserData:
 
         with open("./user-data.json", 'r') as infile:
             try:
-                users = json.loads(infile.read())
+                users = json.load(infile)
                 logger.info(f"Searching id {self.id}")
                 for id in users.items():
                     logger.info(f"Check id {id[0]}")
                     if id[0] == str(self.id):
                         logger.info(f"User {self.name} exists")
-                        infile.close()
                         return True
                 else: 
                     logger.info(f"id {self.id} not exist")
@@ -153,11 +152,12 @@ class UserData:
 
         with open("./user-data.json", "r") as infile:
             try:
-                users = json.loads(infile.read())
+                users = json.load(infile)
                 id = str(self.id)
-                self.changeAccessLevel(users[id]["access"])
-                self.changeRequestStatus(users[id]["request"])    
-                infile.close()            
+                if id in users.keys():
+                    self.changeAccessLevel(users[id]["access"])
+                    self.changeRequestStatus(users[id]["request"])    
+                                
             except JSONDecodeError:
                 logger.error("function: update(). JSON decode error")
                 pass                
@@ -167,25 +167,21 @@ class UserData:
 
         """Сохранить данные пользователя в файл"""
 
-        with open("./user-data.json", 'r') as infile, open("./user-data.json", 'w') as writefile:
+        users = {}
+        with open("./user-data.json", 'r') as infile:
             try:
-                users = json.loads(infile.read())
+                users = json.load(infile)
                 if self.isExist():    
                     id = str(self.id)
-                    logger.info(f"users list1: {users}")
                     users[id] = {
                         "name": self.name,
                         "chat": self.chat,
                         "access": self.access,
                         "request": self.request
                     }
-                    logger.info(f"users list2: {users}")
-                    writefile.write(json.dumps(users))
-                    writefile.close()
             except JSONDecodeError:
                 logger.exception("function: dump(). JSON decode error. Creating a new file")
-                with open("./user-data.json", 'w') as writefile:
-                    
+                with open("./user-data.json", 'w') as writefile:  
                     users = {
                         str(self.id): {
                             "name": self.name,
@@ -194,8 +190,13 @@ class UserData:
                             "request": self.request                       
                         }
                     }
-                    writefile.write(json.dumps(users))
-                    writefile.close()
+                    writefile.write(json.dump(users, writefile, indent = 4))
+                pass
+        with open("./user-data.json", 'w') as writefile:
+            try:
+                writefile.write(json.dumps(users, indent = 4))
+            except JSONDecodeError:
+                logger.exception("function: dump(). JSON decode error. Writing fail.")
                 pass
 
 def getAdmins(self):
@@ -204,14 +205,14 @@ def getAdmins(self):
 
     with open("./user-data.json", 'r') as infile:
         try:
-            users = json.loads(infile.read())
+            users = json.load(infile)
             admins = []
             for user in users.items():
                 if user[1]["access"] == 2:
                     admins.append(user[1]["chat"])
-            infile.close()
             return admins
         except JSONDecodeError:
+            logger.exception("function: getAdmins(). JSON decode error.")
             pass
 
 
@@ -229,14 +230,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Starts the conversation and check access."""
 
     user = UserData(update.callback_query.from_user.id, update.callback_query.from_user.username, update.callback_query.chat_instance)
-    user.update()
-    if user.isExist() and (user.accessLevel() > 0):
+    # user.update()
+    # if user.isExist() and (user.accessLevel() > 0):
+    if MAIN_MENU == 0: #(user.accessLevel() > 0):
+    
         keyboard = InlineKeyboardMarkup([InlineKeyboardButton(text="Начать", callback_data=str(MAIN_MENU))])
         await update.callback_query.edit_message_text("Добро пожаловать. Снова", reply_markup=keyboard)
         return MAIN_MENU
     else:    
-        user.changeAccessLevel(UNKNOWN_USER)
-        user.changeRequestStatus(REQUEST_NONE)
+        # user.changeAccessLevel(UNKNOWN_USER)
+        # user.changeRequestStatus(REQUEST_NONE)
         user.dump()
         buttons = [
             [InlineKeyboardButton(text="Ввести пароль", callback_data=str(ENTER_PASSWORD))],
