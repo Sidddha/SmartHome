@@ -156,9 +156,6 @@ var Device = function(set_param, actual_param, device_control, button_control, m
               break;
     }
   }
-  Device.prototype.getSetParam = function() {
-    return this.set_param;	
-  }
   Device.prototype.getActualParam = function() {
     return this.actual_param;	
   }
@@ -238,15 +235,15 @@ var Device = function(set_param, actual_param, device_control, button_control, m
 
   }
 
-function checkState(device) {
+function check_state(device) {
         defineRule({
             whenChanged: function() {
-                log("function: checkState. Device: {},device mode: {}, device state: {}, set value {}, actual value {}", device.device_control, device.memory_cell, device.getValue(), dev[device.set_param], dev[device.actual_param]);
+                // log("function: check_state. Device: {},device mode: {}, device state: {}, set value {}, actual value {}", device.device_control, device.memory_cell, device.getValue(), dev[device.set_param], dev[device.actual_param]);
                 return dev[device.set_param, device.actual_param];
             },
             then: function() {
                 device.checkState();
-                log("Device {} set to {}", device.header_control, device.getValue());
+                //log("Device {} set to {}", device.header_control, device.getValue());
             }
         })  
     }
@@ -258,10 +255,11 @@ function button(device) {
             return dev[device.button_control];
         },
         then: function() {
-            if(dev[firstStart] == true) {
-                log("function: button, {} firstStart", device.button_control);
+            restrict = readConfig("/etc/wb-rules-pre-start/on-start-restrict.json");
+            if(restrict.restrict_buttons) {
+                log("button {} restricted", device.button_control);
                 return;
-            }
+            } else {
             switch(device.memory_cell) {
                 case "AUTO":
                     device.setMode("ON");
@@ -280,7 +278,8 @@ function button(device) {
                     device.checkState();
                     break;                   
             }  
-            log("function: button. Device: {}, trigger: {}, device mode: {}, device state: {}", device.header_control, device.button_control, device.memory_cell, device.getValue());
+            log("function: button. Device: {}, device state: {}", device.header_control, device.getValue());
+            }  
         }
     })
 }
@@ -288,46 +287,47 @@ function button(device) {
 
 
 
-function globalButton(devices, global_button, global_memory_cell, global_header) {
+function global_button(devices, global_button, global_memory_cell, global_header) {
 
     defineRule({
         when: function() {
         return dev[global_button];
         },
         then: function() {
-            if(dev[firstStart] == true) {
-                log("function: globalButton, {}, firstStart", global_button);
+            restrict = readConfig("/etc/wb-rules-pre-start/on-start-restrict.json");
+            if(restrict.restrict_buttons) {
+                log("function: global_button restricted")
                 return;
+            } else {            
+                switch(global_memory_cell) {
+                    case "AUTO":    
+                        global_memory_cell = "ON";
+                        getControl(global_header).setValue(global_memory_cell);
+                        break;
+                    case "ON":
+                        global_memory_cell = "OFF";
+                        getControl(global_header).setValue(global_memory_cell);
+                        break;
+                    case "OFF":
+                        global_memory_cell = "AUTO";
+                        getControl(global_header).setValue(global_memory_cell);
+                        break;
+                    default:
+                        global_memory_cell = "OFF";
+                        getControl(global_header).setValue(global_memory_cell);
+                        break;
+
+                };
+
+                for( i = 0; i < devices.length; ++i) {
+                    device = devices[i];
+                    device.setMode(global_memory_cell);
+                    device.checkState();
+                    debug(i + " " + device.getButton())
+                    log("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
+
+                }
             }
-        switch(global_memory_cell) {
-            case "AUTO":    
-                global_memory_cell = "ON";
-                getControl(global_header).setValue(global_memory_cell);
-                break;
-            case "ON":
-                global_memory_cell = "OFF";
-                getControl(global_header).setValue(global_memory_cell);
-                break;
-            case "OFF":
-                global_memory_cell = "AUTO";
-                getControl(global_header).setValue(global_memory_cell);
-                break;
-            default:
-                global_memory_cell = "OFF";
-                getControl(global_header).setValue(global_memory_cell);
-                break;
-
-        };
-
-        for( i = 0; i < devices.length; ++i) {
-            device = devices[i];
-            device.setMode(global_memory_cell);
-            device.checkState();
-            debug(i + " " + device.getButton())
-            log("function: globalButton. Device: {}, trigger: {}, device mode: {}, device state: {}", device.header_control, device.button_control, device.memory_cell, device.getValue());
-
-        }
-
         }
     })
 }
@@ -360,8 +360,8 @@ var lights = [
     gmOutdoorLight
 ]
 
-globalButton(heaters, globalHeaterButton, globalHeaterMemoryCell, globalHeaterHeader);
-globalButton(lights, globalLightButton, globalLightMemoryCell, globalLightHeader);
+global_button(heaters, globalHeaterButton, globalHeaterMemoryCell, globalHeaterHeader);
+global_button(lights, globalLightButton, globalLightMemoryCell, globalLightHeader);
 
 button(baniaMainHeater);
 button(baniaMediumHeater);
@@ -376,24 +376,14 @@ button(mainOutdoorLight);
 button(gmOutdoorLight);
 
 
-checkState(baniaMainHeater);
-checkState(baniaMediumHeater);
-checkState(baniaTamburHeater);
-checkState(waterPrepareHeater);
-checkState(gmHousHeater);
-checkState(mainRoomHeater);
-checkState(mainRoomTamburCarpet);
-checkState(mainRoomTamburHeater);
+check_state(baniaMainHeater);
+check_state(baniaMediumHeater);
+check_state(baniaTamburHeater);
+check_state(waterPrepareHeater);
+check_state(gmHousHeater);
+check_state(mainRoomHeater);
+check_state(mainRoomTamburCarpet);
+check_state(mainRoomTamburHeater);
 
-checkState(mainOutdoorLight);
-checkState(gmOutdoorLight);
-
-defineRule({
-    when: function() {
-        return dev["start/Trigger"];
-    },
-    then: function() {
-        dev["start/FirstStart"] = false;
-        log("dev['start/FirstStart'] = {}", dev["start/FirstStart"]);
-    }
-})
+check_state(mainOutdoorLight);
+check_state(gmOutdoorLight);
