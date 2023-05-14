@@ -237,13 +237,10 @@ var Device = function(set_param, actual_param, device_control, button_control, m
 
 function check_state(device) {
         defineRule({
-            whenChanged: function() {
-                // log("function: check_state. Device: {},device mode: {}, device state: {}, set value {}, actual value {}", device.device_control, device.memory_cell, device.getValue(), dev[device.set_param], dev[device.actual_param]);
-                return dev[device.set_param, device.actual_param];
-            },
+            whenChanged: [device.set_param, device.actual_param],
             then: function() {
                 device.checkState();
-                //log("Device {} set to {}", device.header_control, device.getValue());
+                log("Device {} set to {}", device.header_control, device.getValue());
             }
         })  
     }
