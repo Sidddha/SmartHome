@@ -1,0 +1,19 @@
+[Unit]
+Description=MQTT Rule engine for Wiren Board
+Wants=wb-hwconf-manager.service wb-modules.service
+After=wb-hwconf-manager.service wb-modules.service mosquitto.service
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=1
+User=root
+Environment="WB_RULES_MODULES=/etc/wb-rules-modules:/usr/share/wb-rules-modules"
+EnvironmentFile=-/etc/default/wb-rules
+# Add pre and post stert scripts to restrict interact with buttons when rule engine starting
+ExecStartPre=/bin/bash '/mnt/data/wb-rules-pre-start-script.sh'
+ExecStart=/usr/bin/wb-rules $WB_RULES_OPTIONS -syslog -editdir '/etc/wb-rules/' '/usr/share/wb-rules-system/rules/' '/etc/wb-rules/' '/usr/share/wb-rules/'
+ExecStartPost=/bin/bash '/mnt/data/wb-rules-post-start-script.sh'
+
+[Install]
+WantedBy=multi-user.target
