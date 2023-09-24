@@ -60,8 +60,6 @@ var mainRoomTamburHeaterHeader = "main-room/TamburHeaterHeader";
 var mainRoomHeaterHeader = "main-room/HeaterHeader";
 var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
 
-var main
-
 ////////////////////////////////////
 //***Grandmothers hous variables****/
 ////////////////////////////////////
@@ -252,7 +250,7 @@ function button(device) {
             return dev[device.button_control];
         },
         then: function() {
-            restrict = readConfig("/etc/wb-rules-pre-start/on-start-restrict.json");
+            restrict = readConfig("/mnt/data/on-start-restrict.json");
             if(restrict.restrict_buttons) {
                 log("button {} restricted", device.button_control);
                 return;
@@ -291,7 +289,7 @@ function global_button(devices, global_button, global_memory_cell, global_header
         return dev[global_button];
         },
         then: function() {
-            restrict = readConfig("/etc/wb-rules-pre-start/on-start-restrict.json");
+            restrict = readConfig("/mnt/data/on-start-restrict.json");
             if(restrict.restrict_buttons) {
                 log("function: global_button restricted")
                 return;

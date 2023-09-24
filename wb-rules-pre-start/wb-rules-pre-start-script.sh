@@ -1,2 +1,2 @@
 #! /bin/bash
-echo '{"restrict_buttons": true }' > '/etc/wb-rules/on-start-restrict.json' 
+echo '{"restrict_buttons": true }' > '/mnt/data/on-start-restrict.json' 
