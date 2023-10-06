@@ -10,9 +10,10 @@ RestartSec=1
 User=root
 Environment="WB_RULES_MODULES=/etc/wb-rules-modules:/usr/share/wb-rules-modules"
 EnvironmentFile=-/etc/default/wb-rules
-ExecStartPre=bash /etc/wb-rules-pre-start/on-start-restrict
+ExecStartPre=bash /mnt/data/wb-rules-pre-start-script.sh
 ExecStart=/usr/bin/wb-rules $WB_RULES_OPTIONS -syslog -editdir '/etc/wb-rules/' '/usr/share/wb-rules-system/rules/' '/etc/wb-rules/' '/usr/share/wb-rules/'
-ExecStartPost=bash /etc/wb-rules-pre-start/on-start-allow
+ExecStartPost=bash /mnt/data/wb-rules-post-start-script.sh
+
 [Install]
 WantedBy=multi-user.target
 
