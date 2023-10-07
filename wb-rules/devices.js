@@ -116,6 +116,12 @@ var restRoomTempSet = "rest-room/MainHeaterControl";
 var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
+//*************Alarms*******************/
+/////////////////////////////////////////
+
+
+
+/////////////////////////////////////////
 
 var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis, external_topic, track_mqtt) {
     this.set_param = set_param;
