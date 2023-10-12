@@ -336,6 +336,7 @@ var mainOutdoorLight = new Device(globalLightSet,
                                   mainRoomOutdoorLightMemoryCell, 
                                   mainRoomOutdoorLightHeader, 
                                   illuminanceHisteresis);
+
 var gmOutdoorLight = new Device(globalLightSet, 
                                 outdoorLightLux, 
                                 gmOutdoorLightOn, 
@@ -353,6 +354,7 @@ var mainRoomHeater = new Device(mainRoomTempSet,
                                 heaterHisteresis, 
                                 true, 
                                 "stat/tasmota_C6208D/POWER");
+
 var mainRoomTamburCarpet = new Device(mainRoomTempSet, 
                                       mainRoomTemp, 
                                       mainRoomTamburCarpetOn, 
@@ -360,6 +362,7 @@ var mainRoomTamburCarpet = new Device(mainRoomTempSet,
                                       mainRoomTamburCarpetMemoryCell, 
                                       mainRoomTamburCarpetHeader, 
                                       heaterHisteresis);
+
 var mainRoomTamburHeater = new Device(mainRoomTempSet, 
                                       mainRoomTemp, 
                                       mainRoomTamburHeaterOn, 
@@ -367,6 +370,7 @@ var mainRoomTamburHeater = new Device(mainRoomTempSet,
                                       mainRoomTamburHeaterMemoryCell, 
                                       mainRoomTamburHeaterHeader, 
                                       heaterHisteresis);
+
 var baniaMainHeater = new Device(restRoomTempSet, 
                                  restRoomTemp, 
                                  mainHeaterOn, 
@@ -374,6 +378,7 @@ var baniaMainHeater = new Device(restRoomTempSet,
                                  mainHeaterMemoryCell, 
                                  mainHeaterHeader, 
                                  heaterHisteresis);
+
 var baniaMediumHeater = new Device(restRoomTempSet, 
                                    restRoomTemp, 
                                    mediumHeaterOn, 
@@ -381,6 +386,7 @@ var baniaMediumHeater = new Device(restRoomTempSet,
                                    mediumHeaterMemoryCell, 
                                    mediumHeaterHeader, 
                                    heaterHisteresis);
+
 var baniaTamburHeater = new Device(restRoomTempSet, 
                                    restRoomTemp, 
                                    tamburHeaterOn, 
@@ -388,6 +394,7 @@ var baniaTamburHeater = new Device(restRoomTempSet,
                                    tamburHeaterMemoryCell, 
                                    tamburHeaterHeader, 
                                    heaterHisteresis);
+
 var waterPrepareHeater = new Device(waterPrepareTempSet, 
                                     waterPrepareTemp, 
                                     waterPrepareHeaterOn, 
@@ -395,6 +402,7 @@ var waterPrepareHeater = new Device(waterPrepareTempSet,
                                     waterPrepareMemoryCell, 
                                     waterPrepareHeaterHeader, 
                                     heaterHisteresis);
+                                    
 var gmHousHeater = new Device(gmHousTempSet, 
                               gmHousTemp, 
                               gmHousHeaterOn, 

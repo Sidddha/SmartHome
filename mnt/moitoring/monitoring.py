@@ -22,7 +22,7 @@ def composeCSV(input_file, output_file):
                 writer.writerow([time, row[2]])
 
 
-def csvToList(input_file):
+def csvToDict(input_file):
     
     with open(input_file, newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
@@ -38,4 +38,6 @@ composeCSV(path_to_db + "MainRoomTemp", path_to_db + "main_room_strp")
 composeCSV(path_to_db + "BaniaTemp", path_to_db + "banya_strp")
 composeCSV(path_to_db + "gmHousTemp", path_to_db + "gm_hous_strp")
 
-csv
+Outdoor = csvToDict("./outdoor_strp")
+MainRoom = csvToDict("./main_room_strp")
+
