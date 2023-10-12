@@ -116,12 +116,6 @@ var restRoomTempSet = "rest-room/MainHeaterControl";
 var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
-//*************Alarms*******************/
-/////////////////////////////////////////
-
-
-
-/////////////////////////////////////////
 
 var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis, external_topic, track_mqtt) {
     this.set_param = set_param;
@@ -202,6 +196,7 @@ var Device = function(set_param, actual_param, device_control, button_control, m
                     break;
                 default:
                     publish(this.device_control, "false");
+                    device.setMode("OFF");
                     debug("publish to: " + this.device_control);
                     debug(this.header_control + " set to " + false);
                     break;           
@@ -231,6 +226,7 @@ var Device = function(set_param, actual_param, device_control, button_control, m
                         break;
                     default:
                         dev[this.device_control] = false;
+                        device.setMode("OFF");
                         debug(this.header_control + " set to " + false);
                         break;           
                 }
@@ -333,17 +329,79 @@ function global_button(devices, global_button, global_memory_cell, global_header
     })
 }
 
-var mainOutdoorLight = new Device(globalLightSet, outdoorLightLux, mainRoomOutdoorLightOn, mainOutdoorLightButton, mainRoomOutdoorLightMemoryCell, mainRoomOutdoorLightHeader, illuminanceHisteresis);
-var gmOutdoorLight = new Device(globalLightSet, outdoorLightLux, gmOutdoorLightOn, gmOutdoorLightButton, gmHousOutdoorLightMemoryCell, gmOutdoorLightHeader, illuminanceHisteresis);
+var mainOutdoorLight = new Device(globalLightSet, 
+                                  outdoorLightLux, 
+                                  mainRoomOutdoorLightOn, 
+                                  mainOutdoorLightButton, 
+                                  mainRoomOutdoorLightMemoryCell, 
+                                  mainRoomOutdoorLightHeader, 
+                                  illuminanceHisteresis);
+var gmOutdoorLight = new Device(globalLightSet, 
+                                outdoorLightLux, 
+                                gmOutdoorLightOn, 
+                                gmOutdoorLightButton, 
+                                gmHousOutdoorLightMemoryCell, 
+                                gmOutdoorLightHeader, 
+                                illuminanceHisteresis);
 
-var mainRoomHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomHeaterOn, mainRoomHeaterButton, mainRoomHeaterMemoryCell, mainRoomHeaterHeader, heaterHisteresis, true, "stat/tasmota_C6208D/POWER");
-var mainRoomTamburCarpet = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburCarpetOn, mainRoomTamburCarpetButton, mainRoomTamburCarpetMemoryCell, mainRoomTamburCarpetHeader, heaterHisteresis);
-var mainRoomTamburHeater = new Device(mainRoomTempSet, mainRoomTemp, mainRoomTamburHeaterOn, mainRoomTamburHeaterButton, mainRoomTamburHeaterMemoryCell, mainRoomTamburHeaterHeader, heaterHisteresis);
-var baniaMainHeater = new Device(restRoomTempSet, restRoomTemp, mainHeaterOn, mainHeaterButton, mainHeaterMemoryCell, mainHeaterHeader, heaterHisteresis);
-var baniaMediumHeater = new Device(restRoomTempSet, restRoomTemp, mediumHeaterOn, mediumHeaterButton, mediumHeaterMemoryCell, mediumHeaterHeader, heaterHisteresis);
-var baniaTamburHeater = new Device(restRoomTempSet, restRoomTemp, tamburHeaterOn, tamburHeaterButton, tamburHeaterMemoryCell, tamburHeaterHeader, heaterHisteresis);
-var waterPrepareHeater = new Device(waterPrepareTempSet, waterPrepareTemp, waterPrepareHeaterOn, waterPrepareHeaterButton, waterPrepareMemoryCell, waterPrepareHeaterHeader, heaterHisteresis);
-var gmHousHeater = new Device(gmHousTempSet, gmHousTemp, gmHousHeaterOn, gmHousHeaterButton, gmHousHeaterMemoryCell, gmHousHeaterHeader, heaterHisteresis);
+var mainRoomHeater = new Device(mainRoomTempSet, 
+                                mainRoomTemp, 
+                                mainRoomHeaterOn, 
+                                mainRoomHeaterButton, 
+                                mainRoomHeaterMemoryCell, 
+                                mainRoomHeaterHeader, 
+                                heaterHisteresis, 
+                                true, 
+                                "stat/tasmota_C6208D/POWER");
+var mainRoomTamburCarpet = new Device(mainRoomTempSet, 
+                                      mainRoomTemp, 
+                                      mainRoomTamburCarpetOn, 
+                                      mainRoomTamburCarpetButton, 
+                                      mainRoomTamburCarpetMemoryCell, 
+                                      mainRoomTamburCarpetHeader, 
+                                      heaterHisteresis);
+var mainRoomTamburHeater = new Device(mainRoomTempSet, 
+                                      mainRoomTemp, 
+                                      mainRoomTamburHeaterOn, 
+                                      mainRoomTamburHeaterButton, 
+                                      mainRoomTamburHeaterMemoryCell, 
+                                      mainRoomTamburHeaterHeader, 
+                                      heaterHisteresis);
+var baniaMainHeater = new Device(restRoomTempSet, 
+                                 restRoomTemp, 
+                                 mainHeaterOn, 
+                                 mainHeaterButton, 
+                                 mainHeaterMemoryCell, 
+                                 mainHeaterHeader, 
+                                 heaterHisteresis);
+var baniaMediumHeater = new Device(restRoomTempSet, 
+                                   restRoomTemp, 
+                                   mediumHeaterOn, 
+                                   mediumHeaterButton, 
+                                   mediumHeaterMemoryCell, 
+                                   mediumHeaterHeader, 
+                                   heaterHisteresis);
+var baniaTamburHeater = new Device(restRoomTempSet, 
+                                   restRoomTemp, 
+                                   tamburHeaterOn, 
+                                   tamburHeaterButton, 
+                                   tamburHeaterMemoryCell, 
+                                   tamburHeaterHeader, 
+                                   heaterHisteresis);
+var waterPrepareHeater = new Device(waterPrepareTempSet, 
+                                    waterPrepareTemp, 
+                                    waterPrepareHeaterOn, 
+                                    waterPrepareHeaterButton, 
+                                    waterPrepareMemoryCell, 
+                                    waterPrepareHeaterHeader, 
+                                    heaterHisteresis);
+var gmHousHeater = new Device(gmHousTempSet, 
+                              gmHousTemp, 
+                              gmHousHeaterOn, 
+                              gmHousHeaterButton, 
+                              gmHousHeaterMemoryCell, 
+                              gmHousHeaterHeader, 
+                              heaterHisteresis);
 
 var heaters = [
     baniaMainHeater,

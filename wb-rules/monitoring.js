@@ -22,14 +22,14 @@ CollectValues.prototype.getValues = function () {
     defineRule(this.name, {
         when: cron("@dayli"),
         then: function () {
-            runShellCommand(("wb-mqtt-db-cli --from {} --decimal-places 2 -a {} -o /mnt/sdcard/monitoring_db/{} --timeout 10", date, this.control, this.name), {
+            runShellCommand(("wb-mqtt-db-cli --from {} --decimal-places 1 -a {} -o /mnt/sdcard/monitoring_db/{} --timeout 10", date, this.control, this.name), {
                 captureOutput: false
             });
         }
     });
 }
 
-var MainRoomTemp = new CollectValues("MainPoomTemp", "wb-msw-v3_201/Temperature");
+var MainRoomTemp = new CollectValues("MainRoomTemp", "wb-msw-v3_201/Temperature");
 var BaniaTemp = new CollectValues("BaniaTemp", "wb-msw-v3_49/Temperature");
 var gmHousTemp = new CollectValues("gmHousTemp", "wb-ms_132/Temperature");
 var outdoorTemp = new CollectValues("outdoorTemp", "wb-ms_138/Temperature");
@@ -39,9 +39,9 @@ BaniaTemp.getValues();
 gmHousTemp.getValues();
 outdoorTemp.getValues();
 
-defineRule("RunPythoScript", {
-    when: cron("@dayli"),
-    then: function () {
-        spawn("python3 /mnt/sdcard/monitoring_db/monitoring.py");
-    }
-});
+// defineRule("RunPythoScript", {
+//     when: cron("@dayli"),
+//     then: function () {
+//         spawn("python3 /mnt/sdcard/monitoring_db/monitoring.py");
+//     }
+// });
