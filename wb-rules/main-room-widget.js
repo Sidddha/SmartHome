@@ -5,17 +5,7 @@ var mainRoomOutdoorLightState= "wb-mr6c_24/K4";
 
 var mainRoomTemp = "wb-msw-v3_201/Temperature";
 var mainRoomHum = "wb-msw-v3_201/Humidity";
-var mainRoomTempSet = "main-room/HeaterControl";
 
-var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
-var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
-var mainRoomHeaterButton = "main-room/HeaterButton";
-var mainOutdoorLightButton = "main-room/OutdoorLightButton";
-
-var mainRoomTamburCarpetHeader = "main-room/TamburCarpetHeader";
-var mainRoomTamburHeaterHeader = "main-room/TamburHeaterHeader";
-var mainRoomHeaterHeader = "main-room/HeaterHeader";
-var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
 
 defineVirtualDevice("main-room", {
     title: "MainRoom" ,
@@ -69,12 +59,12 @@ defineVirtualDevice("main-room", {
             value: "Второй этаж"
           },        
         Temperature2: {
-            title: "Temperature2",
+            title: "Температура",
             type: "temperature",
             value: dev["wb-ms_90/Temperature"]
             },
         Humidity2: {
-            title: "Humidity2",
+            title: "Влажность",
             type: "rel_humidity",
             value: dev["wb-ms_90/Humidity"]
             }                                             

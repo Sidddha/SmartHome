@@ -12,19 +12,6 @@ var tempBarrel2 = "wb-ms_187/External Sensor 2"
 var underfloorTemperature = "wb-ms_239/Temperature";
 var underfloorHumidity = "wb-ms_239/Humidity";
 
-var mainHeaterButton = "rest-room/MainHeaterButton";
-var mediumHeaterButton = "rest-room/MediumHeaterButton";
-var tamburHeaterButton = "rest-room/TamburHeaterButton";
-var waterPrepareHeaterButton = "rest-room/WaterPrepareHeaterButton";
-
-var mainHeaterHeader = "rest-room/MainHeaterHeader";
-var mediumHeaterHeader = "rest-room/MediumHeaterHeader";
-var tamburHeaterHeader = "rest-room/TamburHeaterHeader";
-var waterPrepareHeaterHeader = "rest-room/WaterPrepareHeaterHeader";
-
-var restRoomTempSet = "rest-room/MainHeaterControl";
-var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
-
 defineVirtualDevice("bania-widget", {
     title: "BaniaWidget" ,
     readonly: false, 
@@ -35,45 +22,34 @@ defineVirtualDevice("bania-widget", {
             value: "Комната отдыха"
         },
         TemperatureRestRoom: {
-            title: "Temperature",
+            title: "Температура",
             type: "temperature",
             value: dev[restRoomTemp]
 	    },
         HumidityRestRoom: {
-            title: "Humidity",
+            title: "Влажность",
             type: "rel_humidity",
             value: dev[restRoomHum]
 	    },
-        MainHeaterHeader: {
-            title: "MainHeater",
-            type: "text",
-            value: "Большой радиатор"
-        },
         MainHeaterControl: {
+            titlt: "Регулировка температура",
             type: "range",
             value: 22,
             min: 5,
             max: 30
         },
         MainHeaterButton: {
+            title: "Большой радиатор",
             type: "switch",
             value: dev[mainHeaterState]
-        },
-        MediumHeaterHeader: {
-            title: "MediumHeater",
-            type: "text",
-            value: "Средний радиатор"
-        },          
+        },        
         MediumHeaterButton: {
+            title: "MediumHeater",
             type: "switch",
             value: dev[mediumHeaterState]
-        }, 
-        TamburHeaterHeader: {
-            title: "TamburHeater",
-            type: "text",
-            value: "Радиатор в тамбуре"
         },
         TamburHeaterButton: {
+            title: "Радиатор в тамбуре",
             type: "switch",
             value: dev[tamburHeaterState]
         },              
@@ -83,37 +59,34 @@ defineVirtualDevice("bania-widget", {
             value: "Комната водоподготовки"
         },    
         TemperatureWaterPrepareRoom: {
-            title: "Temperature",
+            title: "Температура",
             type: "temperature",
             value: dev[waterPrepareTemp]
         },
         HumidityWaterPrepareRoom: {
-            title: "Humidity",
+            title: "Влажность",
             type: "rel_humidity",
             value: dev[waterPrepareHum]
         },
         WaterPrepareHeaterControl: {
+            title: "Регулировка температуры",
             type: "range",
             value: 22,
             min: 5,
             max: 30
         },        
-        WaterPrepareHeaterHeader: {
-            title: "WaterPrepareHeater",
-            type: "text",
-            value: "Радиатор"
-        },
         WaterPrepareHeaterButton: {
+            title: "Радиатор",
             type: "switch",
             value: dev[waterPrepareHeaterState]
         },
         TemperatureBarrel1: {
-            title: "Temperature",
+            title: "Температура в бочке",
             type: "temperature",
             value: dev[tempBarrel1]
 	    },
         TemperatureBarrel2: {
-            title: "Temperature",
+            title: "Температура в бочке",
             type: "temperature",
             value: dev[tempBarrel2]
 	    },              
@@ -123,12 +96,12 @@ defineVirtualDevice("bania-widget", {
             value: "Подвал"
         },       
         TemperatureUnderfloor: {
-            title: "UnderfloorTemperature",
+            title: "Температура",
             type: "temperature",
             value: dev[underfloorTemperature]
 	    },
         HumidityUnderfloor: {
-            title: "Humidity",
+            title: "Влажность",
             type: "rel_humidity",
             value: dev[underfloorHumidity]
 	    }
