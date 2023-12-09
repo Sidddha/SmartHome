@@ -1,30 +1,21 @@
-var heaterState = new PersistentStorage("heater-states", {global: true});
-var lightState = new PersistentStorage("light-states", {global: true});
-
-var mainRoomTamburCarpetMemoryCell = heaterState["mainRoomTamburCarpet"];
-var mainRoomTamburHeaterMemoryCell = heaterState["mainRoomTamburHeater"];
-var mainRoomHeaterMemoryCell = heaterState["mainRoomHeater"];
-
-var mainRoomOutdoorLightMemoryCell = lightState["mainRoomOutdoorLight"];
-
 defineVirtualDevice("main-room", {
     title: "MainRoom" ,
     readonly: false, 
     cells: {
         Header: {
-            title: "header",
+            title: "FirstFLoor",
             type: "text",
             value: "Первый этаж"
           },        
         Temperature: {
             title: "Temperature",
             type: "temperature",
-            value: dev["wb-msw-v3_201/Temperature"]
+            value: dev[mainRoomTemp]
             },
         Humidity: {
             title: "Humidity",
             type: "rel_humidity",
-            value: dev["wb-msw-v3_201/Humidity"]
+            value: dev[mainRoomHum]
             },
         HeaterControl: {
             title: "Установка температуры",
@@ -34,43 +25,27 @@ defineVirtualDevice("main-room", {
             max: 30
         },
         TamburCarpetButton: {
-            type: "pushbutton",
-            value: false
+            title: "Коврик в тамбуре",
+            type: "switch",
+            value: dev[mainRoomTamburCarpetState]
         },
         TamburHeaterButton: {
-            type: "pushbutton",
-            value: false
+            title: "Радиатор в тамбуре",
+            type: "switch",
+            value: dev[mainRoomTamburHeaterState]
         },
         HeaterButton: {
-            type: "pushbutton",
-            value: false
+            title: "Радиатор в комнате",
+            type: "switch",
+            value: dev[mainRoomHeaterState]
         },
         OutdoorLightButton: {
-            type: "pushbutton",
-            value: false
+            title: "Уличное освещение",
+            type: "switch",
+            value: dev[mainRoomOutdoorLightState]
         },
-        OutdoorLightHeader: {
-            title: "header",
-            type: "text",
-            value: lightState["mainOutdoorLight"]
-        },
-        TamburCarpetHeader: {
-            title: "header",
-            type: "text",
-            value: heaterState["tamburCarpet"]
-          }, 
-        TamburHeaterHeader: {
-            title: "header",
-            type: "text",
-            value: heaterState["tamburHeater"]
-          }, 
-        HeaterHeader: {
-            title: "header",
-            type: "text",
-            value: heaterState["mainHeater"]
-          },  
         SecondFloorHeader: {
-            title: "header",
+            title: "SecondFloor",
             type: "text",
             value: "Второй этаж"
           },        

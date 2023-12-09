@@ -25,6 +25,7 @@ var mainRoomHeaterState= "cmnd/tasmota_C6208D/POWER";
 var mainRoomOutdoorLightState= "wb-mr6c_24/K4";
 
 var mainRoomTemp = "wb-msw-v3_201/Temperature";
+var mainRoomHum = "wb-msw-v3_201/Humidity";
 var mainRoomTempSet = "main-room/HeaterControl";
 
 var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
