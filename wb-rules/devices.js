@@ -2,20 +2,10 @@
 //*********Global variables****** */
 ////////////////////////////////////
 
-var firstStart = "start/FirstStart";
-
 var heaterHisteresis = 0.5;
-
-var GlobalHeaterState = new PersistentStorage("global-heater-states", {global: true});
-var heaterState = new PersistentStorage("heater-states", {global: true});
-var lightState = new PersistentStorage("light-states", {global: true});
-
-GlobalHeaterState["globalHeater"] = "OFF";
-lightState["global"] = "OFF";
 
 var globalHeaterButton = "global/GlobalHeaterButton";
 var globalHeaterHeader = "global/HeaderGH";
-var globalHeaterMemoryCell = GlobalHeaterState["globalHeater"];
 
 var outdoorLightLux = "wb-ms_138/Illuminance";
 
@@ -24,28 +14,15 @@ var illuminanceHisteresis = 2;
 var globalLightButton = "global/GlobalLightButton";
 var globalLightHeader = "global/GlobalLightHeader";
 var globalLightSet = "global/LightControl";
-var globalLightMemoryCell = lightState["global"];
 
 ////////////////////////////////////
 //*********Main room variables*****/
 ////////////////////////////////////
 
-heaterState["mainRoomTamburCarpet"] = "OFF";
-heaterState["mainRoomTamburHeater"] = "OFF";
-heaterState["mainRoomHeater"] = "OFF";
-
-lightState["mainRoomOutdoorLight"] = "OFF";
-
-var mainRoomTamburCarpetMemoryCell = heaterState["mainRoomTamburCarpet"];
-var mainRoomTamburHeaterMemoryCell = heaterState["mainRoomTamburHeater"];
-var mainRoomHeaterMemoryCell = heaterState["mainRoomHeater"];
-
-var mainRoomOutdoorLightMemoryCell = lightState["mainRoomOutdoorLight"];
-
-var mainRoomTamburCarpetOn = "wb-mr6c_24/K3";
-var mainRoomTamburHeaterOn = "wb-mr6c_24/K2";
-var mainRoomHeaterOn = "cmnd/tasmota_C6208D/POWER";
-var mainRoomOutdoorLightOn = "wb-mr6c_24/K4";
+var mainRoomTamburCarpetState= "wb-mr6c_24/K3";
+var mainRoomTamburHeaterState= "wb-mr6c_24/K2";
+var mainRoomHeaterState= "cmnd/tasmota_C6208D/POWER";
+var mainRoomOutdoorLightState= "wb-mr6c_24/K4";
 
 var mainRoomTemp = "wb-msw-v3_201/Temperature";
 var mainRoomTempSet = "main-room/HeaterControl";
@@ -65,39 +42,23 @@ var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
 ////////////////////////////////////
 
 var gmHousTemp = "wb-ms_132/Temperature";
-var gmHousHeaterOn = "wb-mr3_34/K1";
+var gmHousHeaterState= "wb-mr3_34/K1";
 var gmHousTempSet = "grandmas-hous/HeaterControl";
 var gmHousHeaterButton = "grandmas-hous/HeaterButton";
 var gmHousHeaterHeader = "grandmas-hous/HeaterHeader";
 
-var gmOutdoorLightOn = "wb-mr3_34/K3";
+var gmOutdoorLightState= "wb-mr3_34/K3";
 var gmOutdoorLightButton = "grandmas-hous/OutdoorLightButton";
 var gmOutdoorLightHeader = "grandmas-hous/OutdoorLightHeader";
-
-heaterState["gmHousHeater"] = "OFF";
-lightState["gmOutdoorLight"] = "OFF";
-
-var gmHousOutdoorLightMemoryCell = lightState["gmOutdoorLight"];
-var gmHousHeaterMemoryCell = heaterState["gmHousHeater"];
 
 ////////////////////////////////////
 //*********Bania variables*********/
 ////////////////////////////////////
 
-heaterState["baniaMainHeater"] = "OFF";
-heaterState["baniaMediumHeater"] = "OFF";
-heaterState["baniaTamburHeater"] = "OFF";
-heaterState["baniaWaterPrepareHeater"] = "OFF";
-
-var mainHeaterMemoryCell = heaterState["baniaMainHeater"];
-var mediumHeaterMemoryCell = heaterState["baniaMediumHeater"];
-var tamburHeaterMemoryCell = heaterState["baniaTamburHeater"];
-var waterPrepareMemoryCell = heaterState["baniaWaterPrepareHeater"];
-
-var mainHeaterOn = "wb-mr6c_214/K3";
-var mediumHeaterOn = "wb-mr6c_214/K4";
-var tamburHeaterOn = "wb-mr6c_214/K5";
-var waterPrepareHeaterOn = "wb-mr6c_214/K6";
+var mainHeaterState= "wb-mr6c_214/K3";
+var mediumHeaterState= "wb-mr6c_214/K4";
+var tamburHeaterState= "wb-mr6c_214/K5";
+var waterPrepareHeaterState= "wb-mr6c_214/K6";
 
 var restRoomTemp = "wb-msw-v3_49/Temperature";
 var waterPrepareTemp = "wb-ms_187/Temperature";
@@ -117,42 +78,28 @@ var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
-var Device = function(set_param, actual_param, device_control, button_control, memory_cell, header_control, histeresis, external_topic, track_mqtt) {
+var Device = function(set_param, actual_param, device_control, button_control, header_control, histeresis) {
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
     this.button_control = button_control;
-    this.memory_cell = memory_cell;
     this.header_control = header_control;
     this.histeresis = histeresis;
-    if(external_topic == undefined) {
-        this.external_topic = false;
-    } else {
-        this.external_topic = external_topic;
-        this.track_mqtt = track_mqtt;
-    }
-
   }
   
-  Device.prototype.setMode = function(mode) {
-    this.memory_cell = mode;
-    getControl(this.header_control).setValue(this.memory_cell);
+  Device.prototype.setModeAuto = function(mode) {
+    getControl(this.header_control).setReadonly(mode);
     debug(this.header_control);
   }
   
-  Device.prototype.getMode = function() {
-    return this.memory_cell;	
+  Device.prototype.getModeAuto = function() {
+    return getControl(this.header_control).getReadonly();
+  }
+  Device.prototype.setValue = function(value) {
+    getControl(this.header_control).setValue(value);
   }
   Device.prototype.getValue = function() {
-    switch(this.external_topic) {
-        case false: 
-            return dev[this.device_control];
-        case true:
-            trackMqtt(this.track_mqtt, function(message){
-                return message.value;
-              });
-              break;
-    }
+    return getControl(this.header_control).getValue();
   }
   Device.prototype.getActualParam = function() {
     return this.actual_param;	
@@ -165,74 +112,33 @@ var Device = function(set_param, actual_param, device_control, button_control, m
   }
   
   Device.prototype.checkState = function() {
-    debug(this.header_control + "external is: " + this.external_topic);
-    switch(this.external_topic) {
-
-        case true:
-            switch(this.memory_cell) {
-                case "AUTO":
-                    if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
-                        publish(this.device_control, "false");
-                        debug("publish to: " + this.device_control);
-                        debug(this.header_control + " set to " + false);
-                        return;
-                    }
-                    if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
-                        publish(this.device_control, "true");
-                        debug("publish to: " + this.device_control);
-                        debug(this.header_control + " set to " + true);
-                        return;
-                    }
-                    break;
-                case "ON":
-                    publish(this.device_control, "true");
-                    debug("publish to: " + this.device_control);
-                    debug(this.header_control + " set to " + true);
-                    break;
-                case "OFF":
-                    publish(this.device_control, "false");
-                    debug("publish to: " + this.device_control);
-                    debug(this.header_control + " set to " + false);
-                    break;
-                default:
-                    publish(this.device_control, "false");
-                    device.setMode("OFF");
-                    debug("publish to: " + this.device_control);
-                    debug(this.header_control + " set to " + false);
-                    break;           
-            }
+    if(this.getModeAuto()) {
+        if(getControl(this.actual_param).getValue() > (getControl(this.set_param).getValue() + this.histeresis)) {
+          getControl(this.device_control).setValue(false);
+          debug(this.header_control + " set to " + false);
+          return;
+        }
+        if(getControl(this.actual_param).getValue() < (getControl(this.set_param).getValue() - this.histeresis)) {
+            getControl(this.device_control).setValue(true);
+            debug(this.header_control + " set to " + true);
+            return;
+        }
+    } else {
+        switch(getControl(this.button_control)) {
+            case true:
+                getControl(this.device_control).setValue(true);
+                debug(this.header_control + " set to " + true);
+                break;
+            case false:
+                getControl(this.device_control).setValue(false);
+                debug(this.header_control + " set to " + false);
                 break;
             default:
-                switch(this.memory_cell) {
-                    case "AUTO":
-                        if(dev[this.actual_param] > (dev[this.set_param] + this.histeresis)) {
-                          dev[this.device_control] = false;
-                          debug(this.header_control + " set to " + false);
-                          return;
-                        }
-                        if(dev[this.actual_param] < (dev[this.set_param] - this.histeresis)) {
-                          dev[this.device_control] = true;
-                          debug(this.header_control + " set to " + true);
-                          return;
-                        }
-                        break;
-                    case "ON":
-                        dev[this.device_control] = true;
-                        debug(this.header_control + " set to " + true);
-                        break;
-                    case "OFF":
-                        dev[this.device_control] = false;
-                        debug(this.header_control + " set to " + false);
-                        break;
-                    default:
-                        dev[this.device_control] = false;
-                        device.setMode("OFF");
-                        debug(this.header_control + " set to " + false);
-                        break;           
-                }
-                break;
+                getControl(this.device_control).setValue(false);
+                debug(this.header_control + " set to " + false);
+                break;          
+        }
     }
-
   }
 
 function check_state(device) {
@@ -240,7 +146,7 @@ function check_state(device) {
             whenChanged: [device.set_param, device.actual_param],
             then: function() {
                 device.checkState();
-                log("Device {} set to {}", device.header_control, device.getValue());
+                debug("Device {} set to {}", device.header_control, device.getValue());
             }
         })  
     }
@@ -251,79 +157,53 @@ function button(device) {
         when: function() {
             return dev[device.button_control];
         },
-        then: function() {
-            restrict = readConfig("/mnt/data/on-start-restrict.json");
-            if(restrict.restrict_buttons) {
-                log("button {} restricted", device.button_control);
-                return;
-            } else {
-            switch(device.memory_cell) {
-                case "AUTO":
-                    device.setMode("ON");
+        then: function(newValue) {
+
+            switch(newValue) {
+                case true:
+                    device.setValue(true);
                     device.checkState();
                     break;
-                case "ON":
-                    device.setMode("OFF");
-                    device.checkState();
-                    break;
-                case "OFF":
-                    device.setMode("AUTO");
+                case false:
+                    device.setValue(false);
                     device.checkState();
                     break;
                 default:
-                    device.setMode("OFF");
+                    device.setValue(false);
                     device.checkState();
-                    break;                   
+                    break;   
             }  
-            log("function: button. Device: {}, device state: {}", device.header_control, device.getValue());
+            debug("function: button. Device: {}, device state: {}", device.header_control, device.getValue());
             }  
         }
-    })
+    )
 }
     
 
 
 
-function global_button(devices, global_button, global_memory_cell, global_header) {
+function global_button(devices, global_button) {
 
     defineRule({
         when: function() {
         return dev[global_button];
         },
-        then: function() {
-            restrict = readConfig("/mnt/data/on-start-restrict.json");
-            if(restrict.restrict_buttons) {
-                log("function: global_button restricted")
-                return;
-            } else {            
-                switch(global_memory_cell) {
-                    case "AUTO":    
-                        global_memory_cell = "ON";
-                        getControl(global_header).setValue(global_memory_cell);
-                        break;
-                    case "ON":
-                        global_memory_cell = "OFF";
-                        getControl(global_header).setValue(global_memory_cell);
-                        break;
-                    case "OFF":
-                        global_memory_cell = "AUTO";
-                        getControl(global_header).setValue(global_memory_cell);
-                        break;
-                    default:
-                        global_memory_cell = "OFF";
-                        getControl(global_header).setValue(global_memory_cell);
-                        break;
-
-                };
-
-                for( i = 0; i < devices.length; ++i) {
-                    device = devices[i];
-                    device.setMode(global_memory_cell);
-                    device.checkState();
-                    debug(i + " " + device.getButton())
-                    log("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
+        then: function(newValue) {
+          
+            if(newValue) {
+                for(device in devices) {
+                    device.setModeAuto(true);
+                    debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
+                }
+            } else {
+                for(device in devices) {
+                    device.setModeAuto(false);
+                    debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
 
                 }
+            }
+            for(device in devices) {
+                device.checkState();
             }
         }
     })
@@ -331,83 +211,71 @@ function global_button(devices, global_button, global_memory_cell, global_header
 
 var mainOutdoorLight = new Device(globalLightSet, 
                                   outdoorLightLux, 
-                                  mainRoomOutdoorLightOn, 
+                                  mainRoomOutdoorLightState, 
                                   mainOutdoorLightButton, 
-                                  mainRoomOutdoorLightMemoryCell, 
                                   mainRoomOutdoorLightHeader, 
                                   illuminanceHisteresis);
 
 var gmOutdoorLight = new Device(globalLightSet, 
                                 outdoorLightLux, 
-                                gmOutdoorLightOn, 
+                                gmOutdoorLightState, 
                                 gmOutdoorLightButton, 
-                                gmHousOutdoorLightMemoryCell, 
                                 gmOutdoorLightHeader, 
                                 illuminanceHisteresis);
 
-var mainRoomHeater = new Device(mainRoomTempSet, 
-                                mainRoomTemp, 
-                                mainRoomHeaterOn, 
-                                mainRoomHeaterButton, 
-                                mainRoomHeaterMemoryCell, 
-                                mainRoomHeaterHeader, 
-                                heaterHisteresis, 
-                                true, 
-                                "stat/tasmota_C6208D/POWER");
+// var mainRoomHeater = new Device(mainRoomTempSet, 
+//                                 mainRoomTemp, 
+//                                 mainRoomHeaterState, 
+//                                 mainRoomHeaterButton, 
+//                                 mainRoomHeaterHeader, 
+//                                 heaterHisteresis,);
 
 var mainRoomTamburCarpet = new Device(mainRoomTempSet, 
                                       mainRoomTemp, 
-                                      mainRoomTamburCarpetOn, 
+                                      mainRoomTamburCarpetState, 
                                       mainRoomTamburCarpetButton, 
-                                      mainRoomTamburCarpetMemoryCell, 
                                       mainRoomTamburCarpetHeader, 
                                       heaterHisteresis);
 
 var mainRoomTamburHeater = new Device(mainRoomTempSet, 
                                       mainRoomTemp, 
-                                      mainRoomTamburHeaterOn, 
+                                      mainRoomTamburHeaterState, 
                                       mainRoomTamburHeaterButton, 
-                                      mainRoomTamburHeaterMemoryCell, 
                                       mainRoomTamburHeaterHeader, 
                                       heaterHisteresis);
 
 var baniaMainHeater = new Device(restRoomTempSet, 
                                  restRoomTemp, 
-                                 mainHeaterOn, 
+                                 mainHeaterState, 
                                  mainHeaterButton, 
-                                 mainHeaterMemoryCell, 
                                  mainHeaterHeader, 
                                  heaterHisteresis);
 
 var baniaMediumHeater = new Device(restRoomTempSet, 
                                    restRoomTemp, 
-                                   mediumHeaterOn, 
+                                   mediumHeaterState, 
                                    mediumHeaterButton, 
-                                   mediumHeaterMemoryCell, 
                                    mediumHeaterHeader, 
                                    heaterHisteresis);
 
 var baniaTamburHeater = new Device(restRoomTempSet, 
                                    restRoomTemp, 
-                                   tamburHeaterOn, 
+                                   tamburHeaterState, 
                                    tamburHeaterButton, 
-                                   tamburHeaterMemoryCell, 
                                    tamburHeaterHeader, 
                                    heaterHisteresis);
 
 var waterPrepareHeater = new Device(waterPrepareTempSet, 
                                     waterPrepareTemp, 
-                                    waterPrepareHeaterOn, 
+                                    waterPrepareHeaterState, 
                                     waterPrepareHeaterButton, 
-                                    waterPrepareMemoryCell, 
                                     waterPrepareHeaterHeader, 
                                     heaterHisteresis);
                                     
 var gmHousHeater = new Device(gmHousTempSet, 
                               gmHousTemp, 
-                              gmHousHeaterOn, 
+                              gmHousHeaterState, 
                               gmHousHeaterButton, 
-                              gmHousHeaterMemoryCell, 
                               gmHousHeaterHeader, 
                               heaterHisteresis);
 
@@ -417,7 +285,7 @@ var heaters = [
     baniaTamburHeater,
     waterPrepareHeater,
     gmHousHeater,
-    mainRoomHeater,
+    // mainRoomHeater,
     mainRoomTamburCarpet,
     mainRoomTamburHeater
 ]
@@ -427,30 +295,15 @@ var lights = [
     gmOutdoorLight
 ]
 
-global_button(heaters, globalHeaterButton, globalHeaterMemoryCell, globalHeaterHeader);
-global_button(lights, globalLightButton, globalLightMemoryCell, globalLightHeader);
+global_button(heaters, globalHeaterButton);
+global_button(lights, globalLightButton);
 
-button(baniaMainHeater);
-button(baniaMediumHeater);
-button(baniaTamburHeater);
-button(waterPrepareHeater);
-button(gmHousHeater);
-button(mainRoomHeater);
-button(mainRoomTamburCarpet);
-button(mainRoomTamburHeater);
+for(device in heaters) {
+    button(device);
+    check_state(device);
+}
 
-button(mainOutdoorLight);
-button(gmOutdoorLight);
-
-
-check_state(baniaMainHeater);
-check_state(baniaMediumHeater);
-check_state(baniaTamburHeater);
-check_state(waterPrepareHeater);
-check_state(gmHousHeater);
-check_state(mainRoomHeater);
-check_state(mainRoomTamburCarpet);
-check_state(mainRoomTamburHeater);
-
-check_state(mainOutdoorLight);
-check_state(gmOutdoorLight);
+for(device in lights) {
+    button(device);
+    check_state(device);    
+}
