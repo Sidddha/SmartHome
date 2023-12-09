@@ -1,33 +1,24 @@
-var GlobalHeaterState = new PersistentStorage("global-heater-states", {global: true});
-var lightState = new PersistentStorage("light-states", {global: true});
-
-GlobalHeaterState["globalHeater"] = "OFF";
-lightState["global"] = "OFF";
-
-var globalHeaterButton = "global/GlobalHeaterButton";
-var globalHeaterHeader = "global/HeaderGH";
-
 defineVirtualDevice("global", {
     title: "Global" ,
     readonly: false,
     cells: {
-      GlobalHeaterButton: {
-          type: "pushbutton",
-          value: false
-      },
       HeaderGH: {
-          title: "header",
+          title: "GlabalHeaterMode",
           type: "text",
-          value: GlobalHeaterState["globalHeater"]
+          value: "Включить авто-режим отопления"
       },
-      GlobalLightButton: {
-        type: "pushbutton",
-        value: false
+      GlobalHeaterButton: {
+          type: "switch",
+          value: dev[globalHeaterButton]
       },
       GlobalLightHeader: {
-        title: "header",
+        title: "GlobalLigth",
         type: "text",
-        value: lightState["global"]
+        value: "Включить авто-режим освещения"
+      },
+      GlobalLightButton: {
+        type: "switch",
+        value: dev[GlobalLightButton]
       },
       LightControl: {
         type: "range",
