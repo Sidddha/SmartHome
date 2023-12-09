@@ -1,32 +1,27 @@
-var heaterState = new PersistentStorage("heater-states", {global: true}); 
-var lightState = new PersistentStorage("light-states", {global: true}); 
-
-var baniaOutdoorLightMemoryCell = lightState["baniaOutdoorLight"];
-
-var mainHeaterMemoryCell = heaterState["baniaMainHeater"];
-var mediumHeaterMemoryCell = heaterState["baniaMediumHeater"];
-var tamburHeaterMemoryCell = heaterState["baniaTamburHeater"];
-var waterPrepareMemoryCell = heaterState["baniaWaterPrepareHeater"];
-
-defineVirtualDevice("rest-room", {
-    title: "RestRoom" ,
+defineVirtualDevice("bania-widget", {
+    title: "BaniaWidget" ,
     readonly: false, 
     cells: {
         HeaderRestRoom: {
-            title: "header",
+            title: "RestRoom",
             type: "text",
             value: "Комната отдыха"
         },
         TemperatureRestRoom: {
             title: "Temperature",
             type: "temperature",
-            value: dev["wb-msw-v3_49/Temperature"]
+            value: dev[restRoomTemp]
 	    },
         HumidityRestRoom: {
             title: "Humidity",
             type: "rel_humidity",
-            value: dev["wb-msw-v3_49/Humidity"]
+            value: dev[restRoomHum]
 	    },
+        MainHeaterHeader: {
+            title: "MainHeater",
+            type: "text",
+            value: "Большой радиатор"
+        },
         MainHeaterControl: {
             type: "range",
             value: 22,
@@ -34,96 +29,91 @@ defineVirtualDevice("rest-room", {
             max: 30
         },
         MainHeaterButton: {
-            type: "pushbutton",
-            value: false
-        },
-        MediumHeaterButton: {
-            type: "pushbutton",
-            value: false
-        }, 
-        TamburHeaterButton: {
-            type: "pushbutton",
-            value: false
-        },              
-        OutdoorLightButton: {
-            type: "pushbutton",
-            value: false
-        },
-        OutdoorLightHeader: {
-            title: "header",
-            type: "text",
-            value: lightState["baniaOutdoorLight"]
-        },
-        MainHeaterHeader: {
-            title: "header",
-            type: "text",
-            value: heaterState["baniaMainHeater"]
+            type: "switch",
+            value: dev[mainHeaterState]
         },
         MediumHeaterHeader: {
-            title: "header",
+            title: "MediumHeater",
             type: "text",
-            value: heaterState["baniaMediumHeater"]
+            value: "Средний радиатор"
         },          
+        MediumHeaterButton: {
+            type: "switch",
+            value: dev[mediumHeaterState]
+        }, 
         TamburHeaterHeader: {
-            title: "header",
+            title: "TamburHeater",
             type: "text",
-            value: heaterState["baniaTamburHeater"]
+            value: "Радиатор в тамбуре"
         },
+        TamburHeaterButton: {
+            type: "switch",
+            value: dev[tamburHeaterState]
+        },              
         HeaderWaterPrepare: {
-            title: "header",
+            title: "WaterPrepare",
             type: "text",
             value: "Комната водоподготовки"
         },    
+        TemperatureWaterPrepareRoom: {
+            title: "Temperature",
+            type: "temperature",
+            value: dev[waterPrepareTemp]
+        },
+        HumidityWaterPrepareRoom: {
+            title: "Humidity",
+            type: "rel_humidity",
+            value: dev[waterPrepareHum]
+        },
         WaterPrepareHeaterControl: {
             type: "range",
             value: 22,
             min: 5,
             max: 30
         },        
-        WaterPrepareHeaterButton: {
-            type: "pushbutton",
-            value: false
-        },
         WaterPrepareHeaterHeader: {
-            title: "header",
+            title: "WaterPrepareHeater",
             type: "text",
-            value: heaterState["baniaWaterPrepareHeater"]
+            value: "Радиатор"
         },
-        TemperatureWaterPrepareRoom: {
-            title: "Temperature",
-            type: "temperature",
-            value: dev["wb-ms_187/Temperature"]
-	    },
-        HumidityWaterPrepareRoom: {
-            title: "Humidity",
-            type: "rel_humidity",
-            value: dev["wb-ms_187/Humidity"]
-	    },
+        WaterPrepareHeaterButton: {
+            type: "switch",
+            value: dev[waterPrepareHeaterState]
+        },
         TemperatureBarrel1: {
             title: "Temperature",
             type: "temperature",
-            value: dev["wb-ms_187/External Sensor 1"]
+            value: dev[tempBarrel1]
 	    },
         TemperatureBarrel2: {
             title: "Temperature",
             type: "temperature",
-            value: dev["wb-ms_187/External Sensor 2"]
+            value: dev[tempBarrel2]
 	    },              
         HeaderUnderfloor: {
-            title: "header",
+            title: "Underfloor",
             type: "text",
             value: "Подвал"
         },       
         TemperatureUnderfloor: {
-            title: "Temperature",
+            title: "UnderfloorTemperature",
             type: "temperature",
-            value: dev["wb-ms_239/Temperature"]
+            value: dev[underfloorTemperature]
 	    },
         HumidityUnderfloor: {
             title: "Humidity",
             type: "rel_humidity",
-            value: dev["wb-ms_239/Humidity"]
+            value: dev[underfloorHumidity]
 	    }
+        // OutdoorLightButton: {
+        //     type: "switch",
+        //     value: false
+        // },
+        // OutdoorLightHeader: {
+        //     title: "OutdoorLight",
+        //     type: "text",
+        //     value: lightState["baniaOutdoorLight"]
+        // }
     }
 })
 
