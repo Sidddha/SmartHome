@@ -1,23 +1,16 @@
-var heaterState = new PersistentStorage("heater-states", {global: true});
-var lightState = new PersistentStorage("light-states", {global: true});
-
-var gmHousHeaterMemoryCell = heaterState["gmHousHeater"];
-var gmHousOutdoorLightMemoryCell = lightState["gmOutdoorLight"];
-
-
-defineVirtualDevice("grandmas-hous", {
-    title: "GrandmasHaus" ,
+defineVirtualDevice("grandmas-house", {
+    title: "GrandmasHouse" ,
     readonly: false,
     cells: {
       Temperature: {
           title: "Temperature",
 	        type: "temperature",
-	        value: dev["wb-ms_132/Temperature"]
+	        value: dev[gmHouseTemp]
 	    },
       Humidity: {
           title: "Humidity",
 	        type: "rel_humidity", 
-	        value: dev["wb-ms_132/Humidity"]
+	        value: dev[gmHouseHum]
 	    },
       HeaterControl: {
           type: "range",
@@ -25,24 +18,24 @@ defineVirtualDevice("grandmas-hous", {
           min:5,
           max: 30
       },
+      HeaterHeader: {
+          title: "Heater",
+          type: "text",
+          value: "Обогреватель"
+      }, 
       HeaterButton: {
-          type: "pushbutton",
-          value: false
-      },
-      OutdoorLightButton: {
-          type: "pushbutton",
-          value: false
+          type: "switch",
+          value: dev[gmHouseHeaterState]
       },
       OutdoorLightHeader: {
-          title: "header",
+          title: "OutdoorLight",
           type: "text",
-          value: gmHousOutdoorLightMemoryCell
+          value: "Уличное освещение"
       },
-      HeaterHeader: {
-          title: "header",
-          type: "text",
-          value: gmHousHeaterMemoryCell
-      } 
+      OutdoorLightButton: {
+          type: "switch",
+          value: dev[gmOutdoorLightState]
+      }
     }
 })
 

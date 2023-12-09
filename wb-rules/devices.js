@@ -41,11 +41,12 @@ var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
 //***Grandmothers hous variables****/
 ////////////////////////////////////
 
-var gmHousTemp = "wb-ms_132/Temperature";
-var gmHousHeaterState= "wb-mr3_34/K1";
-var gmHousTempSet = "grandmas-hous/HeaterControl";
-var gmHousHeaterButton = "grandmas-hous/HeaterButton";
-var gmHousHeaterHeader = "grandmas-hous/HeaterHeader";
+var gmHouseTemp = "wb-ms_132/Temperature";
+var gmHouseHum = "wb-ms_132/Humidity";
+var gmHouseHeaterState = "wb-mr3_34/K1";
+var gmHouseTempSet = "grandmas-hous/HeaterControl";
+var gmHouseHeaterButton = "grandmas-hous/HeaterButton";
+var gmHouseHeaterHeader = "grandmas-hous/HeaterHeader";
 
 var gmOutdoorLightState= "wb-mr3_34/K3";
 var gmOutdoorLightButton = "grandmas-hous/OutdoorLightButton";
@@ -278,11 +279,11 @@ var waterPrepareHeater = new Device(waterPrepareTempSet,
                                     waterPrepareHeaterHeader, 
                                     heaterHisteresis);
                                     
-var gmHousHeater = new Device(gmHousTempSet, 
-                              gmHousTemp, 
-                              gmHousHeaterState, 
-                              gmHousHeaterButton, 
-                              gmHousHeaterHeader, 
+var gmHouseHeater = new Device(gmHouseTempSet, 
+                              gmHouseTemp, 
+                              gmHouseHeaterState, 
+                              gmHouseHeaterButton, 
+                              gmHouseHeaterHeader, 
                               heaterHisteresis);
 
 var heaters = [
@@ -290,7 +291,7 @@ var heaters = [
     baniaMediumHeater,
     baniaTamburHeater,
     waterPrepareHeater,
-    gmHousHeater,
+    gmHouseHeater,
     // mainRoomHeater,
     mainRoomTamburCarpet,
     mainRoomTamburHeater
