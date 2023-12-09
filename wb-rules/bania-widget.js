@@ -1,3 +1,30 @@
+var mainHeaterState= "wb-mr6c_214/K3";
+var mediumHeaterState= "wb-mr6c_214/K4";
+var tamburHeaterState= "wb-mr6c_214/K5";
+var waterPrepareHeaterState= "wb-mr6c_214/K6";
+
+var restRoomTemp = "wb-msw-v3_49/Temperature";
+var restRoomHum = "wb-msw-v3_49/Humidity";
+var waterPrepareTemp = "wb-ms_187/Temperature";
+var waterPrepareHum = "wb-ms_187/Humidity";
+var tempBarrel1 = "wb-ms_187/External Sensor 1";
+var tempBarrel2 = "wb-ms_187/External Sensor 2"
+var underfloorTemperature = "wb-ms_239/Temperature";
+var underfloorHumidity = "wb-ms_239/Humidity";
+
+var mainHeaterButton = "rest-room/MainHeaterButton";
+var mediumHeaterButton = "rest-room/MediumHeaterButton";
+var tamburHeaterButton = "rest-room/TamburHeaterButton";
+var waterPrepareHeaterButton = "rest-room/WaterPrepareHeaterButton";
+
+var mainHeaterHeader = "rest-room/MainHeaterHeader";
+var mediumHeaterHeader = "rest-room/MediumHeaterHeader";
+var tamburHeaterHeader = "rest-room/TamburHeaterHeader";
+var waterPrepareHeaterHeader = "rest-room/WaterPrepareHeaterHeader";
+
+var restRoomTempSet = "rest-room/MainHeaterControl";
+var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
+
 defineVirtualDevice("bania-widget", {
     title: "BaniaWidget" ,
     readonly: false, 

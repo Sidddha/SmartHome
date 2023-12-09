@@ -1,3 +1,14 @@
+var gmHouseTemp = "wb-ms_132/Temperature";
+var gmHouseHum = "wb-ms_132/Humidity";
+var gmHouseHeaterState = "wb-mr3_34/K1";
+var gmHouseTempSet = "grandmas-hous/HeaterControl";
+var gmHouseHeaterButton = "grandmas-hous/HeaterButton";
+var gmHouseHeaterHeader = "grandmas-hous/HeaterHeader";
+
+var gmOutdoorLightState= "wb-mr3_34/K3";
+var gmOutdoorLightButton = "grandmas-hous/OutdoorLightButton";
+var gmOutdoorLightHeader = "grandmas-hous/OutdoorLightHeader";
+
 defineVirtualDevice("grandmas-house", {
     title: "GrandmasHouse" ,
     readonly: false,
