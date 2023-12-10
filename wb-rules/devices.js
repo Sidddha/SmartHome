@@ -129,17 +129,18 @@ Device.prototype.updateState = function () {
             return;
         }
     } else {
-        switch (this.device.getButtonValue()) {
-            case true:
-                getDevice(this.device).getControl(this.control).setValue(true);
-                break;
-            case false:
-                getDevice(this.device).getControl(this.control).setValue(false);
-                break;
-            default:
-                getDevice(this.device).getControl(this.control).setValue(false);
-                break;
-        }
+        getDevice(this.device).getControl(this.control).setValue(this.device.getButtonValue());
+        // switch (this.device.getButtonValue()) {
+        //     case true:
+        //         getDevice(this.device).getControl(this.control).setValue(true);
+        //         break;
+        //     case false:
+        //         getDevice(this.device).getControl(this.control).setValue(false);
+        //         break;
+        //     default:
+        //         getDevice(this.device).getControl(this.control).setValue(false);
+        //         break;
+        // }
     }
 }
 
