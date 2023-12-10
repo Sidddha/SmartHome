@@ -146,6 +146,7 @@ function check_state(device) {
             then: function(newValue, devName, cellName) {
                 if(device.getModeAuto()){
                     var value = dev[device.getButtonControl()];
+                    log("Value = {}", value);
                     device.updateState(value);
                     log("{}/{} changed. Device {} set to {}. Auto mode {}", devName, cellName, device.getDeviceControl(), value, device.getModeAuto());
                 }
