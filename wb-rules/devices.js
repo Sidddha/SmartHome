@@ -75,6 +75,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     var dev = device_control.split("/");
     this.set_param = set_param;
     this.actual_param = actual_param;
+    this.device_control = device_control;
     this.device = dev[0];
     this.control = dev[1];
     this.button_control = button_control;
