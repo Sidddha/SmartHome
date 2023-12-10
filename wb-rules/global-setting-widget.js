@@ -13,7 +13,7 @@ defineVirtualDevice("global", {
           value: true
       },
       GlobalLightButton: {
-        title: "Включить авто-режим освещения",
+        title: "Авто-режим освещения",
         type: "switch",
         value: true
       },
