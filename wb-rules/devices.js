@@ -138,7 +138,9 @@ var Device = function(set_param, actual_param, device_control, button_control, h
 
 function check_state(device) {
         defineRule({
-            whenChanged: [device.set_param, device.actual_param],
+            whenChanged: function() {
+                dev[device.getSetParam(), device.getActualParam()]
+            },
             then: function() {
                 device.checkState();
                 debug("Device {} set to {}", device.header_control, device.getValue());
@@ -283,12 +285,14 @@ var lights = [
 global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
 
-for(device in heaters) {
+heaters.forEach(function (device) {
     button(device);
     check_state(device);
-}
+    
+});
 
-for(device in lights) {
+lights.forEach(function (device) {
     button(device);
-    check_state(device);    
-}
+    check_state(device);
+    
+});
