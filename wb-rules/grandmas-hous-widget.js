@@ -19,7 +19,7 @@ defineVirtualDevice("grandmas-house", {
             value: dev[gmHouseHum]
         },
         HeaterControl: {
-            titlt: "Регулировка температуры",
+            titl: "Регулировка температуры",
             type: "range",
             value: 22,
             min: 5,
