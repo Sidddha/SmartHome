@@ -10,12 +10,12 @@ defineVirtualDevice("global", {
         GlobalHeaterButton: {
           title: "Авто-режим отопления",
           type: "switch",
-          value: dev[globalHeaterButton]
+          value: true
       },
       GlobalLightButton: {
         title: "Включить авто-режим освещения",
         type: "switch",
-        value: dev[GlobalLightButton]
+        value: true
       },
       LightControl: {
         title: "Ругудировка освещения",

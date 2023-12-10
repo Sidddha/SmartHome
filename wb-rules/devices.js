@@ -163,7 +163,7 @@ function check_state(device) {
 function button(device) {
     defineRule({
         when: function() {
-            return dev[device.button_control];
+            return dev[device.getButton()];
         },
         then: function(newValue) {
 
