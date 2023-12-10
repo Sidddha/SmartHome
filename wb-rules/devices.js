@@ -74,11 +74,17 @@ var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 var Device = function (set_param, actual_param, device_control, button_control, histeresis) {
     var dev = device_control.split("/");
     var but = button_control.split("/");
+    var sparam = set_param.split("/");
+    var aparam = actual_param.split("/");
     this.set_param = set_param;
+    this.set_param_header = sparam[0];
+    this.set_param_control = sparam[1];
     this.actual_param = actual_param;
+    this.actual_param_header = aparam[0];
+    this.actual_param_control = aparam[1];
     this.device_control = device_control;
     this.device = dev[0];
-    this.control = dev[1];
+    this.device_control = dev[1];
     this.button = button_control;
     this.button_header = but[0];
     this.button_control = but[1];
@@ -90,21 +96,24 @@ Device.prototype.setModeAuto = function (mode) {
     log("{} auto mode set to {}", this.button, mode);
 }
 
-Device.prototype.setValue = function (value) {
-    getDevice(this.device).getControl(this.control).setValue(value);
+Device.prototype.setDeviceValue = function (value) {
+    getDevice(this.device_header).getControl(this.device_control).setValue(value);
     log("{} set to {}", this.device_control, value);
+}
+Device.prototype.setButtonValue = function(value) {
+    getDevice(this.button_header).getControl(this.button_control).setValue(value);
 }
 Device.prototype.getModeAuto = function () {
     return getDevice(this.button_header).getControl(this.button_control).getReadonly();
 }
-Device.prototype.getValue = function () {
-    return getDevice(this.device).getControl(this.control).getValue();
+Device.prototype.getDeviceValue = function () {
+    return getDevice(this.device_header).getControl(this.device_control).getValue();
 }
 Device.prototype.getActualParam = function () {
-    return this.actual_param;
+    return getDevice(this.actual_param_header).getControl(this.actual_param_control).getValue();
 }
 Device.prototype.getSetParam = function () {
-    return this.set_param;
+    return getDevice(this.set_param_header).getControl(this.set_param_control).getValue();
 }
 Device.prototype.getButtonControl = function () {
     return this.button;
@@ -116,30 +125,31 @@ Device.prototype.getDeviceControl = function () {
     return this.device_control;
 }
 
-Device.prototype.updateState = function () {
+Device.prototype.updateState = function (ruleName) {
+    log("Rule {}:", ruleName);
     if (this.getModeAuto()) {
-        if (getDevice(this.device).getControl(this.actual_param).getValue() > (getDevice(this.device).getControl(this.set_param).getValue() + this.histeresis)) {
-            getDevice(this.button_header).getControl(this.button_control).setValue(false);
-            getDevice(this.device).getControl(this.control).setValue(false);
+        if (this.getActualParam() > (this.getSetParam() + this.histeresis)) {
+            this.setButtonValue(false);
+            this.setDeviceValue(false);
             return;
         }
-        if (getDevice(this.device).getControl(this.actual_param).getValue() < (getDevice(this.device).getControl(this.set_param).getValue() - this.histeresis)) {
-            getDevice(this.button_header).getControl(this.button_control).setValue(true);
-            getDevice(this.device).getControl(this.control).setValue(true);
+        if (this.getActualParam() < (this.getSetParam() - this.histeresis)) {
+            this.setButtonValue(true);
+            this.setDeviceValue(true);
             return;
         }
     } else {
-        var newValue = this.getButtonValue();
-        getDevice(this.device).getControl(this.control).setValue(newValue);
-        // switch (this.device.getButtonValue()) {
+        this.setDeviceValue(this.getButtonValue());
+
+        // switch (this.device_header.getButtonValue()) {
         //     case true:
-        //         getDevice(this.device).getControl(this.control).setValue(true);
+        //         getDevice(this.device_header).getControl(this.device_control).setValue(true);
         //         break;
         //     case false:
-        //         getDevice(this.device).getControl(this.control).setValue(false);
+        //         getDevice(this.device_header).getControl(this.device_control).setValue(false);
         //         break;
         //     default:
-        //         getDevice(this.device).getControl(this.control).setValue(false);
+        //         getDevice(this.device_header).getControl(this.device_control).setValue(false);
         //         break;
         // }
     }
@@ -149,12 +159,10 @@ function check_state(device) {
     defineRule({
         whenChanged: [device.getSetParam(), device.getActualParam()],
         then: function (newValue, devName, cellName) {
-            // if(device.getModeAuto()){
-            // var value = dev[device.getButtonControl()];
-            //     log("Value = {}", value);
-            device.updateState();
-            log("{}/{} changed. Device {} set to {}. Auto mode {}", devName, cellName, device.getDeviceControl(), newValue, device.getModeAuto());
-            // }
+            if(device.getModeAuto()){
+                log("{}/{} changed:", devName, cellName);
+                device.updateState("check_state");
+            }
         }
     })
 }
@@ -163,9 +171,9 @@ function check_state(device) {
 function button(device) {
     defineRule({
         whenChanged: device.getButtonControl(),
-        then: function (newValue) {
-            log("Button {} pressed. Device {} set to {}", device.getButtonControl(), device.getDeviceControl(), newValue);
-            device.updateState();
+        then: function () {
+            log("Button {} pressed", device.getButtonControl());
+            device.updateState("button");
             // switch(newValue) {
             //     case true:
             //         device.updateState();
@@ -188,7 +196,8 @@ function global_button(devices, global_button) {
 
     defineRule({
         whenChanged: global_button,
-        then: function (newValue) {
+        then: function (newValue, devName, cellName) {
+            log("{}/{} pressed:", devName, cellName);
             devices.forEach(function (device) {
                 device.setModeAuto(newValue);
             });
