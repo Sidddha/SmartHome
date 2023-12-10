@@ -91,7 +91,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   }
   
   Device.prototype.getModeAuto = function() {
-    return getDevice(this.device).getControl(this.control).getReadonly();
+    return getDevice(this.button_header).getControl(this.button_control).getReadonly();
   }
   Device.prototype.setValue = function(value) {
     getDevice(this.device).getControl(this.control).setValue(value);
