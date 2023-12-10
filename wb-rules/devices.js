@@ -162,7 +162,7 @@ function check_state(device) {
 
 function button(device) {
     defineRule({
-        when: function() {
+        whenChanged: function() {
             return dev[device.getButton()];
         },
         then: function(newValue) {
@@ -193,26 +193,25 @@ function button(device) {
 function global_button(devices, global_button) {
 
     defineRule({
-        when: function() {
+        whenChanged: function() {
         return dev[global_button];
         },
         then: function(newValue) {
           
             if(newValue) {
-                for(device in devices) {
+                devices.array.forEach(device => {
                     device.setModeAuto(true);
-                    debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
-                }
+                    debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue()); 
+                });
             } else {
-                for(device in devices) {
+                devices.array.forEach(device => {
                     device.setModeAuto(false);
                     debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
-
-                }
+                });
             }
-            for(device in devices) {
-                device.checkState();
-            }
+            devices.array.forEach(device => {
+                device.checkState();                
+            });
         }
     })
 }
