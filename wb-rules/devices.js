@@ -83,18 +83,18 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   }
   
   Device.prototype.setModeAuto = function(mode) {
-    getControl(this.header_control).setReadonly(mode);
-    debug(this.header_control);
+    getControl(this.device_control).setReadonly(mode);
+    debug(this.device_control);
   }
   
   Device.prototype.getModeAuto = function() {
-    return getControl(this.header_control).getReadonly();
+    return getControl(this.device_control).getReadonly();
   }
   Device.prototype.setValue = function(value) {
-    getControl(this.header_control).setValue(value);
+    getControl(this.device_control).setValue(value);
   }
   Device.prototype.getValue = function() {
-    return getControl(this.header_control).getValue();
+    return getControl(this.device_control).getValue();
   }
   Device.prototype.getActualParam = function() {
     return this.actual_param;	
@@ -110,27 +110,27 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     if(this.getModeAuto()) {
         if(getControl(this.actual_param).getValue() > (getControl(this.set_param).getValue() + this.histeresis)) {
           getControl(this.device_control).setValue(false);
-          debug(this.header_control + " set to " + false);
+          debug(this.device_control + " set to " + false);
           return;
         }
         if(getControl(this.actual_param).getValue() < (getControl(this.set_param).getValue() - this.histeresis)) {
             getControl(this.device_control).setValue(true);
-            debug(this.header_control + " set to " + true);
+            debug(this.device_control + " set to " + true);
             return;
         }
     } else {
         switch(getControl(this.button_control)) {
             case true:
                 getControl(this.device_control).setValue(true);
-                debug(this.header_control + " set to " + true);
+                debug(this.device_control + " set to " + true);
                 break;
             case false:
                 getControl(this.device_control).setValue(false);
-                debug(this.header_control + " set to " + false);
+                debug(this.device_control + " set to " + false);
                 break;
             default:
                 getControl(this.device_control).setValue(false);
-                debug(this.header_control + " set to " + false);
+                debug(this.device_control + " set to " + false);
                 break;          
         }
     }
@@ -143,7 +143,7 @@ function check_state(device) {
             },
             then: function() {
                 device.checkState();
-                debug("Device {} set to {}", device.header_control, device.getValue());
+                debug("Device {} set to {}", device.device_control, device.getValue());
             }
         })  
     }
@@ -170,7 +170,7 @@ function button(device) {
                     device.checkState();
                     break;   
             }  
-            debug("function: button. Device: {}, device state: {}", device.header_control, device.getValue());
+            debug("function: button. Device: {}, device state: {}", device.device_control, device.getValue());
             }  
         }
     )
@@ -189,7 +189,7 @@ function global_button(devices, global_button) {
             
             devices.forEach(function (device) {
                 device.setModeAuto(newValue);
-                debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue()); 
+                debug("function: global_button. Device: {}, device state: {}", device.device_control, device.getValue()); 
             });
             devices.forEach(function (device) {
                 device.checkState();                
