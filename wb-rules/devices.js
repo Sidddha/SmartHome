@@ -94,7 +94,6 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     return getDevice(this.device).getControl(this.control).getReadonly();
   }
   Device.prototype.setValue = function(value) {
-    log("{} set to {}", this.device_control, value);   
     getDevice(this.device).getControl(this.control).setValue(value);
     log("{} set to {}", this.device_control, value);
   }
@@ -109,6 +108,9 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   }
   Device.prototype.getButtonControl = function() {
     return this.button;	
+  }
+  Device.prototype.getDeviceControl = function() {
+    return this.device_control;
   }
   
   Device.prototype.updateState = function(newValue) {
@@ -141,9 +143,10 @@ var Device = function(set_param, actual_param, device_control, button_control, h
 function check_state(device) {
         defineRule({
             whenChanged: [device.getSetParam(), device.getActualParam()],
-            then: function() {
+            then: function(newValue, devName, cellName) {
                 newValue = dev[device.getButtonControl()];
                 device.updateState(newValue);
+                log("{}/{} changed. Device {} set to {}", devName, cellName, device.getDeviceControl(), newValue);
             }
         })  
     }
@@ -153,6 +156,7 @@ function button(device) {
     defineRule({
         whenChanged: device.getButtonControl(),
         then: function(newValue) {
+            log("Button {} pressed. Device {} set to {}", device.getButtonControl(), device.getDeviceControl(), newValue);
             switch(newValue) {
                 case true:
                     device.updateState(newValue);
