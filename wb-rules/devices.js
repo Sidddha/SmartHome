@@ -5,14 +5,11 @@
 var heaterHisteresis = 0.5;
 
 var globalHeaterButton = "global/GlobalHeaterButton";
-var globalHeaterHeader = "global/HeaderGH";
-
 var outdoorLightLux = "wb-ms_138/Illuminance";
 
 var illuminanceHisteresis = 2;
 
 var globalLightButton = "global/GlobalLightButton";
-var globalLightHeader = "global/GlobalLightHeader";
 var globalLightSet = "global/LightControl";
 
 ////////////////////////////////////
@@ -111,27 +108,27 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     if(this.getModeAuto()) {
         if(getDevice(this.device).getControl(this.actual_param).getValue() > (getDevice(this.device).getControl(this.set_param).getValue() + this.histeresis)) {
             getDevice(this.device).getControl(this.control).setValue(false);
-          debug(this.control + " set to " + false);
+          log(this.device_control + " set to " + false);
           return;
         }
         if(getDevice(this.device).getControl(this.actual_param).getValue() < (getDevice(this.device).getControl(this.set_param).getValue() - this.histeresis)) {
             getDevice(this.device).getControl(this.control).setValue(true);
-            debug(this.control + " set to " + true);
+            log(this.device_control + " set to " + true);
             return;
         }
     } else {
         switch(this.getButton()) {
             case true:
                 getDevice(this.device).getControl(this.control).setValue(true);
-                debug(this.control + " set to " + true);
+                log(this.device_control + " set to " + true);
                 break;
             case false:
                 getDevice(this.device).getControl(this.control).setValue(false);
-                debug(this.control + " set to " + false);
+                log(this.device_control + " set to " + false);
                 break;
             default:
                 getDevice(this.device).getControl(this.control).setValue(false);
-                debug(this.control + " set to " + false);
+                log(this.device_control + " set to " + false);
                 break;          
         }
     }
@@ -144,7 +141,6 @@ function check_state(device) {
             },
             then: function() {
                 device.checkState();
-                debug("Device {} set to {}", device.device_control, device.getValue());
             }
         })  
     }
@@ -171,10 +167,8 @@ function button(device) {
                     device.checkState();
                     break;   
             }  
-            debug("function: button. Device: {}, device state: {}", device.device_control, device.getValue());
-            }  
-        }
-    )
+        }  
+    })
 }
     
 
@@ -190,7 +184,6 @@ function global_button(devices, global_button) {
             
             devices.forEach(function (device) {
                 device.setModeAuto(newValue);
-                debug("function: global_button. Device: {}, state: {}", device.device_control, device.getValue()); 
             });
             devices.forEach(function (device) {
                 device.checkState();                
