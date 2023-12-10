@@ -144,12 +144,12 @@ function check_state(device) {
         defineRule({
             whenChanged: [device.getSetParam(), device.getActualParam()],
             then: function(newValue, devName, cellName) {
-                if(device.getModeAuto()){
+                // if(device.getModeAuto()){
                     var value = dev[device.getButtonControl()];
-                    log("Value = {}", value);
+                //     log("Value = {}", value);
                     device.updateState(value);
                     log("{}/{} changed. Device {} set to {}. Auto mode {}", devName, cellName, device.getDeviceControl(), value, device.getModeAuto());
-                }
+                // }
             }
         })  
     }
