@@ -142,7 +142,12 @@ var Device = function(set_param, actual_param, device_control, button_control, h
 
 function check_state(device) {
         defineRule({
-            whenChanged: [device.getSetParam(), device.getActualParam()],
+            whenChanged: [
+                device.getSetParam(), device.getActualParam(),
+                function() {
+                    return device.getModeAuto();
+                }
+            ],
             then: function(newValue, devName, cellName) {
                 newValue = dev[device.getButtonControl()];
                 device.updateState(newValue);
