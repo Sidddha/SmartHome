@@ -137,9 +137,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
 
 function check_state(device) {
         defineRule({
-            whenChanged: function() {
-                dev[device.getSetParam(), device.getActualParam()];
-            },
+            whenChanged: [device.getSetParam(), device.getActualParam()],
             then: function() {
                 newValue = dev[device.getButtonControl()];
                 device.updateState(newValue);
@@ -150,11 +148,8 @@ function check_state(device) {
 
 function button(device) {
     defineRule({
-        whenChanged: function() {
-            return dev[device.getButtonControl()];
-        },
+        whenChanged: device.getButtonControl(),
         then: function(newValue) {
-
             switch(newValue) {
                 case true:
                     device.updateState(newValue);
@@ -176,11 +171,8 @@ function button(device) {
 function global_button(devices, global_button) {
 
     defineRule({
-        whenChanged: function() {
-        return dev[global_button];
-        },
+        whenChanged: global_button,
         then: function(newValue) {
-            
             devices.forEach(function (device) {
                 device.setModeAuto(newValue);
             });
