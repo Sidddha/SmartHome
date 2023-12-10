@@ -73,18 +73,21 @@ var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 var Device = function(set_param, actual_param, device_control, button_control, histeresis) {
     var dev = device_control.split("/");
+    var but = button_control.split("/");
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
     this.device = dev[0];
     this.control = dev[1];
-    this.button_control = button_control;
+    this.button = button_control;
+    this.button_header = but[0];
+    this.button_control = but[1];
     this.histeresis = histeresis;
   }
   
   Device.prototype.setModeAuto = function(mode) {
-    getDevice(this.device).getControl(this.control).setReadonly(mode);
-    log("{} auto mode set to {}", this.device_control, mode);
+    getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);
+    log("{} auto mode set to {}", this.button, mode);
   }
   
   Device.prototype.getModeAuto = function() {
@@ -104,7 +107,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     return this.set_param;	
   }
   Device.prototype.getButton = function() {
-    return this.button_control;	
+    return this.button;	
   }
   
   Device.prototype.updateState = function(newValue) {
