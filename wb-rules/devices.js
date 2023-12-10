@@ -129,7 +129,7 @@ Device.prototype.updateState = function () {
             return;
         }
     } else {
-        var newValue = this.device.getButtonValue();
+        var newValue = this.getButtonValue();
         getDevice(this.device).getControl(this.control).setValue(newValue);
         // switch (this.device.getButtonValue()) {
         //     case true:
