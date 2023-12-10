@@ -32,7 +32,7 @@ defineVirtualDevice("bania-widget", {
             value: dev[restRoomHum]
 	    },
         MainHeaterControl: {
-            titlt: "Регулировка температура",
+            title: "Регулировка температуры",
             type: "range",
             value: 22,
             min: 5,
@@ -42,7 +42,7 @@ defineVirtualDevice("bania-widget", {
             title: "Большой радиатор",
             type: "switch",
             value: dev[mainHeaterState]
-        },        
+        },
         MediumHeaterButton: {
             title: "MediumHeater",
             type: "switch",
@@ -52,12 +52,12 @@ defineVirtualDevice("bania-widget", {
             title: "Радиатор в тамбуре",
             type: "switch",
             value: dev[tamburHeaterState]
-        },              
+        },
         HeaderWaterPrepare: {
             title: "WaterPrepare",
             type: "text",
             value: "Комната водоподготовки"
-        },    
+        },
         TemperatureWaterPrepareRoom: {
             title: "Температура",
             type: "temperature",
@@ -74,7 +74,7 @@ defineVirtualDevice("bania-widget", {
             value: 22,
             min: 5,
             max: 30
-        },        
+        },
         WaterPrepareHeaterButton: {
             title: "Радиатор",
             type: "switch",
@@ -89,12 +89,12 @@ defineVirtualDevice("bania-widget", {
             title: "Температура в бочке",
             type: "temperature",
             value: dev[tempBarrel2]
-	    },              
+	    },
         HeaderUnderfloor: {
             title: "Underfloor",
             type: "text",
             value: "Подвал"
-        },       
+        },
         TemperatureUnderfloor: {
             title: "Температура",
             type: "temperature",
@@ -141,7 +141,7 @@ defineRule({
         return dev[mainHeaterState];
     },
     then: function(value) {
-        dev["bania-widget/mainHeaterButton"] = value;
+        dev["bania-widget/MainHeaterButton"] = value;
     }
 });
 
@@ -150,7 +150,7 @@ defineRule({
         return dev[mediumHeaterState];
     },
     then: function(value) {
-        dev["bania-widget/mediumHeaterButton"] = value;
+        dev["bania-widget/MediumHeaterButton"] = value;
     }
 });
 
@@ -159,7 +159,7 @@ defineRule({
         return dev[tamburHeaterState];
     },
     then: function(value) {
-        dev["bania-widget/tamburHeaterButton"] = value;
+        dev["bania-widget/TamburHeaterButton"] = value;
     }
 });
 
@@ -186,7 +186,7 @@ defineRule({
         return dev[waterPrepareHeaterState];
     },
     then: function(value) {
-        dev["bania-widget/waterPrepareHeaterButton"] = value;
+        dev["bania-widget/WaterPrepareHeaterButton"] = value;
     }
 });
 
