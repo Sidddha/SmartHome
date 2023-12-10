@@ -71,19 +71,23 @@ var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
-var Device = function(set_param, actual_param, device_control, button_control, histeresis) {
+var Device = function(set_param, actual_param, device_control, button, histeresis) {
     var dev = device_control.split("/");
+    var but = button.split("/");
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
     this.device = dev[0];
     this.control = dev[1];
-    this.button_control = button_control;
+    this.button = button_control;
+    this.button_header = but[0];
+    this.button_control = but[1];
     this.histeresis = histeresis;
   }
   
   Device.prototype.setModeAuto = function(mode) {
     getDevice(this.device).getControl(this.control).setReadonly(mode);
+    log("{} auto mode set to {}", this.device_control, mode);
   }
   
   Device.prototype.getModeAuto = function() {
@@ -91,6 +95,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   }
   Device.prototype.setValue = function(value) {
     getDevice(this.device).getControl(this.control).setValue(value);
+    log("{} set to {}", this.device_control, value);
   }
   Device.prototype.getValue = function() {
     return getDevice(this.device).getControl(this.control).getValue();
@@ -102,34 +107,29 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     return this.set_param;	
   }
   Device.prototype.getButton = function() {
-    return this.button_control;	
+    return getDevice(this.button_header).getControl(this.button_control).getValue();
   }
   
   Device.prototype.checkState = function() {
     if(this.getModeAuto()) {
         if(getDevice(this.device).getControl(this.actual_param).getValue() > (getDevice(this.device).getControl(this.set_param).getValue() + this.histeresis)) {
             getDevice(this.device).getControl(this.control).setValue(false);
-          log(this.device_control + " set to " + false);
           return;
         }
         if(getDevice(this.device).getControl(this.actual_param).getValue() < (getDevice(this.device).getControl(this.set_param).getValue() - this.histeresis)) {
             getDevice(this.device).getControl(this.control).setValue(true);
-            log(this.device_control + " set to " + true);
             return;
         }
     } else {
         switch(this.getButton()) {
             case true:
                 getDevice(this.device).getControl(this.control).setValue(true);
-                log(this.device_control + " set to " + true);
                 break;
             case false:
                 getDevice(this.device).getControl(this.control).setValue(false);
-                log(this.device_control + " set to " + false);
                 break;
             default:
                 getDevice(this.device).getControl(this.control).setValue(false);
-                log(this.device_control + " set to " + false);
                 break;          
         }
     }
