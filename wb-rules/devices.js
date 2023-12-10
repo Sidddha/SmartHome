@@ -72,8 +72,8 @@ var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 /////////////////////////////////////////
 
 var Device = function (set_param, actual_param, device_control, button_control, histeresis) {
-    var dev = device_control.split("/");
-    var but = button_control.split("/");
+    let dev = device_control.split("/");
+    let but = button_control.split("/");
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
@@ -129,7 +129,8 @@ Device.prototype.updateState = function () {
             return;
         }
     } else {
-        getDevice(this.device).getControl(this.control).setValue(this.device.getButtonValue());
+        let newValue = this.device.getButtonValue();
+        getDevice(this.device).getControl(this.control).setValue(newValue);
         // switch (this.device.getButtonValue()) {
         //     case true:
         //         getDevice(this.device).getControl(this.control).setValue(true);
