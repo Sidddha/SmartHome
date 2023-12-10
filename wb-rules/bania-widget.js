@@ -117,3 +117,111 @@ defineVirtualDevice("bania-widget", {
     }
 })
 
+
+defineRule({
+    whenChanged: function() {
+        return dev[restRoomTemp];
+    },
+    then: function(value) {
+        dev["bania-widget/TemperatureRestRoom"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[restRoomHum];
+    },
+    then: function(value) {
+        dev["bania-widget/HumidityRestRoom"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[mainHeaterState];
+    },
+    then: function(value) {
+        dev["bania-widget/mainHeaterButton"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[mediumHeaterState];
+    },
+    then: function(value) {
+        dev["bania-widget/mediumHeaterButton"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[tamburHeaterState];
+    },
+    then: function(value) {
+        dev["bania-widget/tamburHeaterButton"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[waterPrepareTemp];
+    },
+    then: function(value) {
+        dev["bania-widget/TemperatureWaterPrepareRoom"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[waterPrepareHum];
+    },
+    then: function(value) {
+        dev["bania-widget/HumidityWaterPrepareRoom"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[waterPrepareHeaterState];
+    },
+    then: function(value) {
+        dev["bania-widget/waterPrepareHeaterButton"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[tempBarrel1];
+    },
+    then: function(value) {
+        dev["bania-widget/TemperatureBarrel1"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[tempBarrel2];
+    },
+    then: function(value) {
+        dev["bania-widget/TemperatureBarrel2"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[underfloorTemperature];
+    },
+    then: function(value) {
+        dev["bania-widget/TemperatureUnderfloor"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[underfloorHumidity];
+    },
+    then: function(value) {
+        dev["bania-widget/HumidityUnderfloor"] = value;
+    }
+});

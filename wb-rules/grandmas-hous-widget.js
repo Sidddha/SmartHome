@@ -38,3 +38,20 @@ defineVirtualDevice("grandmas-house", {
     }
 })
 
+defineRule({
+    whenChanged: function() {
+        return dev[gmHouseTemp];
+    },
+    then: function(value) {
+        dev["grandmas-house/Temperature"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[gmHouseHum];
+    },
+    then: function(value) {
+        dev["grandmas-house/Humidity"] = value;
+    }
+});

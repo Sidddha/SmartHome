@@ -141,7 +141,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
 function check_state(device) {
         defineRule({
             whenChanged: function() {
-                dev[device.getSetParam(), device.getActualParam()]
+                dev[device.getSetParam(), device.getActualParam()];
             },
             then: function() {
                 device.checkState();

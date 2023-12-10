@@ -70,3 +70,48 @@ defineVirtualDevice("main-room", {
             }                                             
     }
 })
+
+defineRule({
+    whenChanged: function() {
+        return dev[mainRoomTemp];
+    },
+    then: function(value) {
+        dev["main-room/Temperature"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[mainRoomHum];
+    },
+    then: function(value) {
+        dev["main-room/Humidity"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[mainRoomTamburCarpetState];
+    },
+    then: function(value) {
+        dev["main-room/TamburCarpetButton"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[mainRoomTamburHeaterState];
+    },
+    then: function(value) {
+        dev["main-room/TamburHeaterButton"] = value;
+    }
+});
+
+defineRule({
+    whenChanged: function() {
+        return dev[mainRoomOutdoorLightState];
+    },
+    then: function(value) {
+        dev["main-room/OutdoorLightButton"] = value;
+    }
+});
