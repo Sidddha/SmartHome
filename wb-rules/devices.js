@@ -37,11 +37,11 @@ var mainOutdoorLightButton = "main-room/OutdoorLightButton";
 var gmHouseTemp = "wb-ms_132/Temperature";
 var gmHouseHum = "wb-ms_132/Humidity";
 var gmHouseHeaterState = "wb-mr3_34/K1";
-var gmHouseTempSet = "grandmas-hous/HeaterControl";
-var gmHouseHeaterButton = "grandmas-hous/HeaterButton";
+var gmHouseTempSet = "grandmas-house/HeaterControl";
+var gmHouseHeaterButton = "grandmas-house/HeaterButton";
 
 var gmOutdoorLightState= "wb-mr3_34/K3";
-var gmOutdoorLightButton = "grandmas-hous/OutdoorLightButton";
+var gmOutdoorLightButton = "grandmas-house/OutdoorLightButton";
 
 ////////////////////////////////////
 //*********Bania variables*********/
@@ -106,7 +106,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   Device.prototype.getSetParam = function() {
     return this.set_param;	
   }
-  Device.prototype.getButton = function() {
+  Device.prototype.getButtonControl = function() {
     return this.button;	
   }
   
@@ -141,6 +141,7 @@ function check_state(device) {
                 dev[device.getSetParam(), device.getActualParam()];
             },
             then: function() {
+                newValue = dev[device.getButtonControl()];
                 device.updateState(newValue);
             }
         })  
@@ -150,7 +151,7 @@ function check_state(device) {
 function button(device) {
     defineRule({
         whenChanged: function() {
-            return dev[device.getButton()];
+            return dev[device.getButtonControl()];
         },
         then: function(newValue) {
 
@@ -182,9 +183,6 @@ function global_button(devices, global_button) {
             
             devices.forEach(function (device) {
                 device.setModeAuto(newValue);
-            });
-            devices.forEach(function (device) {
-                device.updateState(newValue);                
             });
         }
     })
