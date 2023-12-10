@@ -71,18 +71,18 @@ var tempBarrel2 = "wb-ms_187/External Sensor 2"
 var underfloorTemperature = "wb-ms_239/Temperature";
 var underfloorHumidity = "wb-ms_239/Humidity";
 
-var mainHeaterButton = "rest-room/MainHeaterButton";
-var mediumHeaterButton = "rest-room/MediumHeaterButton";
-var tamburHeaterButton = "rest-room/TamburHeaterButton";
-var waterPrepareHeaterButton = "rest-room/WaterPrepareHeaterButton";
+var mainHeaterButton = "bania-widget/MainHeaterButton";
+var mediumHeaterButton = "bania-widget/MediumHeaterButton";
+var tamburHeaterButton = "bania-widget/TamburHeaterButton";
+var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
 
-var mainHeaterHeader = "rest-room/MainHeaterHeader";
-var mediumHeaterHeader = "rest-room/MediumHeaterHeader";
-var tamburHeaterHeader = "rest-room/TamburHeaterHeader";
-var waterPrepareHeaterHeader = "rest-room/WaterPrepareHeaterHeader";
+var mainHeaterHeader = "bania-widget/MainHeaterHeader";
+var mediumHeaterHeader = "bania-widget/MediumHeaterHeader";
+var tamburHeaterHeader = "bania-widget/TamburHeaterHeader";
+var waterPrepareHeaterHeader = "bania-widget/WaterPrepareHeaterHeader";
 
-var restRoomTempSet = "rest-room/MainHeaterControl";
-var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
+var restRoomTempSet = "bania-widget/MainHeaterControl";
+var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
