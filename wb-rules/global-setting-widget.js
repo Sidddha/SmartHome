@@ -18,7 +18,7 @@ defineVirtualDevice("global", {
         value: true
       },
       LightControl: {
-        title: "Ругудировка освещения",
+        title: "Ругулировка освещения",
         type: "range",
         value: 11,
         min: 0,
