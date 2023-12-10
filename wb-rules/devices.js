@@ -33,11 +33,6 @@ var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
 var mainRoomHeaterButton = "main-room/HeaterButton";
 var mainOutdoorLightButton = "main-room/OutdoorLightButton";
 
-var mainRoomTamburCarpetHeader = "main-room/TamburCarpetHeader";
-var mainRoomTamburHeaterHeader = "main-room/TamburHeaterHeader";
-var mainRoomHeaterHeader = "main-room/HeaterHeader";
-var mainRoomOutdoorLightHeader = "main-room/OutdoorLightHeader";
-
 ////////////////////////////////////
 //***Grandmothers hous variables****/
 ////////////////////////////////////
@@ -47,11 +42,9 @@ var gmHouseHum = "wb-ms_132/Humidity";
 var gmHouseHeaterState = "wb-mr3_34/K1";
 var gmHouseTempSet = "grandmas-hous/HeaterControl";
 var gmHouseHeaterButton = "grandmas-hous/HeaterButton";
-var gmHouseHeaterHeader = "grandmas-hous/HeaterHeader";
 
 var gmOutdoorLightState= "wb-mr3_34/K3";
 var gmOutdoorLightButton = "grandmas-hous/OutdoorLightButton";
-var gmOutdoorLightHeader = "grandmas-hous/OutdoorLightHeader";
 
 ////////////////////////////////////
 //*********Bania variables*********/
@@ -76,22 +69,16 @@ var mediumHeaterButton = "bania-widget/MediumHeaterButton";
 var tamburHeaterButton = "bania-widget/TamburHeaterButton";
 var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
 
-var mainHeaterHeader = "bania-widget/MainHeaterHeader";
-var mediumHeaterHeader = "bania-widget/MediumHeaterHeader";
-var tamburHeaterHeader = "bania-widget/TamburHeaterHeader";
-var waterPrepareHeaterHeader = "bania-widget/WaterPrepareHeaterHeader";
-
 var restRoomTempSet = "bania-widget/MainHeaterControl";
 var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
-var Device = function(set_param, actual_param, device_control, button_control, header_control, histeresis) {
+var Device = function(set_param, actual_param, device_control, button_control, histeresis) {
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
     this.button_control = button_control;
-    this.header_control = header_control;
     this.histeresis = histeresis;
   }
   
@@ -199,17 +186,17 @@ function global_button(devices, global_button) {
         then: function(newValue) {
           
             if(newValue) {
-                devices.array.forEach(device => {
+                devices.forEach(function (device) {
                     device.setModeAuto(true);
                     debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue()); 
                 });
             } else {
-                devices.array.forEach(device => {
+                devices.forEach(function (device) {
                     device.setModeAuto(false);
                     debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
                 });
             }
-            devices.array.forEach(device => {
+            devices.forEach(function (device) {
                 device.checkState();                
             });
         }
@@ -220,14 +207,12 @@ var mainOutdoorLight = new Device(globalLightSet,
                                   outdoorLightLux, 
                                   mainRoomOutdoorLightState, 
                                   mainOutdoorLightButton, 
-                                  mainRoomOutdoorLightHeader, 
                                   illuminanceHisteresis);
 
 var gmOutdoorLight = new Device(globalLightSet, 
                                 outdoorLightLux, 
                                 gmOutdoorLightState, 
                                 gmOutdoorLightButton, 
-                                gmOutdoorLightHeader, 
                                 illuminanceHisteresis);
 
 // var mainRoomHeater = new Device(mainRoomTempSet, 
@@ -241,49 +226,42 @@ var mainRoomTamburCarpet = new Device(mainRoomTempSet,
                                       mainRoomTemp, 
                                       mainRoomTamburCarpetState, 
                                       mainRoomTamburCarpetButton, 
-                                      mainRoomTamburCarpetHeader, 
                                       heaterHisteresis);
 
 var mainRoomTamburHeater = new Device(mainRoomTempSet, 
                                       mainRoomTemp, 
                                       mainRoomTamburHeaterState, 
                                       mainRoomTamburHeaterButton, 
-                                      mainRoomTamburHeaterHeader, 
                                       heaterHisteresis);
 
 var baniaMainHeater = new Device(restRoomTempSet, 
                                  restRoomTemp, 
                                  mainHeaterState, 
                                  mainHeaterButton, 
-                                 mainHeaterHeader, 
                                  heaterHisteresis);
 
 var baniaMediumHeater = new Device(restRoomTempSet, 
                                    restRoomTemp, 
                                    mediumHeaterState, 
                                    mediumHeaterButton, 
-                                   mediumHeaterHeader, 
                                    heaterHisteresis);
 
 var baniaTamburHeater = new Device(restRoomTempSet, 
                                    restRoomTemp, 
                                    tamburHeaterState, 
                                    tamburHeaterButton, 
-                                   tamburHeaterHeader, 
                                    heaterHisteresis);
 
 var waterPrepareHeater = new Device(waterPrepareTempSet, 
                                     waterPrepareTemp, 
                                     waterPrepareHeaterState, 
                                     waterPrepareHeaterButton, 
-                                    waterPrepareHeaterHeader, 
                                     heaterHisteresis);
                                     
 var gmHouseHeater = new Device(gmHouseTempSet, 
                               gmHouseTemp, 
                               gmHouseHeaterState, 
                               gmHouseHeaterButton, 
-                              gmHouseHeaterHeader, 
                               heaterHisteresis);
 
 var heaters = [
