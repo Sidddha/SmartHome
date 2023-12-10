@@ -186,18 +186,11 @@ function global_button(devices, global_button) {
         return dev[global_button];
         },
         then: function(newValue) {
-          
-            if(newValue) {
-                devices.forEach(function (device) {
-                    device.setModeAuto(true);
-                    debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue()); 
-                });
-            } else {
-                devices.forEach(function (device) {
-                    device.setModeAuto(false);
-                    debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue());
-                });
-            }
+            
+            devices.forEach(function (device) {
+                device.setModeAuto(newValue);
+                debug("function: global_button. Device: {}, device state: {}", device.header_control, device.getValue()); 
+            });
             devices.forEach(function (device) {
                 device.checkState();                
             });
