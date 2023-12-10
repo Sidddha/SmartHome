@@ -86,7 +86,6 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   
   Device.prototype.setModeAuto = function(mode) {
     getDevice(this.device).getControl(this.control).setReadonly(mode);
-    debug(this.device_control);
   }
   
   Device.prototype.getModeAuto = function() {
@@ -121,7 +120,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
             return;
         }
     } else {
-        switch(getDevice(this.device).getControl(this.button_control)) {
+        switch(this.getButton()) {
             case true:
                 getDevice(this.device).getControl(this.control).setValue(true);
                 debug(this.control + " set to " + true);
@@ -191,7 +190,7 @@ function global_button(devices, global_button) {
             
             devices.forEach(function (device) {
                 device.setModeAuto(newValue);
-                debug("function: global_button. Device: {}, device state: {}", device.device_control, device.getValue()); 
+                debug("function: global_button. Device: {}, state: {}", device.device_control, device.getValue()); 
             });
             devices.forEach(function (device) {
                 device.checkState();                

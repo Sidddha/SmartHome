@@ -12,22 +12,22 @@ defineVirtualDevice("main-room", {
     readonly: false, 
     cells: {
         Header: {
-            title: "FirstFLoor",
+            title: "Первый этаж",
             type: "text",
             value: "Первый этаж"
           },        
         Temperature: {
-            title: "Temperature",
+            title: "Температура",
             type: "temperature",
             value: dev[mainRoomTemp]
             },
         Humidity: {
-            title: "Humidity",
+            title: "Влажность",
             type: "rel_humidity",
             value: dev[mainRoomHum]
             },
         HeaterControl: {
-            title: "Установка температуры",
+            title: "Регулировка температуры",
             type: "range",
             value: 22,
             min: 5,
@@ -54,7 +54,7 @@ defineVirtualDevice("main-room", {
             value: dev[mainRoomOutdoorLightState]
         },
         SecondFloorHeader: {
-            title: "SecondFloor",
+            title: "Второй этаж",
             type: "text",
             value: "Второй этаж"
           },        
@@ -89,29 +89,29 @@ defineRule({
     }
 });
 
-defineRule({
-    whenChanged: function() {
-        return dev[mainRoomTamburCarpetState];
-    },
-    then: function(value) {
-        dev["main-room/TamburCarpetButton"] = value;
-    }
-});
+// defineRule({
+//     whenChanged: function() {
+//         return dev[mainRoomTamburCarpetState];
+//     },
+//     then: function(value) {
+//         dev["main-room/TamburCarpetButton"] = value;
+//     }
+// });
 
-defineRule({
-    whenChanged: function() {
-        return dev[mainRoomTamburHeaterState];
-    },
-    then: function(value) {
-        dev["main-room/TamburHeaterButton"] = value;
-    }
-});
+// defineRule({
+//     whenChanged: function() {
+//         return dev[mainRoomTamburHeaterState];
+//     },
+//     then: function(value) {
+//         dev["main-room/TamburHeaterButton"] = value;
+//     }
+// });
 
-defineRule({
-    whenChanged: function() {
-        return dev[mainRoomOutdoorLightState];
-    },
-    then: function(value) {
-        dev["main-room/OutdoorLightButton"] = value;
-    }
-});
+// defineRule({
+//     whenChanged: function() {
+//         return dev[mainRoomOutdoorLightState];
+//     },
+//     then: function(value) {
+//         dev["main-room/OutdoorLightButton"] = value;
+//     }
+// });
