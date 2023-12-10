@@ -71,18 +71,18 @@ var tempBarrel2 = "wb-ms_187/External Sensor 2"
 var underfloorTemperature = "wb-ms_239/Temperature";
 var underfloorHumidity = "wb-ms_239/Humidity";
 
-var mainHeaterButton = "main-room/MainHeaterButton";
-var mediumHeaterButton = "main-room/MediumHeaterButton";
-var tamburHeaterButton = "main-room/TamburHeaterButton";
-var waterPrepareHeaterButton = "main-room/WaterPrepareHeaterButton";
+var mainHeaterButton = "rest-room/MainHeaterButton";
+var mediumHeaterButton = "rest-room/MediumHeaterButton";
+var tamburHeaterButton = "rest-room/TamburHeaterButton";
+var waterPrepareHeaterButton = "rest-room/WaterPrepareHeaterButton";
 
-var mainHeaterHeader = "main-room/MainHeaterHeader";
-var mediumHeaterHeader = "main-room/MediumHeaterHeader";
-var tamburHeaterHeader = "main-room/TamburHeaterHeader";
-var waterPrepareHeaterHeader = "main-room/WaterPrepareHeaterHeader";
+var mainHeaterHeader = "rest-room/MainHeaterHeader";
+var mediumHeaterHeader = "rest-room/MediumHeaterHeader";
+var tamburHeaterHeader = "rest-room/TamburHeaterHeader";
+var waterPrepareHeaterHeader = "rest-room/WaterPrepareHeaterHeader";
 
-var restRoomTempSet = "main-room/MainHeaterControl";
-var waterPrepareTempSet = "main-room/WaterPrepareHeaterControl";
+var restRoomTempSet = "rest-room/MainHeaterControl";
+var waterPrepareTempSet = "rest-room/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
