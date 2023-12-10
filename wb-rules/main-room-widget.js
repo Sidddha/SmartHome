@@ -43,11 +43,11 @@ defineVirtualDevice("main-room", {
             type: "switch",
             value: dev[mainRoomTamburHeaterState]
         },
-        HeaterButton: {
-            title: "Радиатор в комнате",
-            type: "switch",
-            value: dev[mainRoomHeaterState]
-        },
+        // HeaterButton: {
+        //     title: "Радиатор в комнате",
+        //     type: "switch",
+        //     value: dev[mainRoomHeaterState]
+        // },
         OutdoorLightButton: {
             title: "Уличное освещение",
             type: "switch",
