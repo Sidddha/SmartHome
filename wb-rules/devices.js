@@ -71,17 +71,14 @@ var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
 
-var Device = function(set_param, actual_param, device_control, button, histeresis) {
+var Device = function(set_param, actual_param, device_control, button_control, histeresis) {
     var dev = device_control.split("/");
-    var but = button.split("/");
     this.set_param = set_param;
     this.actual_param = actual_param;
     this.device_control = device_control;
     this.device = dev[0];
     this.control = dev[1];
-    this.button = button_control;
-    this.button_header = but[0];
-    this.button_control = but[1];
+    this.button_control = button_control;
     this.histeresis = histeresis;
   }
   
@@ -107,10 +104,10 @@ var Device = function(set_param, actual_param, device_control, button, histeresi
     return this.set_param;	
   }
   Device.prototype.getButton = function() {
-    return getDevice(this.button_header).getControl(this.button_control).getValue();
+    return this.button_control;	
   }
   
-  Device.prototype.checkState = function() {
+  Device.prototype.updateState = function(newValue) {
     if(this.getModeAuto()) {
         if(getDevice(this.device).getControl(this.actual_param).getValue() > (getDevice(this.device).getControl(this.set_param).getValue() + this.histeresis)) {
             getDevice(this.device).getControl(this.control).setValue(false);
@@ -121,7 +118,7 @@ var Device = function(set_param, actual_param, device_control, button, histeresi
             return;
         }
     } else {
-        switch(this.getButton()) {
+        switch(newValue) {
             case true:
                 getDevice(this.device).getControl(this.control).setValue(true);
                 break;
@@ -141,7 +138,7 @@ function check_state(device) {
                 dev[device.getSetParam(), device.getActualParam()];
             },
             then: function() {
-                device.checkState();
+                device.updateState(newValue);
             }
         })  
     }
@@ -156,16 +153,13 @@ function button(device) {
 
             switch(newValue) {
                 case true:
-                    device.setValue(true);
-                    device.checkState();
+                    device.updateState(newValue);
                     break;
                 case false:
-                    device.setValue(false);
-                    device.checkState();
+                    device.updateState(newValue);
                     break;
                 default:
-                    device.setValue(false);
-                    device.checkState();
+                    device.updateState(newValue);
                     break;   
             }  
         }  
@@ -187,7 +181,7 @@ function global_button(devices, global_button) {
                 device.setModeAuto(newValue);
             });
             devices.forEach(function (device) {
-                device.checkState();                
+                device.updateState(newValue);                
             });
         }
     })
