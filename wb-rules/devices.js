@@ -94,6 +94,7 @@ var Device = function(set_param, actual_param, device_control, button_control, h
     return getDevice(this.device).getControl(this.control).getReadonly();
   }
   Device.prototype.setValue = function(value) {
+    log("{} set to {}", this.device_control, value);   
     getDevice(this.device).getControl(this.control).setValue(value);
     log("{} set to {}", this.device_control, value);
   }
@@ -113,10 +114,12 @@ var Device = function(set_param, actual_param, device_control, button_control, h
   Device.prototype.updateState = function(newValue) {
     if(this.getModeAuto()) {
         if(getDevice(this.device).getControl(this.actual_param).getValue() > (getDevice(this.device).getControl(this.set_param).getValue() + this.histeresis)) {
+            getDevice(this.button_header).getControl(this.button_control).setValue(false);
             getDevice(this.device).getControl(this.control).setValue(false);
-          return;
+           return;
         }
         if(getDevice(this.device).getControl(this.actual_param).getValue() < (getDevice(this.device).getControl(this.set_param).getValue() - this.histeresis)) {
+            getDevice(this.button_header).getControl(this.button_control).setValue(true);
             getDevice(this.device).getControl(this.control).setValue(true);
             return;
         }
