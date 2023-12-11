@@ -159,17 +159,18 @@ function update_state(device) {
                 device.updateState("update_state");
             }
         }
-    })
+    });
 }
 
 function update_mode(device, global_button) {
-    defineRule({
-        when: global_button,
-        then: function(newValue) {
-        log("Set {} auto mode to {}", device.getDevice(), button_value);
-        device.setModeAuto(newValue);            
+    defineRule("crontest_hourly", {
+        when: function() {
+            return cron("@every 1s") && dev[global_button];
+        },
+        then: function () {
+            device.setModeAuto(true);            
         }
-    })
+    });
 }
 // function update_mode(device, global_button) {
 //     var button = global_button.split("/");
@@ -191,7 +192,7 @@ function button(device) {
             log("Button {} pressed:", device.getButtonControl());
             device.updateState("button");
         }
-    })
+    });
 }
 
 
@@ -207,7 +208,7 @@ function global_button(devices, global_button) {
                 device.setModeAuto(newValue);
             });
         }
-    })
+    });
 }
 
 var mainOutdoorLight = new Device(
@@ -296,19 +297,17 @@ var lights = [
     gmOutdoorLight
 ];
 
-var timer1sec = null;
-
 global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
 
 for(var i = 0; i < heaters.length; i++) {
-    setInterval(update_mode(heaters[i], globalHeaterButton), 1000);
+    update_mode(heaters[i], globalHeaterButton);
     button(heaters[i]);
     update_state(heaters[i]);    
 }
 
 for(var i = 0; i < lights.length; i++) {
-    setInterval(update_mode(lights[i], globalLightButton), 1000);
+    update_mode(lights[i], globalLightButton);
     button(lights[i]);
     update_state(lights[i]);    
 }
