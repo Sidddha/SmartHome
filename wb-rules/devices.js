@@ -162,10 +162,10 @@ function update_state(device) {
     })
 }
 
-function update_mode(device) {
+function update_mode(device, global_button) {
     defineRule({
         asSoonAs: function() {
-            dev[device.getButtonControl()];
+            dev[global_button];
         },
         then: function(newValue) {
             log("Set {} auto mode to {}", device.getDevice(), newValue);
@@ -291,13 +291,13 @@ global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
 
 for(var i = 0; i < heaters.length; i++) {
-    update_mode(heaters[i]);
+    update_mode(heaters[i], globalHeaterButton);
     button(heaters[i]);
     update_state(heaters[i]);    
 }
 
 for(var i = 0; i < lights.length; i++) {
-    update_mode(lights[i]);
+    update_mode(lights[i], globalLightButton);
     button(lights[i]);
     update_state(lights[i]);    
 }
