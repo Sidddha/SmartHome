@@ -28,7 +28,9 @@ defineVirtualDevice("global", {
 })
 
 defineRule({
-  whenChanged: "global/GlobalLightButton",
+  whenChanged: function() {
+    return dev["global/GlobalLightButton"]
+  },
   then: function(value) {
     dev["global/LightControl#readonly"] = !value;
   }
