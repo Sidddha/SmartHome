@@ -18,7 +18,7 @@ defineVirtualDevice("global", {
         value: true
       },
       LightControl: {
-        title: "Ругулировка освещения",
+        title: "Уставка освещения",
         type: "Generic value type control",
         value: 11,
         min: 0,
