@@ -163,15 +163,15 @@ function update_state(device) {
 }
 
 function update_mode(device, global_button) {
-    defineRule({
-        asSoonAs: function() {
-            dev[global_button];
-        },
-        then: function(newValue) {
-            log("Set {} auto mode to {}", device.getDevice(), newValue);
-            device.setModeAuto(newValue);
-        }
-    })
+    var button = global_button.split("/");
+    var button_header = button[0];
+    var button_control = button[1];
+    var button_value = getDevice(button_header).getControl(button_control).getValue();
+    if(button_value) {
+        log("Set {} auto mode to {}", device.getDevice(), button_value);
+        device.setModeAuto(button_value);
+    }
+
 }
 
 
