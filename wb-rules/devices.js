@@ -287,13 +287,3 @@ for(var i = 0; i < lights.length; i++) {
     button(lights[i]);
     check_state(lights[i]);    
 }
-// heaters.forEach(function (device) {
-//     button(device);
-//     check_state(device);
-
-// });
-
-// lights.forEach(function (device) {
-//     button(device);
-//     check_state(device);
-// });

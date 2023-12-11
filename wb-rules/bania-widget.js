@@ -23,12 +23,12 @@ defineVirtualDevice("bania-widget", {
         },
         TemperatureRestRoom: {
             title: "Температура",
-            type: "deg C",
+            type: "temperature",
             value: dev[restRoomTemp]
 	    },
         HumidityRestRoom: {
             title: "Влажность",
-            type: "%, RH",
+            type: "rel_humidity",
             value: dev[restRoomHum]
 	    },
         MainHeaterControl: {
@@ -60,12 +60,12 @@ defineVirtualDevice("bania-widget", {
         },
         TemperatureWaterPrepareRoom: {
             title: "Температура. КВП",
-            type: "deg C",
+            type: "temperature",
             value: dev[waterPrepareTemp]
         },
         HumidityWaterPrepareRoom: {
             title: "Влажность. КВП",
-            type: "%, RH",
+            type: "rel_humidity",
             value: dev[waterPrepareHum]
         },
         WaterPrepareHeaterControl: {
@@ -82,12 +82,12 @@ defineVirtualDevice("bania-widget", {
         },
         TemperatureBarrel1: {
             title: "Температура в бочке",
-            type: "deg C",
+            type: "temperature",
             value: dev[tempBarrel1]
 	    },
         TemperatureBarrel2: {
             title: "Температура в бочке",
-            type: "deg C",
+            type: "temperature",
             value: dev[tempBarrel2]
 	    },
         HeaderUnderfloor: {
@@ -97,12 +97,12 @@ defineVirtualDevice("bania-widget", {
         },
         TemperatureUnderfloor: {
             title: "Температура в подвале",
-            type: "deg C",
+            type: "temperature",
             value: dev[underfloorTemperature]
 	    },
         HumidityUnderfloor: {
             title: "Влажность в подвале",
-            type: "%, RH",
+            type: "rel_humidity",
             value: dev[underfloorHumidity]
 	    }
         // OutdoorLightButton: {
