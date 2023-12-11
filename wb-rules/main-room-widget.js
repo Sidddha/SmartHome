@@ -5,6 +5,8 @@ var mainRoomOutdoorLightState= "wb-mr6c_24/K4";
 
 var mainRoomTemp = "wb-msw-v3_201/Temperature";
 var mainRoomHum = "wb-msw-v3_201/Humidity";
+var SecondFloorTemp = "wb-ms_90/Temperature";
+var SecondFloorHum = "wb-ms_90/Humidity";
 
 
 defineVirtualDevice("main-room", {
@@ -59,14 +61,14 @@ defineVirtualDevice("main-room", {
             value: "Второй этаж"
           },        
         Temperature2: {
-            title: "Температура",
+            title: "Температура. Второй этаж",
             type: "temperature",
-            value: dev["wb-ms_90/Temperature"]
+            value: dev[SecondFloorTemp]
             },
         Humidity2: {
-            title: "Влажность",
+            title: "Влажность. Второй этаж",
             type: "rel_humidity",
-            value: dev["wb-ms_90/Humidity"]
+            value: dev[SecondFloorHum]
             }                                             
     }
 })
@@ -89,29 +91,20 @@ defineRule({
     }
 });
 
-// defineRule({
-//     whenChanged: function() {
-//         return dev[mainRoomTamburCarpetState];
-//     },
-//     then: function(value) {
-//         dev["main-room/TamburCarpetButton"] = value;
-//     }
-// });
+defineRule({
+    whenChanged: function() {
+        return dev[SecondFloorTemp];
+    },
+    then: function(value) {
+        dev["main-room/Temperature2"] = value;
+    }
+});
 
-// defineRule({
-//     whenChanged: function() {
-//         return dev[mainRoomTamburHeaterState];
-//     },
-//     then: function(value) {
-//         dev["main-room/TamburHeaterButton"] = value;
-//     }
-// });
-
-// defineRule({
-//     whenChanged: function() {
-//         return dev[mainRoomOutdoorLightState];
-//     },
-//     then: function(value) {
-//         dev["main-room/OutdoorLightButton"] = value;
-//     }
-// });
+defineRule({
+    whenChanged: function() {
+        return dev[SecondFloorHum];
+    },
+    then: function(value) {
+        dev["main-room/Humidity2"] = value;
+    }
+});

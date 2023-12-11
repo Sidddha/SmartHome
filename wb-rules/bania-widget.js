@@ -17,7 +17,7 @@ defineVirtualDevice("bania-widget", {
     readonly: false, 
     cells: {
         HeaderRestRoom: {
-            title: "RestRoom",
+            title: "Комната отдыха",
             type: "text",
             value: "Комната отдыха"
         },
@@ -59,12 +59,12 @@ defineVirtualDevice("bania-widget", {
             value: "Комната водоподготовки"
         },
         TemperatureWaterPrepareRoom: {
-            title: "Температура",
+            title: "Температура. КВП",
             type: "temperature",
             value: dev[waterPrepareTemp]
         },
         HumidityWaterPrepareRoom: {
-            title: "Влажность",
+            title: "Влажность. КВП",
             type: "rel_humidity",
             value: dev[waterPrepareHum]
         },
@@ -76,7 +76,7 @@ defineVirtualDevice("bania-widget", {
             max: 30
         },
         WaterPrepareHeaterButton: {
-            title: "Радиатор",
+            title: "Радиатор. КВП",
             type: "switch",
             value: dev[waterPrepareHeaterState]
         },
