@@ -168,7 +168,7 @@ function update_mode(device, global_button) {
     var button_control = button[1];
     var button_value = getDevice(button_header).getControl(button_control).getValue();
     if(button_value) {
-        log("Set {} auto mode to {}", device.getDevice(), button_value);
+        log("Set {} auto mode to {}", device.getDeviceControl(), button_value);
         device.setModeAuto(button_value);
     }
 
