@@ -136,33 +136,6 @@ defineRule({
     }
 });
 
-// defineRule({
-//     whenChanged: function() {
-//         return dev[mainHeaterState];
-//     },
-//     then: function(value) {
-//         dev["bania-widget/MainHeaterButton"] = value;
-//     }
-// });
-
-// defineRule({
-//     whenChanged: function() {
-//         return dev[mediumHeaterState];
-//     },
-//     then: function(value) {
-//         dev["bania-widget/MediumHeaterButton"] = value;
-//     }
-// });
-
-// defineRule({
-//     whenChanged: function() {
-//         return dev[tamburHeaterState];
-//     },
-//     then: function(value) {
-//         dev["bania-widget/TamburHeaterButton"] = value;
-//     }
-// });
-
 defineRule({
     whenChanged: function() {
         return dev[waterPrepareTemp];
@@ -180,15 +153,6 @@ defineRule({
         dev["bania-widget/HumidityWaterPrepareRoom"] = value;
     }
 });
-
-// defineRule({
-//     whenChanged: function() {
-//         return dev[waterPrepareHeaterState];
-//     },
-//     then: function(value) {
-//         dev["bania-widget/WaterPrepareHeaterButton"] = value;
-//     }
-// });
 
 defineRule({
     whenChanged: function() {

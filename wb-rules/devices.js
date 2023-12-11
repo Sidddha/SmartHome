@@ -275,12 +275,12 @@ var heaters = [
     // mainRoomHeater,
     mainRoomTamburCarpet,
     mainRoomTamburHeater
-]
+];
 
 var lights = [
     mainOutdoorLight,
     gmOutdoorLight
-]
+];
 
 global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
