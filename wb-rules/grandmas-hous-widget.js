@@ -10,12 +10,12 @@ defineVirtualDevice("grandmas-house", {
     cells: {
         Temperature: {
             title: "Температура",
-            type: "temperature",
+            units: "deg C",
             value: dev[gmHouseTemp]
         },
         Humidity: {
             title: "Влажность",
-            type: "rel_humidity",
+            units: "%, RH",
             value: dev[gmHouseHum]
         },
         HeaterControl: {

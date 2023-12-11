@@ -19,7 +19,7 @@ defineVirtualDevice("global", {
       },
       LightControl: {
         title: "Ругулировка освещения",
-        type: "range",
+        type: "Generic value type control",
         value: 11,
         min: 0,
         max: 100
@@ -27,11 +27,3 @@ defineVirtualDevice("global", {
     }
 })
 
-defineRule({
-  whenChanged: function() {
-    return dev["global/GlobalLightButton"]
-  },
-  then: function(value) {
-    dev["global/LightControl#readonly"] = !value;
-  }
-})
