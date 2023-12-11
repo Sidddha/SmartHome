@@ -163,16 +163,25 @@ function update_state(device) {
 }
 
 function update_mode(device, global_button) {
-    var button = global_button.split("/");
-    var button_header = button[0];
-    var button_control = button[1];
-    var button_value = getDevice(button_header).getControl(button_control).getValue();
-    if(button_value) {
-        log("Set {} auto mode to {}", device.getDeviceControl(), button_value);
-        device.setModeAuto(button_value);
-    }
-
+    defineRule({
+        when: global_button,
+        then: function(newValue) {
+        log("Set {} auto mode to {}", device.getDevice(), button_value);
+        device.setModeAuto(newValue);            
+        }
+    })
 }
+// function update_mode(device, global_button) {
+//     var button = global_button.split("/");
+//     var button_header = button[0];
+//     var button_control = button[1];
+//     var button_value = getDevice(button_header).getControl(button_control).getValue();
+//     if(button_value) {
+//         log("Set {} auto mode to {}", device.getDevice(), button_value);
+//         device.setModeAuto(button_value);
+//     }
+
+// }
 
 
 function button(device) {
@@ -287,17 +296,19 @@ var lights = [
     gmOutdoorLight
 ];
 
+var timer1sec = null;
+
 global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
 
 for(var i = 0; i < heaters.length; i++) {
-    update_mode(heaters[i], globalHeaterButton);
+    setInterval(update_mode(heaters[i], globalHeaterButton), 1000);
     button(heaters[i]);
     update_state(heaters[i]);    
 }
 
 for(var i = 0; i < lights.length; i++) {
-    update_mode(lights[i], globalLightButton);
+    setInterval(update_mode(lights[i], globalLightButton), 1000);
     button(lights[i]);
     update_state(lights[i]);    
 }
