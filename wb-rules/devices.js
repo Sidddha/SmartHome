@@ -278,14 +278,22 @@ var lights = [
 global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
 
-heaters.forEach(function (device) {
-    button(device);
-    check_state(device);
+for(var i = 0; i < heaters.length; i++) {
+    button(heaters[i]);
+    check_state(heaters[i]);    
+}
 
-});
+for(var i = 0; i < lights.length; i++) {
+    button(lights[i]);
+    check_state(lights[i]);    
+}
+// heaters.forEach(function (device) {
+//     button(device);
+//     check_state(device);
 
-lights.forEach(function (device) {
-    log("{} setValue: {}, actualValue: {}", device.getDeviceControl(), device.getSetParamValue(), device.getActualParamValue());
-    button(device);
-    check_state(device);
-});
+// });
+
+// lights.forEach(function (device) {
+//     button(device);
+//     check_state(device);
+// });
