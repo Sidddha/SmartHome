@@ -98,7 +98,7 @@ Device.prototype.setModeAuto = function (mode) {
 
 Device.prototype.setDeviceValue = function (value) {
     getDevice(this.device_header).getControl(this.device_control).setValue(value);
-    log("{} set to {}", this.device_control, value);
+    log("{} set to {}", this.device, value);
 }
 Device.prototype.setButtonValue = function(value) {
     getDevice(this.button_header).getControl(this.button_control).setValue(value);
@@ -109,11 +109,17 @@ Device.prototype.getModeAuto = function () {
 Device.prototype.getDeviceValue = function () {
     return getDevice(this.device_header).getControl(this.device_control).getValue();
 }
-Device.prototype.getActualParam = function () {
+Device.prototype.getActualParamValue = function () {
     return getDevice(this.actual_param_header).getControl(this.actual_param_control).getValue();
 }
-Device.prototype.getSetParam = function () {
+Device.prototype.getSetParamValue = function () {
     return getDevice(this.set_param_header).getControl(this.set_param_control).getValue();
+}
+Device.prototype.getActualParamControl = function () {
+    return this.actual_param;
+}
+Device.prototype.getSetParamControl = function () {
+    return this.set_param;
 }
 Device.prototype.getButtonControl = function () {
     return this.button;
@@ -125,39 +131,27 @@ Device.prototype.getDeviceControl = function () {
     return this.device_control;
 }
 
-Device.prototype.updateState = function (ruleName) {
-    log("Rule {}:", ruleName);
+Device.prototype.updateState = function (funcName) {
+    log("Function {}:", funcName);
     if (this.getModeAuto()) {
-        if (this.getActualParam() > (this.getSetParam() + this.histeresis)) {
+        if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
             this.setButtonValue(false);
             this.setDeviceValue(false);
             return;
         }
-        if (this.getActualParam() < (this.getSetParam() - this.histeresis)) {
+        if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
             this.setButtonValue(true);
             this.setDeviceValue(true);
             return;
         }
     } else {
         this.setDeviceValue(this.getButtonValue());
-
-        // switch (this.device_header.getButtonValue()) {
-        //     case true:
-        //         getDevice(this.device_header).getControl(this.device_control).setValue(true);
-        //         break;
-        //     case false:
-        //         getDevice(this.device_header).getControl(this.device_control).setValue(false);
-        //         break;
-        //     default:
-        //         getDevice(this.device_header).getControl(this.device_control).setValue(false);
-        //         break;
-        // }
     }
 }
 
 function check_state(device) {
     defineRule({
-        whenChanged: [device.set_param, device.actual_param],
+        whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
         then: function (newValue, devName, cellName) {
             if(device.getModeAuto()){
                 log("{}/{} changed:", devName, cellName);
@@ -172,19 +166,8 @@ function button(device) {
     defineRule({
         whenChanged: device.getButtonControl(),
         then: function () {
-            log("Button {} pressed", device.getButtonControl());
+            log("Button {} pressed:", device.getButtonControl());
             device.updateState("button");
-            // switch(newValue) {
-            //     case true:
-            //         device.updateState();
-            //         break;
-            //     case false:
-            //         device.updateState();
-            //         break;
-            //     default:
-            //         device.updateState();
-            //         break;   
-            // }  
         }
     })
 }
