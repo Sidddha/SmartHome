@@ -164,7 +164,9 @@ function update_state(device) {
 
 function update_mode(device) {
     defineRule({
-        asSoonAs: device.getButtonControl(),
+        asSoonAs: function() {
+            dev[device.getButtonControl()];
+        },
         then: function(newValue) {
             log("Set {} auto mode to {}", device.getDevice(), newValue);
             device.setModeAuto(newValue);
