@@ -150,14 +150,24 @@ Device.prototype.updateState = function (funcName) {
     }
 }
 
-function check_state(device) {
+function update_state(device) {
     defineRule({
         whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
         then: function (newValue, devName, cellName) {
             if (device.getModeAuto()) {
                 log("{}/{} changed:", devName, cellName);
-                device.updateState("check_state");
+                device.updateState("update_state");
             }
+        }
+    })
+}
+
+function update_mode(device) {
+    defineRule({
+        asSoonAs: device.getButtonControl(),
+        then: function(newValue) {
+            log("Set {} auto mode to {}", device.getDevice(), newValue);
+            device.setModeAuto(newValue);
         }
     })
 }
@@ -279,11 +289,13 @@ global_button(heaters, globalHeaterButton);
 global_button(lights, globalLightButton);
 
 for(var i = 0; i < heaters.length; i++) {
+    update_mode(heaters[i]);
     button(heaters[i]);
-    check_state(heaters[i]);    
+    update_state(heaters[i]);    
 }
 
 for(var i = 0; i < lights.length; i++) {
+    update_mode(lights[i]);
     button(lights[i]);
-    check_state(lights[i]);    
+    update_state(lights[i]);    
 }
