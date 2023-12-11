@@ -157,7 +157,7 @@ Device.prototype.updateState = function (ruleName) {
 
 function check_state(device) {
     defineRule({
-        whenChanged: [device.getSetParam(), device.getActualParam()],
+        whenChanged: [device.set_param, device.actual_param],
         then: function (newValue, devName, cellName) {
             if(device.getModeAuto()){
                 log("{}/{} changed:", devName, cellName);
