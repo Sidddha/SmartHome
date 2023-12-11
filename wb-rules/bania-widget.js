@@ -119,72 +119,56 @@ defineVirtualDevice("bania-widget", {
 
 
 defineRule({
-    whenChanged: function() {
-        return dev[restRoomTemp];
-    },
+    whenChanged: restRoomTemp,
     then: function(value) {
         dev["bania-widget/TemperatureRestRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[restRoomHum];
-    },
+    whenChanged: restRoomHum,
     then: function(value) {
         dev["bania-widget/HumidityRestRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[waterPrepareTemp];
-    },
+    whenChanged: waterPrepareTemp,
     then: function(value) {
         dev["bania-widget/TemperatureWaterPrepareRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[waterPrepareHum];
-    },
+    whenChanged: waterPrepareHum,
     then: function(value) {
         dev["bania-widget/HumidityWaterPrepareRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[tempBarrel1];
-    },
+    whenChanged: tempBarrel1,
     then: function(value) {
         dev["bania-widget/TemperatureBarrel1"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[tempBarrel2];
-    },
+    whenChanged: tempBarrel2,
     then: function(value) {
         dev["bania-widget/TemperatureBarrel2"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[underfloorTemperature];
-    },
+    whenChanged: underfloorTemperature,
     then: function(value) {
         dev["bania-widget/TemperatureUnderfloor"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[underfloorHumidity];
-    },
+    whenChanged: underfloorHumidity,
     then: function(value) {
         dev["bania-widget/HumidityUnderfloor"] = value;
     }

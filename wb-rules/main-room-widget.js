@@ -74,36 +74,29 @@ defineVirtualDevice("main-room", {
 })
 
 defineRule({
-    whenChanged: function() {
-        return dev[mainRoomTemp];
-    },
+    whenChanged: mainRoomTemp,
     then: function(value) {
         dev["main-room/Temperature"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[mainRoomHum];
-    },
+    whenChanged: 
+        mainRoomHum,
     then: function(value) {
         dev["main-room/Humidity"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[SecondFloorTemp];
-    },
+    whenChanged: SecondFloorTemp,
     then: function(value) {
         dev["main-room/Temperature2"] = value;
     }
 });
 
 defineRule({
-    whenChanged: function() {
-        return dev[SecondFloorHum];
-    },
+    whenChanged: SecondFloorHum,
     then: function(value) {
         dev["main-room/Humidity2"] = value;
     }
