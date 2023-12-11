@@ -20,12 +20,12 @@ defineVirtualDevice("main-room", {
           },        
         Temperature: {
             title: "Температура",
-            units: "deg C",
+            type: "deg C",
             value: dev[mainRoomTemp]
             },
         Humidity: {
             title: "Влажность",
-            units: "%, RH",
+            type: "%, RH",
             value: dev[mainRoomHum]
             },
         HeaterControl: {
@@ -62,12 +62,12 @@ defineVirtualDevice("main-room", {
           },        
         Temperature2: {
             title: "Температура. Второй этаж",
-            units: "deg C",
+            type: "deg C",
             value: dev[SecondFloorTemp]
             },
         Humidity2: {
             title: "Влажность. Второй этаж",
-            units: "%, RH",
+            type: "%, RH",
             value: dev[SecondFloorHum]
             }                                             
     }
