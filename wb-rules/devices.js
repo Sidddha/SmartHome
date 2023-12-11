@@ -100,7 +100,7 @@ Device.prototype.setDeviceValue = function (value) {
     getDevice(this.device_header).getControl(this.device_control).setValue(value);
     log("{} set to {}", this.device, value);
 }
-Device.prototype.setButtonValue = function(value) {
+Device.prototype.setButtonValue = function (value) {
     getDevice(this.button_header).getControl(this.button_control).setValue(value);
 }
 Device.prototype.getModeAuto = function () {
@@ -137,6 +137,7 @@ Device.prototype.updateState = function (funcName) {
         if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
             this.setButtonValue(false);
             this.setDeviceValue(false);
+
             return;
         }
         if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
@@ -153,7 +154,7 @@ function check_state(device) {
     defineRule({
         whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
         then: function (newValue, devName, cellName) {
-            if(device.getModeAuto()){
+            if (device.getModeAuto()) {
                 log("{}/{} changed:", devName, cellName);
                 device.updateState("check_state");
             }
@@ -188,13 +189,15 @@ function global_button(devices, global_button) {
     })
 }
 
-var mainOutdoorLight = new Device(globalLightSet,
+var mainOutdoorLight = new Device(
+    globalLightSet,
     outdoorLightLux,
     mainRoomOutdoorLightState,
     mainOutdoorLightButton,
     illuminanceHisteresis);
 
-var gmOutdoorLight = new Device(globalLightSet,
+var gmOutdoorLight = new Device(
+    globalLightSet,
     outdoorLightLux,
     gmOutdoorLightState,
     gmOutdoorLightButton,
@@ -207,43 +210,50 @@ var gmOutdoorLight = new Device(globalLightSet,
 //                                 mainRoomHeaterHeader, 
 //                                 heaterHisteresis,);
 
-var mainRoomTamburCarpet = new Device(mainRoomTempSet,
+var mainRoomTamburCarpet = new Device(
+    mainRoomTempSet,
     mainRoomTemp,
     mainRoomTamburCarpetState,
     mainRoomTamburCarpetButton,
     heaterHisteresis);
 
-var mainRoomTamburHeater = new Device(mainRoomTempSet,
+var mainRoomTamburHeater = new Device(
+    mainRoomTempSet,
     mainRoomTemp,
     mainRoomTamburHeaterState,
     mainRoomTamburHeaterButton,
     heaterHisteresis);
 
-var baniaMainHeater = new Device(restRoomTempSet,
+var baniaMainHeater = new Device(
+    restRoomTempSet,
     restRoomTemp,
     mainHeaterState,
     mainHeaterButton,
     heaterHisteresis);
 
-var baniaMediumHeater = new Device(restRoomTempSet,
+var baniaMediumHeater = new Device(
+    restRoomTempSet,
     restRoomTemp,
     mediumHeaterState,
     mediumHeaterButton,
     heaterHisteresis);
 
-var baniaTamburHeater = new Device(restRoomTempSet,
+var baniaTamburHeater = new Device(
+    restRoomTempSet,
     restRoomTemp,
     tamburHeaterState,
     tamburHeaterButton,
     heaterHisteresis);
 
-var waterPrepareHeater = new Device(waterPrepareTempSet,
+var waterPrepareHeater = new Device(
+    waterPrepareTempSet,
     waterPrepareTemp,
     waterPrepareHeaterState,
     waterPrepareHeaterButton,
     heaterHisteresis);
 
-var gmHouseHeater = new Device(gmHouseTempSet,
+var gmHouseHeater = new Device(
+    gmHouseTempSet,
     gmHouseTemp,
     gmHouseHeaterState,
     gmHouseHeaterButton,
@@ -275,7 +285,7 @@ heaters.forEach(function (device) {
 });
 
 lights.forEach(function (device) {
+    log("{} setValue: {}, actualValue: {}", device.getDeviceControl(), device.getSetParamValue(), device.getActualParamValue());
     button(device);
     check_state(device);
-
 });
