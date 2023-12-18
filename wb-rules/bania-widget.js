@@ -10,7 +10,7 @@ defineVirtualDevice("bania-widget", {
         TemperatureRestRoom: {
             title: "Температура",
             type: "temperature",
-            value: dev[bglobal.aniaRestRoomTemp]
+            value: dev[global.baniaRestRoomTemp]
 	    },
         HumidityRestRoom: {
             title: "Влажность",
