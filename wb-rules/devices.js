@@ -1,5 +1,5 @@
 var Device = function (set_param, actual_param, device_control, button_control, histeresis, global_button, self_auto) {
-    var dev = device_control.split("/");
+    var dvc = device_control.split("/");
     var but = button_control.split("/");
     var sparam = set_param.split("/");
     var aparam = actual_param.split("/");
@@ -11,8 +11,8 @@ var Device = function (set_param, actual_param, device_control, button_control, 
     this.actual_param_header = aparam[0];
     this.actual_param_control = aparam[1];
     this.device = device_control;
-    this.device_header = dev[0];
-    this.device_control = dev[1];
+    this.device_header = dvc[0];
+    this.device_control = dvc[1];
     this.button = button_control;
     this.button_header = but[0];
     this.button_control = but[1];
