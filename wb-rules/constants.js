@@ -2,7 +2,7 @@
 //*********Global constants****** */
 ////////////////////////////////////
 
-const global = {
+var global = {
     HeaterHisteresis: 0.5,
     HeaterButton: "global/GlobalHeaterButton",
     OutdoorLightLux: "wb-ms_138/Illuminance",
@@ -16,7 +16,7 @@ export {global};
 //*********Main room constants*****/
 ////////////////////////////////////
 
-const mainRoom = {
+var mainRoom = {
     TamburCarpetState: "wb-mr6c_24/K3",
     TamburHeaterState: "wb-mr6c_24/K2",
     HeaterState: "cmnd/tasmota_C6208D/POWER",
@@ -38,7 +38,7 @@ export {mainRoom};
 //***Grandmothers hous constants****/
 ////////////////////////////////////
 
-const gmHouse = {
+var gmHouse = {
     Temp: "wb-ms_132/Temperature",
     Hum: "wb-ms_132/Humidity",
     HeaterState: "wb-mr3_34/K1",
@@ -54,7 +54,7 @@ export {gmHouse};
 //*********Bania constants*********/
 ////////////////////////////////////
 
- const bania = {
+ var bania = {
     mainHeaterState: "wb-mr6c_214/K3",
     mediumHeaterState: "wb-mr6c_214/K4",
     tamburHeaterState: "wb-mr6c_214/K5",
