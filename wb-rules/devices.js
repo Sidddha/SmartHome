@@ -160,59 +160,72 @@ Device.prototype.getGlobalButtonValue = function() {
 }
 Device.prototype.updateState = function () {
     if (this.getModeAuto()) {
-        defineRule({
-            whenChanged: [this.getSetParamControl(), this.getActualParamControl(), this.global_button, this.self_auto],
-            then: function (newValue, devName, cellName) {
-                if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
-                    this.setButtonValue(false);
-                    this.setDeviceValue(false);
-                    return;
-                }
-                if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
-                    this.setButtonValue(true);
-                    this.setDeviceValue(true);
-                    return;
-                }
-            }
-        });
+        if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
+            this.setButtonValue(false);
+            this.setDeviceValue(false);
+            return;
+        }
+        if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
+            this.setButtonValue(true);
+            this.setDeviceValue(true);
+            return;
+        }
     } else {
-        defineRule({
-            whenChanged: this.getButtonControl(),
-            then: function (newValue) {
-                this.setDeviceValue(newValue);
-            }
-        })
+        this.setDeviceValue(this.getButtonValue());
     }
 }
-Device.prototype.updateMode = function() {
+
+
+function update_state(device) {
+    defineRule({
+        whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
+        then: function (newValue, devName, cellName) {
+            if (device.getModeAuto()) {
+                log("{}/{} changed:", devName, cellName);
+                device.updateState("update_state");
+            }
+        }
+    });
+}
+
+function update_mode(device, global_button) {
     defineRule({
         when: function() {
             return cron("@every 1s");
         },
         then: function () {
-            if(this.getModeAuto()) {
-                this.setModeAuto(true);            
+            log("Cron rule. {} update auto mode", device.getDeviceControl());
+            if(dev[global_button]) {
+                device.setModeAuto(true);            
             } else {
-                this.setModeAuto(false)
+                device.setModeAuto(false)
             }
         }
     });
 }
-Device.prototype.button = function() {
+
+function button(device) {
     defineRule({
-        whenChanged: this.getButtonControl(),
+        whenChanged: device.getButtonControl(),
         then: function () {
-            log("Button {} pressed:", this.getButtonControl());
-            this.updateState();
+            log("Button {} pressed:", device.getButtonControl());
+            device.updateState("button");
         }
     });
 }
-Device.prototype.globalButton = function() {
+
+
+
+
+function global_button(devices, global_button) {
+
     defineRule({
-        whenChanged: this.global_button,
+        whenChanged: global_button,
         then: function (newValue, devName, cellName) {
             log("{}/{} pressed:", devName, cellName);
-            this.setModeAuto(newValue);
+            devices.forEach(function (device) {
+                device.setModeAuto(newValue);
+            });
         }
     });
 }
@@ -314,16 +327,17 @@ var lights = [
     gmOutdoorLight
 ];
 
+global_button(heaters, globalHeaterButton);
+global_button(lights, globalLightButton);
+
 for(var i = 0; i < heaters.length; i++) {
-    heaters[i].updateMode();
-    heaters[i].updateState();
-    heaters[i].button();
-    heaters[i].globalButton();   
+    update_mode(heaters[i], globalHeaterButton);
+    button(heaters[i]);
+    update_state(heaters[i]);    
 }
 
 for(var i = 0; i < lights.length; i++) {
-    lights[i].updateMode();
-    lights[i].updateState();
-    lights[i].button();
-    lights[i].globalButton();   
+    update_mode(lights[i], globalLightButton);
+    button(lights[i]);
+    update_state(lights[i]); 
 }
