@@ -198,7 +198,7 @@ function update_mode(device, global_button) {
             if(dev[global_button]) {
                 device.setModeAuto(true);            
             } else {
-                device.setModeAuto(false)
+                device.setModeAuto(false);
             }
         }
     });

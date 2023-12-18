@@ -68,12 +68,12 @@ defineVirtualDevice("main-room", {
         Temperature2: {
             title: "Температура. Второй этаж",
             type: "temperature",
-            value: dev[SecondFloorTemp]
+            value: dev[mainRoomSecondFloorTemp]
             },
         Humidity2: {
             title: "Влажность Второй этаж",
             type: "rel_humidity",
-            value: dev[SecondFloorHum]
+            value: dev[mainRoomSecondFloorHum]
             }                                             
     }
 })
