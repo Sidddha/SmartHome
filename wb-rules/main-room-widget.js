@@ -10,12 +10,12 @@ defineVirtualDevice("main-room", {
         Temperature: {
             title: "Температура",
             type: "temperature",
-            value: dev[mainRoomTemp]
+            value: dev[global.mainRoomTemp]
             },
         Humidity: {
             title: "Влажность",
             type: "rel_humidity",
-            value: dev[mainRoomHum]
+            value: dev[global.mainRoomHum]
             },
         HeaterControl: {
             title: "Регулировка температуры",
@@ -27,7 +27,7 @@ defineVirtualDevice("main-room", {
         TamburCarpetButton: {
             title: "Коврик в тамбуре",
             type: "switch",
-            value: dev[mainRoomTamburCarpetState]
+            value: dev[global.mainRoomTamburCarpetState]
         },
         TamburCarpetAuto: {
             title: "Отключить Авто-режим",
@@ -37,7 +37,7 @@ defineVirtualDevice("main-room", {
         TamburHeaterButton: {
             title: "Радиатор в тамбуре",
             type: "switch",
-            value: dev[mainRoomTamburHeaterState]
+            value: dev[global.mainRoomTamburHeaterState]
         },
         // HeaterButton: {
         //     title: "Радиатор в комнате",
@@ -47,7 +47,7 @@ defineVirtualDevice("main-room", {
         OutdoorLightButton: {
             title: "Уличное освещение",
             type: "switch",
-            value: dev[mainRoomOutdoorLightState]
+            value: dev[global.mainRoomOutdoorLightState]
         },
         SecondFloorHeader: {
             title: "Второй этаж",
@@ -57,40 +57,39 @@ defineVirtualDevice("main-room", {
         Temperature2: {
             title: "Температура. Второй этаж",
             type: "temperature",
-            value: dev[SecondFloorTemp]
+            value: dev[global.SecondFloorTemp]
             },
         Humidity2: {
             title: "Влажность Второй этаж",
             type: "rel_humidity",
-            value: dev[SecondFloorHum]
+            value: dev[global.SecondFloorHum]
             }                                             
     }
 })
 
 defineRule({
-    whenChanged: mainRoomTemp,
+    whenChanged: global.mainRoomTemp,
     then: function(value) {
         dev["main-room/Temperature"] = value;
     }
 });
 
 defineRule({
-    whenChanged: 
-        mainRoomHum,
+    whenChanged: global.mainRoomHum,
     then: function(value) {
         dev["main-room/Humidity"] = value;
     }
 });
 
 defineRule({
-    whenChanged: mainRoomSecondFloorTemp,
+    whenChanged: global.mainRoomSecondFloorTemp,
     then: function(value) {
         dev["main-room/Temperature2"] = value;
     }
 });
 
 defineRule({
-    whenChanged: mainRoomSecondFloorHum,
+    whenChanged: global.mainRoomSecondFloorHum,
     then: function(value) {
         dev["main-room/Humidity2"] = value;
     }
