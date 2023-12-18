@@ -53,6 +53,11 @@ defineVirtualDevice("bania-widget", {
             type: "switch",
             value: dev[tamburHeaterState]
         },
+        TamburHeaterAuto: {
+            title: "Отключить Авто-режим",
+            type: "switch",
+            value: true 
+        },        
         HeaderWaterPrepare: {
             title: "Комната водоподготовки",
             type: "text",

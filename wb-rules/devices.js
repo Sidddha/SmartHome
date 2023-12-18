@@ -29,6 +29,7 @@ var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
 var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
 var mainRoomHeaterButton = "main-room/HeaterButton";
 var mainOutdoorLightButton = "main-room/OutdoorLightButton";
+var mainRoomTamburCarpetAuto = "main-room/TamburCarpetAuto";
 
 ////////////////////////////////////
 //***Grandmothers hous variables****/
@@ -65,13 +66,16 @@ var mainHeaterButton = "bania-widget/MainHeaterButton";
 var mediumHeaterButton = "bania-widget/MediumHeaterButton";
 var tamburHeaterButton = "bania-widget/TamburHeaterButton";
 var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
+var tamburHeaterAuto = "bania-widget/TamburHeaterAuto";
 
 var restRoomTempSet = "bania-widget/MainHeaterControl";
 var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
-
-var Device = function (set_param, actual_param, device_control, button_control, histeresis) {
+/*
+TODO: implement self auto!
+*/
+var Device = function (set_param, actual_param, device_control, button_control, histeresis, self_auto) {
     var dev = device_control.split("/");
     var but = button_control.split("/");
     var sparam = set_param.split("/");
@@ -89,10 +93,24 @@ var Device = function (set_param, actual_param, device_control, button_control, 
     this.button_header = but[0];
     this.button_control = but[1];
     this.histeresis = histeresis;
+    if(self_auto == undefined) {
+        this.is_self_auto = false;
+        this.self_auto_header = undefined;
+        this.self_auto_header = undefined;
+    } else {
+        this.self_auto = self_auto;
+        this.is_self_auto = true;
+        var sa = self_auto.split("/");
+        this.self_auto_header = sa[0];
+        this.self_auto_control = sa[1];
+    }
 }
 
 Device.prototype.setModeAuto = function (mode) {
-    getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);
+    if(this.getSelfAuto()) 
+        getDevice(this.button_header).getControl(this.button_control).setReadonly(false);    
+    else 
+        getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);
     log("{} auto mode set to {}", this.button, mode);
 }
 
@@ -130,6 +148,12 @@ Device.prototype.getButtonValue = function () {
 Device.prototype.getDeviceControl = function () {
     return this.device_control;
 }
+Device.prototype.getSelfAuto = function() {
+    if(this.is_self_auto)
+        return getDevice(this.self_auto_header).getControl(this.self_auto_control).getValue();
+    else 
+        return false;
+}
 
 Device.prototype.updateState = function (funcName) {
     log("Function {}:", funcName);
@@ -137,7 +161,6 @@ Device.prototype.updateState = function (funcName) {
         if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
             this.setButtonValue(false);
             this.setDeviceValue(false);
-
             return;
         }
         if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
@@ -163,27 +186,20 @@ function update_state(device) {
 }
 
 function update_mode(device, global_button) {
-    defineRule("crontest_hourly", {
+    defineRule({
         when: function() {
-            return cron("@every 1s") && dev[global_button];
+            return cron("@every 1s");
         },
         then: function () {
-            device.setModeAuto(true);            
+            log("Cron rule. {} update auto mode", device.getDeviceControl());
+            if(dev[global_button]) {
+                device.setModeAuto(true);            
+            } else {
+                device.setModeAuto(false)
+            }
         }
     });
 }
-// function update_mode(device, global_button) {
-//     var button = global_button.split("/");
-//     var button_header = button[0];
-//     var button_control = button[1];
-//     var button_value = getDevice(button_header).getControl(button_control).getValue();
-//     if(button_value) {
-//         log("Set {} auto mode to {}", device.getDevice(), button_value);
-//         device.setModeAuto(button_value);
-//     }
-
-// }
-
 
 function button(device) {
     defineRule({

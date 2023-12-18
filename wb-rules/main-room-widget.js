@@ -40,6 +40,11 @@ defineVirtualDevice("main-room", {
             type: "switch",
             value: dev[mainRoomTamburCarpetState]
         },
+        TamburCarpetAuto: {
+            title: "Отключить Авто-режим",
+            type: "switch",
+            value: true 
+        },
         TamburHeaterButton: {
             title: "Радиатор в тамбуре",
             type: "switch",
