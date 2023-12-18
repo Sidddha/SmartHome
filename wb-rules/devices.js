@@ -219,7 +219,7 @@ function button(device) {
 
 function global_button(devices, global_button) {
 
-    defineRule("glogal button rule",{
+    defineRule({
         whenChanged: global_button,
         then: function (newValue, devName, cellName) {
             log("{}/{} pressed:", devName, cellName);
