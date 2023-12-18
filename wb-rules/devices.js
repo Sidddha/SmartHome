@@ -106,7 +106,7 @@ var Device = function (set_param, actual_param, device_control, button_control, 
 }
 
 Device.prototype.setModeAuto = function (mode) {
-    if(this.getSelfAuto()) 
+    if(this.getSelfAutoValue()) 
         getDevice(this.button_header).getControl(this.button_control).setReadonly(false);    
     else 
         getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);
