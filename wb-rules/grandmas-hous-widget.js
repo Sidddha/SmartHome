@@ -1,3 +1,9 @@
+var gmHouseTemp = "wb-ms_132/Temperature";
+var gmHouseHum = "wb-ms_132/Humidity";
+var gmHouseHeaterState = "wb-mr3_34/K1";
+var gmHouseTempSet = "grandmas-house/HeaterControl";
+var gmHouseOutdoorLightState = "wb-mr3_34/K3";
+
 defineVirtualDevice("grandmas-house", {
     title: "GrandmasHouse",
     readonly: false,
@@ -5,12 +11,12 @@ defineVirtualDevice("grandmas-house", {
         Temperature: {
             title: "Температура",
             type: "temperature",
-            value: dev[global.gmHouseTemp]
+            value: dev[gmHouseTemp]
         },
         Humidity: {
             title: "Влажность",
             type: "rel_humidity",
-            value: dev[global.gmHouseHum]
+            value: dev[gmHouseHum]
         },
         HeaterControl: {
             title: "Регулировка температуры",
@@ -22,25 +28,25 @@ defineVirtualDevice("grandmas-house", {
         HeaterButton: {
             title: "Обогреватель",
             type: "switch",
-            value: dev[global.gmHouseHeaterState]
+            value: dev[gmHouseHeaterState]
         },
         OutdoorLightButton: {
             title: "Уличное освещение",
             type: "switch",
-            value: dev[global.gmHouseOutdoorLightState]
+            value: dev[gmHouseOutdoorLightState]
         }
     }
 })
 
 defineRule({
-    whenChanged: global.gmHouseTemp,
+    whenChanged: gmHouseTemp,
     then: function(value) {
         dev["grandmas-house/Temperature"] = value;
     }
 });
 
 defineRule({
-    whenChanged: global.gmHouseHum,
+    whenChanged: gmHouseHum,
     then: function(value) {
         dev["grandmas-house/Humidity"] = value;
     }

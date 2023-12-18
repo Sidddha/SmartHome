@@ -1,3 +1,14 @@
+var mainRoomTamburCarpetState = "wb-mr6c_24/K3";
+var mainRoomTamburHeaterState = "wb-mr6c_24/K2";
+var mainRoomHeaterState = "cmnd/tasmota_C6208D/POWER";
+var mainRoomOutdoorLightState = "wb-mr6c_24/K4";
+var mainRoomTemp = "wb-msw-v3_201/Temperature";
+var mainRoomHum = "wb-msw-v3_201/Humidity";
+var mainRoomTempSet = "main-room/HeaterControl";
+var mainRoomSecondFloorTemp = "wb-ms_90/Temperature";
+var mainRoomSecondFloorHum = "wb-ms_90/Humidity";
+var mainRoomHeaterButton = "main-room/HeaterButton";
+
 defineVirtualDevice("main-room", {
     title: "MainRoom" ,
     readonly: false, 
@@ -10,12 +21,12 @@ defineVirtualDevice("main-room", {
         Temperature: {
             title: "Температура",
             type: "temperature",
-            value: dev[global.mainRoomTemp]
+            value: dev[mainRoomTemp]
             },
         Humidity: {
             title: "Влажность",
             type: "rel_humidity",
-            value: dev[global.mainRoomHum]
+            value: dev[mainRoomHum]
             },
         HeaterControl: {
             title: "Регулировка температуры",
@@ -27,7 +38,7 @@ defineVirtualDevice("main-room", {
         TamburCarpetButton: {
             title: "Коврик в тамбуре",
             type: "switch",
-            value: dev[global.mainRoomTamburCarpetState]
+            value: dev[mainRoomTamburCarpetState]
         },
         TamburCarpetAuto: {
             title: "Отключить Авто-режим",
@@ -37,7 +48,7 @@ defineVirtualDevice("main-room", {
         TamburHeaterButton: {
             title: "Радиатор в тамбуре",
             type: "switch",
-            value: dev[global.mainRoomTamburHeaterState]
+            value: dev[mainRoomTamburHeaterState]
         },
         // HeaterButton: {
         //     title: "Радиатор в комнате",
@@ -47,7 +58,7 @@ defineVirtualDevice("main-room", {
         OutdoorLightButton: {
             title: "Уличное освещение",
             type: "switch",
-            value: dev[global.mainRoomOutdoorLightState]
+            value: dev[mainRoomOutdoorLightState]
         },
         SecondFloorHeader: {
             title: "Второй этаж",
@@ -57,39 +68,39 @@ defineVirtualDevice("main-room", {
         Temperature2: {
             title: "Температура. Второй этаж",
             type: "temperature",
-            value: dev[global.SecondFloorTemp]
+            value: dev[SecondFloorTemp]
             },
         Humidity2: {
             title: "Влажность Второй этаж",
             type: "rel_humidity",
-            value: dev[global.SecondFloorHum]
+            value: dev[SecondFloorHum]
             }                                             
     }
 })
 
 defineRule({
-    whenChanged: global.mainRoomTemp,
+    whenChanged: mainRoomTemp,
     then: function(value) {
         dev["main-room/Temperature"] = value;
     }
 });
 
 defineRule({
-    whenChanged: global.mainRoomHum,
+    whenChanged: mainRoomHum,
     then: function(value) {
         dev["main-room/Humidity"] = value;
     }
 });
 
 defineRule({
-    whenChanged: global.mainRoomSecondFloorTemp,
+    whenChanged: mainRoomSecondFloorTemp,
     then: function(value) {
         dev["main-room/Temperature2"] = value;
     }
 });
 
 defineRule({
-    whenChanged: global.mainRoomSecondFloorHum,
+    whenChanged: mainRoomSecondFloorHum,
     then: function(value) {
         dev["main-room/Humidity2"] = value;
     }
