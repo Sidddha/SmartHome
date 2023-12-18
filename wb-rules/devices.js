@@ -1,83 +1,14 @@
-////////////////////////////////////
-//*********Global constants****** */
-////////////////////////////////////
+import { global } from "./constants";
+import { mainRoom } from "./constants";
+import { bania } from "./constants";
+import { gmHouse } from "./constants";
 
-const heaterHisteresis = 0.5;
-
-const globalHeaterButton = "global/GlobalHeaterButton";
-const outdoorLightLux = "wb-ms_138/Illuminance";
-
-const illuminanceHisteresis = 2;
-
-const globalLightButton = "global/GlobalLightButton";
-const globalLightSet = "global/LightControl";
-
-////////////////////////////////////
-//*********Main room constants*****/
-////////////////////////////////////
-
-const mainRoomTamburCarpetState = "wb-mr6c_24/K3";
-const mainRoomTamburHeaterState = "wb-mr6c_24/K2";
-const mainRoomHeaterState = "cmnd/tasmota_C6208D/POWER";
-const mainRoomOutdoorLightState = "wb-mr6c_24/K4";
-
-const mainRoomTemp = "wb-msw-v3_201/Temperature";
-const mainRoomHum = "wb-msw-v3_201/Humidity";
-const mainRoomTempSet = "main-room/HeaterControl";
-
-const mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
-const mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
-const mainRoomHeaterButton = "main-room/HeaterButton";
-const mainOutdoorLightButton = "main-room/OutdoorLightButton";
-const mainRoomTamburCarpetAuto = "main-room/TamburCarpetAuto";
-
-////////////////////////////////////
-//***Grandmothers hous constants****/
-////////////////////////////////////
-
-const gmHouseTemp = "wb-ms_132/Temperature";
-const gmHouseHum = "wb-ms_132/Humidity";
-const gmHouseHeaterState = "wb-mr3_34/K1";
-const gmHouseTempSet = "grandmas-house/HeaterControl";
-const gmHouseHeaterButton = "grandmas-house/HeaterButton";
-
-const gmOutdoorLightState = "wb-mr3_34/K3";
-const gmOutdoorLightButton = "grandmas-house/OutdoorLightButton";
-
-////////////////////////////////////
-//*********Bania constants*********/
-////////////////////////////////////
-
-const mainHeaterState = "wb-mr6c_214/K3";
-const mediumHeaterState = "wb-mr6c_214/K4";
-const tamburHeaterState = "wb-mr6c_214/K5";
-const waterPrepareHeaterState = "wb-mr6c_214/K6";
-
-const restRoomTemp = "wb-msw-v3_49/Temperature";
-const restRoomHum = "wb-msw-v3_49/Humidity";
-const waterPrepareTemp = "wb-ms_187/Temperature";
-const waterPrepareHum = "wb-ms_187/Humidity";
-const tempBarrel1 = "wb-ms_187/External Sensor 1";
-const tempBarrel2 = "wb-ms_187/External Sensor 2"
-const underfloorTemperature = "wb-ms_239/Temperature";
-const underfloorHumidity = "wb-ms_239/Humidity";
-
-const mainHeaterButton = "bania-widget/MainHeaterButton";
-const mediumHeaterButton = "bania-widget/MediumHeaterButton";
-const tamburHeaterButton = "bania-widget/TamburHeaterButton";
-const waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
-const baniaTamburHeaterAuto = "bania-widget/TamburHeaterAuto";
-
-const restRoomTempSet = "bania-widget/MainHeaterControl";
-const waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
-
-/////////////////////////////////////////
-
-var Device = function (set_param, actual_param, device_control, button_control, histeresis, self_auto) {
+var Device = function (set_param, actual_param, device_control, button_control, histeresis, global_button, self_auto) {
     var dev = device_control.split("/");
     var but = button_control.split("/");
     var sparam = set_param.split("/");
     var aparam = actual_param.split("/");
+    var globbut = global_button.split("/");
     this.set_param = set_param;
     this.set_param_header = sparam[0];
     this.set_param_control = sparam[1];
@@ -91,6 +22,9 @@ var Device = function (set_param, actual_param, device_control, button_control, 
     this.button_header = but[0];
     this.button_control = but[1];
     this.histeresis = histeresis;
+    this.global_button = global_button;
+    this.global_button_header = globbut[0];
+    this.global_button_control = globbut[1];
     if(self_auto == undefined) {
         this.is_self_auto = false;
         this.self_auto_header = undefined;
@@ -111,7 +45,6 @@ Device.prototype.setModeAuto = function (mode) {
         getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);
     log("{} auto mode set to {}", this.button, mode);
 }
-
 Device.prototype.setDeviceValue = function (value) {
     getDevice(this.device_header).getControl(this.device_control).setValue(value);
     log("{} set to {}", this.device, value);
@@ -149,156 +82,145 @@ Device.prototype.getButtonValue = function () {
 Device.prototype.getDeviceControl = function () {
     return this.device_control;
 }
-Device.prototype.getSelfAuto = function() {
+Device.prototype.getSelfAutoValue = function() {
     if(this.is_self_auto)
         return getDevice(this.self_auto_header).getControl(this.self_auto_control).getValue();
     else 
         return false;
 }
-
-Device.prototype.updateState = function (funcName) {
-    log("Function {}:", funcName);
+Device.prototype.getGlobalButtonValue = function() {
+    return getDevice(this.global_button_header).getControl(this.global_button_control).getValue();
+}
+Device.prototype.updateState = function () {
     if (this.getModeAuto()) {
-        if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
-            this.setButtonValue(false);
-            this.setDeviceValue(false);
-            return;
-        }
-        if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
-            this.setButtonValue(true);
-            this.setDeviceValue(true);
-            return;
-        }
+        defineRule({
+            whenChanged: [this.getSetParamControl(), this.getActualParamControl(), this.global_button, this.self_auto],
+            then: function (newValue, devName, cellName) {
+                if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
+                    this.setButtonValue(false);
+                    this.setDeviceValue(false);
+                    return;
+                }
+                if (this.getActualParamValue() < (this.getSetParamValue() - this.histeresis)) {
+                    this.setButtonValue(true);
+                    this.setDeviceValue(true);
+                    return;
+                }
+            }
+        });
     } else {
-        this.setDeviceValue(this.getButtonValue());
+        defineRule({
+            whenChanged: this.getButtonControl(),
+            then: function (newValue) {
+                this.setDeviceValue(newValue);
+            }
+        })
     }
 }
-
-function update_state(device) {
-    defineRule({
-        whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
-        then: function (newValue, devName, cellName) {
-            if (device.getModeAuto()) {
-                log("{}/{} changed:", devName, cellName);
-                device.updateState("update_state");
-            }
-        }
-    });
-}
-
-function update_mode(device, global_button) {
+Device.prototype.updateMode = function() {
     defineRule({
         when: function() {
             return cron("@every 1s");
         },
         then: function () {
-            log("Cron rule. {} update auto mode", device.getDeviceControl());
-            if(dev[global_button]) {
-                device.setModeAuto(true);            
+            if(this.getModeAuto()) {
+                this.setModeAuto(true);            
             } else {
-                device.setModeAuto(false)
+                this.setModeAuto(false)
             }
         }
     });
 }
-
-function button(device) {
+Device.prototype.button = function() {
     defineRule({
-        whenChanged: device.getButtonControl(),
+        whenChanged: this.getButtonControl(),
         then: function () {
-            log("Button {} pressed:", device.getButtonControl());
-            device.updateState("button");
+            log("Button {} pressed:", this.getButtonControl());
+            this.updateState();
         }
     });
 }
-
-
-
-
-function global_button(devices, global_button) {
-
+Device.prototype.globalButton = function() {
     defineRule({
-        whenChanged: global_button,
+        whenChanged: this.global_button,
         then: function (newValue, devName, cellName) {
             log("{}/{} pressed:", devName, cellName);
-            devices.forEach(function (device) {
-                device.setModeAuto(newValue);
-            });
+            this.setModeAuto(newValue);
         }
     });
 }
 
 var mainOutdoorLight = new Device(
-    globalLightSet,
-    outdoorLightLux,
-    mainRoomOutdoorLightState,
-    mainOutdoorLightButton,
-    illuminanceHisteresis);
+    global.LightSet,
+    global.OutdoorLightLux,
+    mainRoom.OutdoorLightState,
+    mainRoom.OutdoorLightButton,
+    global.IlluminanceHisteresis);
 
 var gmOutdoorLight = new Device(
-    globalLightSet,
-    outdoorLightLux,
-    gmOutdoorLightState,
-    gmOutdoorLightButton,
-    illuminanceHisteresis);
+    global.LightSet,
+    global.OutdoorLightLux,
+    gmHouse.OutdoorLightState,
+    gmHouse.OutdoorLightButton,
+    global.IlluminanceHisteresis);
 
 // var mainRoomHeater = new Device(mainRoomTempSet, 
 //                                 mainRoomTemp, 
 //                                 mainRoomHeaterState, 
 //                                 mainRoomHeaterButton, 
 //                                 mainRoomHeaterHeader, 
-//                                 heaterHisteresis,);
+//                                 global.HeaterHisteresis,);
 
 var mainRoomTamburCarpet = new Device(
-    mainRoomTempSet,
-    mainRoomTemp,
-    mainRoomTamburCarpetState,
-    mainRoomTamburCarpetButton,
-    heaterHisteresis,
-    mainRoomTamburCarpetAuto);
+    mainRoom.TempSet,
+    mainRoom.Temp,
+    mainRoom.TamburCarpetState,
+    mainRoom.TamburCarpetButton,
+    global.HeaterHisteresis,
+    mainRoom.TamburCarpetAuto);
 
 var mainRoomTamburHeater = new Device(
-    mainRoomTempSet,
-    mainRoomTemp,
-    mainRoomTamburHeaterState,
-    mainRoomTamburHeaterButton,
-    heaterHisteresis);
+    mainRoom.TempSet,
+    mainRoom.Temp,
+    mainRoom.TamburHeaterState,
+    mainRoom.TamburHeaterButton,
+    global.HeaterHisteresis);
 
 var baniaMainHeater = new Device(
-    restRoomTempSet,
-    restRoomTemp,
-    mainHeaterState,
-    mainHeaterButton,
-    heaterHisteresis);
+    bania.restRoomTempSet,
+    bania.restRoomTemp,
+    bania.mainHeaterState,
+    bania.mainHeaterButton,
+    global.HeaterHisteresis);
 
 var baniaMediumHeater = new Device(
-    restRoomTempSet,
-    restRoomTemp,
-    mediumHeaterState,
-    mediumHeaterButton,
-    heaterHisteresis);
+    bania.restRoomTempSet,
+    bania.restRoomTemp,
+    bania.mediumHeaterState,
+    bania.mediumHeaterButton,
+    global.HeaterHisteresis);
 
 var baniaTamburHeater = new Device(
-    restRoomTempSet,
-    restRoomTemp,
-    tamburHeaterState,
-    tamburHeaterButton,
-    heaterHisteresis,
-    baniaTamburHeaterAuto);
+    bania.restRoomTempSet,
+    bania.restRoomTemp,
+    bania.tamburHeaterState,
+    bania.tamburHeaterButton,
+    global.HeaterHisteresis,
+    bania.TamburHeaterAuto);
 
 var waterPrepareHeater = new Device(
-    waterPrepareTempSet,
-    waterPrepareTemp,
-    waterPrepareHeaterState,
-    waterPrepareHeaterButton,
-    heaterHisteresis);
+    bania.waterPrepareTempSet,
+    bania.waterPrepareTemp,
+    bania.waterPrepareHeaterState,
+    bania.waterPrepareHeaterButton,
+    global.HeaterHisteresis);
 
 var gmHouseHeater = new Device(
-    gmHouseTempSet,
-    gmHouseTemp,
-    gmHouseHeaterState,
-    gmHouseHeaterButton,
-    heaterHisteresis);
+    gmHouse.TempSet,
+    gmHouse.Temp,
+    gmHouse.HeaterState,
+    gmHouse.HeaterButton,
+    global.HeaterHisteresis);
 
 var heaters = [
     baniaMainHeater,
@@ -306,7 +228,7 @@ var heaters = [
     baniaTamburHeater,
     waterPrepareHeater,
     gmHouseHeater,
-    // mainRoomHeater,
+    // mainRoom.Heater,
     mainRoomTamburCarpet,
     mainRoomTamburHeater
 ];
@@ -316,17 +238,16 @@ var lights = [
     gmOutdoorLight
 ];
 
-global_button(heaters, globalHeaterButton);
-global_button(lights, globalLightButton);
-
 for(var i = 0; i < heaters.length; i++) {
-    update_mode(heaters[i], globalHeaterButton);
-    button(heaters[i]);
-    update_state(heaters[i]);    
+    heaters[i].updateMode();
+    heaters[i].updateState();
+    heaters[i].button();
+    heaters[i].globalButton();   
 }
 
 for(var i = 0; i < lights.length; i++) {
-    update_mode(lights[i], globalLightButton);
-    button(lights[i]);
-    update_state(lights[i]);    
+    lights[i].updateMode();
+    lights[i].updateState();
+    lights[i].button();
+    lights[i].globalButton();   
 }

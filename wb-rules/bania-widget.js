@@ -1,16 +1,4 @@
-// var mainHeaterState= "wb-mr6c_214/K3";
-// var mediumHeaterState= "wb-mr6c_214/K4";
-// var tamburHeaterState= "wb-mr6c_214/K5";
-// var waterPrepareHeaterState= "wb-mr6c_214/K6";
-
-// var restRoomTemp = "wb-msw-v3_49/Temperature";
-// var restRoomHum = "wb-msw-v3_49/Humidity";
-// var waterPrepareTemp = "wb-ms_187/Temperature";
-// var waterPrepareHum = "wb-ms_187/Humidity";
-// var tempBarrel1 = "wb-ms_187/External Sensor 1";
-// var tempBarrel2 = "wb-ms_187/External Sensor 2"
-// var underfloorTemperature = "wb-ms_239/Temperature";
-// var underfloorHumidity = "wb-ms_239/Humidity";
+import { bania } from "./constants";
 
 defineVirtualDevice("bania-widget", {
     title: "BaniaWidget" ,
@@ -24,12 +12,12 @@ defineVirtualDevice("bania-widget", {
         TemperatureRestRoom: {
             title: "Температура",
             type: "temperature",
-            value: dev[restRoomTemp]
+            value: dev[bania.restRoomTemp]
 	    },
         HumidityRestRoom: {
             title: "Влажность",
             type: "rel_humidity",
-            value: dev[restRoomHum]
+            value: dev[bania.restRoomHum]
 	    },
         MainHeaterControl: {
             title: "Регулировка температуры",
@@ -41,17 +29,17 @@ defineVirtualDevice("bania-widget", {
         MainHeaterButton: {
             title: "Большой радиатор",
             type: "switch",
-            value: dev[mainHeaterState]
+            value: dev[bania.mainHeaterState]
         },
         MediumHeaterButton: {
             title: "Средний радиатор",
             type: "switch",
-            value: dev[mediumHeaterState]
+            value: dev[bania.mediumHeaterState]
         },
         TamburHeaterButton: {
             title: "Радиатор в тамбуре",
             type: "switch",
-            value: dev[tamburHeaterState]
+            value: dev[bania.tamburHeaterState]
         },
         TamburHeaterAuto: {
             title: "Отключить Авто-режим",
@@ -66,12 +54,12 @@ defineVirtualDevice("bania-widget", {
         TemperatureWaterPrepareRoom: {
             title: "Температура. КВП",
             type: "temperature",
-            value: dev[waterPrepareTemp]
+            value: dev[bania.waterPrepareTemp]
         },
         HumidityWaterPrepareRoom: {
             title: "Влажность. КВП",
             type: "rel_humidity",
-            value: dev[waterPrepareHum]
+            value: dev[bania.waterPrepareHum]
         },
         WaterPrepareHeaterControl: {
             title: "Регулировка температуры",
@@ -83,17 +71,17 @@ defineVirtualDevice("bania-widget", {
         WaterPrepareHeaterButton: {
             title: "Радиатор. КВП",
             type: "switch",
-            value: dev[waterPrepareHeaterState]
+            value: dev[bania.waterPrepareHeaterState]
         },
         TemperatureBarrel1: {
             title: "Температура в бочке",
             type: "temperature",
-            value: dev[tempBarrel1]
+            value: dev[bania.tempBarrel1]
 	    },
         TemperatureBarrel2: {
             title: "Температура в бочке",
             type: "temperature",
-            value: dev[tempBarrel2]
+            value: dev[bania.tempBarrel2]
 	    },
         HeaderUnderfloor: {
             title: "Подвал",
@@ -103,12 +91,12 @@ defineVirtualDevice("bania-widget", {
         TemperatureUnderfloor: {
             title: "Температура в подвале",
             type: "temperature",
-            value: dev[underfloorTemperature]
+            value: dev[bania.underfloorTemperature]
 	    },
         HumidityUnderfloor: {
             title: "Влажность в подвале",
             type: "rel_humidity",
-            value: dev[underfloorHumidity]
+            value: dev[bania.underfloorHumidity]
 	    }
         // OutdoorLightButton: {
         //     type: "switch",
@@ -117,63 +105,63 @@ defineVirtualDevice("bania-widget", {
         // OutdoorLightHeader: {
         //     title: "OutdoorLight",
         //     type: "text",
-        //     value: lightState["baniaOutdoorLight"]
+        //     value: lightState["bania.OutdoorLight"]
         // }
     }
 })
 
 
 defineRule({
-    whenChanged: restRoomTemp,
+    whenChanged: bania.restRoomTemp,
     then: function(value) {
         dev["bania-widget/TemperatureRestRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: restRoomHum,
+    whenChanged: bania.restRoomHum,
     then: function(value) {
         dev["bania-widget/HumidityRestRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: waterPrepareTemp,
+    whenChanged: bania.waterPrepareTemp,
     then: function(value) {
         dev["bania-widget/TemperatureWaterPrepareRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: waterPrepareHum,
+    whenChanged: bania.waterPrepareHum,
     then: function(value) {
         dev["bania-widget/HumidityWaterPrepareRoom"] = value;
     }
 });
 
 defineRule({
-    whenChanged: tempBarrel1,
+    whenChanged: bania.tempBarrel1,
     then: function(value) {
         dev["bania-widget/TemperatureBarrel1"] = value;
     }
 });
 
 defineRule({
-    whenChanged: tempBarrel2,
+    whenChanged: bania.tempBarrel2,
     then: function(value) {
         dev["bania-widget/TemperatureBarrel2"] = value;
     }
 });
 
 defineRule({
-    whenChanged: underfloorTemperature,
+    whenChanged: bania.underfloorTemperature,
     then: function(value) {
         dev["bania-widget/TemperatureUnderfloor"] = value;
     }
 });
 
 defineRule({
-    whenChanged: underfloorHumidity,
+    whenChanged: bania.underfloorHumidity,
     then: function(value) {
         dev["bania-widget/HumidityUnderfloor"] = value;
     }
