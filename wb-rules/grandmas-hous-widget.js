@@ -1,7 +1,7 @@
-var gmHouseTemp = "wb-ms_132/Temperature";
-var gmHouseHum = "wb-ms_132/Humidity";
-var gmHouseHeaterState = "wb-mr3_34/K1";
-var gmOutdoorLightState = "wb-mr3_34/K3";
+// var gmHouseTemp = "wb-ms_132/Temperature";
+// var gmHouseHum = "wb-ms_132/Humidity";
+// var gmHouseHeaterState = "wb-mr3_34/K1";
+// var gmOutdoorLightState = "wb-mr3_34/K3";
 
 
 defineVirtualDevice("grandmas-house", {

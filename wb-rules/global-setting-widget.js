@@ -1,7 +1,7 @@
-var globalHeaterButton = "global/GlobalHeaterButton";
-var globalHeaterHeader = "global/HeaderGH";
+// var globalHeaterButton = "global/GlobalHeaterButton";
+// var globalHeaterHeader = "global/HeaderGH";
 
-var outdoorLightLux = "wb-ms_138/Illuminance";
+// var outdoorLightLux = "wb-ms_138/Illuminance";
 
 defineVirtualDevice("global", {
     title: "Global" ,

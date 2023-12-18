@@ -1,16 +1,16 @@
-var mainHeaterState= "wb-mr6c_214/K3";
-var mediumHeaterState= "wb-mr6c_214/K4";
-var tamburHeaterState= "wb-mr6c_214/K5";
-var waterPrepareHeaterState= "wb-mr6c_214/K6";
+// var mainHeaterState= "wb-mr6c_214/K3";
+// var mediumHeaterState= "wb-mr6c_214/K4";
+// var tamburHeaterState= "wb-mr6c_214/K5";
+// var waterPrepareHeaterState= "wb-mr6c_214/K6";
 
-var restRoomTemp = "wb-msw-v3_49/Temperature";
-var restRoomHum = "wb-msw-v3_49/Humidity";
-var waterPrepareTemp = "wb-ms_187/Temperature";
-var waterPrepareHum = "wb-ms_187/Humidity";
-var tempBarrel1 = "wb-ms_187/External Sensor 1";
-var tempBarrel2 = "wb-ms_187/External Sensor 2"
-var underfloorTemperature = "wb-ms_239/Temperature";
-var underfloorHumidity = "wb-ms_239/Humidity";
+// var restRoomTemp = "wb-msw-v3_49/Temperature";
+// var restRoomHum = "wb-msw-v3_49/Humidity";
+// var waterPrepareTemp = "wb-ms_187/Temperature";
+// var waterPrepareHum = "wb-ms_187/Humidity";
+// var tempBarrel1 = "wb-ms_187/External Sensor 1";
+// var tempBarrel2 = "wb-ms_187/External Sensor 2"
+// var underfloorTemperature = "wb-ms_239/Temperature";
+// var underfloorHumidity = "wb-ms_239/Humidity";
 
 defineVirtualDevice("bania-widget", {
     title: "BaniaWidget" ,

@@ -1,80 +1,78 @@
 ////////////////////////////////////
-//*********Global variables****** */
+//*********Global constants****** */
 ////////////////////////////////////
 
-var heaterHisteresis = 0.5;
+const heaterHisteresis = 0.5;
 
-var globalHeaterButton = "global/GlobalHeaterButton";
-var outdoorLightLux = "wb-ms_138/Illuminance";
+const globalHeaterButton = "global/GlobalHeaterButton";
+const outdoorLightLux = "wb-ms_138/Illuminance";
 
-var illuminanceHisteresis = 2;
+const illuminanceHisteresis = 2;
 
-var globalLightButton = "global/GlobalLightButton";
-var globalLightSet = "global/LightControl";
-
-////////////////////////////////////
-//*********Main room variables*****/
-////////////////////////////////////
-
-var mainRoomTamburCarpetState = "wb-mr6c_24/K3";
-var mainRoomTamburHeaterState = "wb-mr6c_24/K2";
-var mainRoomHeaterState = "cmnd/tasmota_C6208D/POWER";
-var mainRoomOutdoorLightState = "wb-mr6c_24/K4";
-
-var mainRoomTemp = "wb-msw-v3_201/Temperature";
-var mainRoomHum = "wb-msw-v3_201/Humidity";
-var mainRoomTempSet = "main-room/HeaterControl";
-
-var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
-var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
-var mainRoomHeaterButton = "main-room/HeaterButton";
-var mainOutdoorLightButton = "main-room/OutdoorLightButton";
-var mainRoomTamburCarpetAuto = "main-room/TamburCarpetAuto";
+const globalLightButton = "global/GlobalLightButton";
+const globalLightSet = "global/LightControl";
 
 ////////////////////////////////////
-//***Grandmothers hous variables****/
+//*********Main room constants*****/
 ////////////////////////////////////
 
-var gmHouseTemp = "wb-ms_132/Temperature";
-var gmHouseHum = "wb-ms_132/Humidity";
-var gmHouseHeaterState = "wb-mr3_34/K1";
-var gmHouseTempSet = "grandmas-house/HeaterControl";
-var gmHouseHeaterButton = "grandmas-house/HeaterButton";
+const mainRoomTamburCarpetState = "wb-mr6c_24/K3";
+const mainRoomTamburHeaterState = "wb-mr6c_24/K2";
+const mainRoomHeaterState = "cmnd/tasmota_C6208D/POWER";
+const mainRoomOutdoorLightState = "wb-mr6c_24/K4";
 
-var gmOutdoorLightState = "wb-mr3_34/K3";
-var gmOutdoorLightButton = "grandmas-house/OutdoorLightButton";
+const mainRoomTemp = "wb-msw-v3_201/Temperature";
+const mainRoomHum = "wb-msw-v3_201/Humidity";
+const mainRoomTempSet = "main-room/HeaterControl";
+
+const mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
+const mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
+const mainRoomHeaterButton = "main-room/HeaterButton";
+const mainOutdoorLightButton = "main-room/OutdoorLightButton";
+const mainRoomTamburCarpetAuto = "main-room/TamburCarpetAuto";
 
 ////////////////////////////////////
-//*********Bania variables*********/
+//***Grandmothers hous constants****/
 ////////////////////////////////////
 
-var mainHeaterState = "wb-mr6c_214/K3";
-var mediumHeaterState = "wb-mr6c_214/K4";
-var tamburHeaterState = "wb-mr6c_214/K5";
-var waterPrepareHeaterState = "wb-mr6c_214/K6";
+const gmHouseTemp = "wb-ms_132/Temperature";
+const gmHouseHum = "wb-ms_132/Humidity";
+const gmHouseHeaterState = "wb-mr3_34/K1";
+const gmHouseTempSet = "grandmas-house/HeaterControl";
+const gmHouseHeaterButton = "grandmas-house/HeaterButton";
 
-var restRoomTemp = "wb-msw-v3_49/Temperature";
-var restRoomHum = "wb-msw-v3_49/Humidity";
-var waterPrepareTemp = "wb-ms_187/Temperature";
-var waterPrepareHum = "wb-ms_187/Humidity";
-var tempBarrel1 = "wb-ms_187/External Sensor 1";
-var tempBarrel2 = "wb-ms_187/External Sensor 2"
-var underfloorTemperature = "wb-ms_239/Temperature";
-var underfloorHumidity = "wb-ms_239/Humidity";
+const gmOutdoorLightState = "wb-mr3_34/K3";
+const gmOutdoorLightButton = "grandmas-house/OutdoorLightButton";
 
-var mainHeaterButton = "bania-widget/MainHeaterButton";
-var mediumHeaterButton = "bania-widget/MediumHeaterButton";
-var tamburHeaterButton = "bania-widget/TamburHeaterButton";
-var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
-var baniaTamburHeaterAuto = "bania-widget/TamburHeaterAuto";
+////////////////////////////////////
+//*********Bania constants*********/
+////////////////////////////////////
 
-var restRoomTempSet = "bania-widget/MainHeaterControl";
-var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
+const mainHeaterState = "wb-mr6c_214/K3";
+const mediumHeaterState = "wb-mr6c_214/K4";
+const tamburHeaterState = "wb-mr6c_214/K5";
+const waterPrepareHeaterState = "wb-mr6c_214/K6";
+
+const restRoomTemp = "wb-msw-v3_49/Temperature";
+const restRoomHum = "wb-msw-v3_49/Humidity";
+const waterPrepareTemp = "wb-ms_187/Temperature";
+const waterPrepareHum = "wb-ms_187/Humidity";
+const tempBarrel1 = "wb-ms_187/External Sensor 1";
+const tempBarrel2 = "wb-ms_187/External Sensor 2"
+const underfloorTemperature = "wb-ms_239/Temperature";
+const underfloorHumidity = "wb-ms_239/Humidity";
+
+const mainHeaterButton = "bania-widget/MainHeaterButton";
+const mediumHeaterButton = "bania-widget/MediumHeaterButton";
+const tamburHeaterButton = "bania-widget/TamburHeaterButton";
+const waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
+const baniaTamburHeaterAuto = "bania-widget/TamburHeaterAuto";
+
+const restRoomTempSet = "bania-widget/MainHeaterControl";
+const waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
 /////////////////////////////////////////
-/*
-TODO: implement self auto!
-*/
+
 var Device = function (set_param, actual_param, device_control, button_control, histeresis, self_auto) {
     var dev = device_control.split("/");
     var but = button_control.split("/");

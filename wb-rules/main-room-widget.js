@@ -1,12 +1,12 @@
-var mainRoomTamburCarpetState= "wb-mr6c_24/K3";
-var mainRoomTamburHeaterState= "wb-mr6c_24/K2";
-var mainRoomHeaterState= "cmnd/tasmota_C6208D/POWER";
-var mainRoomOutdoorLightState= "wb-mr6c_24/K4";
+// var mainRoomTamburCarpetState= "wb-mr6c_24/K3";
+// var mainRoomTamburHeaterState= "wb-mr6c_24/K2";
+// var mainRoomHeaterState= "cmnd/tasmota_C6208D/POWER";
+// var mainRoomOutdoorLightState= "wb-mr6c_24/K4";
 
-var mainRoomTemp = "wb-msw-v3_201/Temperature";
-var mainRoomHum = "wb-msw-v3_201/Humidity";
-var SecondFloorTemp = "wb-ms_90/Temperature";
-var SecondFloorHum = "wb-ms_90/Humidity";
+// var mainRoomTemp = "wb-msw-v3_201/Temperature";
+// var mainRoomHum = "wb-msw-v3_201/Humidity";
+// var SecondFloorTemp = "wb-ms_90/Temperature";
+// var SecondFloorHum = "wb-ms_90/Humidity";
 
 
 defineVirtualDevice("main-room", {
