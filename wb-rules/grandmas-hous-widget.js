@@ -1,5 +1,3 @@
-import { gmHouse } from "./constants";
-
 defineVirtualDevice("grandmas-house", {
     title: "GrandmasHouse",
     readonly: false,
@@ -7,12 +5,12 @@ defineVirtualDevice("grandmas-house", {
         Temperature: {
             title: "Температура",
             type: "temperature",
-            value: dev[gmHouse.Temp]
+            value: dev[gmHouseTemp]
         },
         Humidity: {
             title: "Влажность",
             type: "rel_humidity",
-            value: dev[gmHouse.Hum]
+            value: dev[gmHouseHum]
         },
         HeaterControl: {
             title: "Регулировка температуры",
@@ -24,25 +22,25 @@ defineVirtualDevice("grandmas-house", {
         HeaterButton: {
             title: "Обогреватель",
             type: "switch",
-            value: dev[gmHouse.HeaterState]
+            value: dev[gmHouseHeaterState]
         },
         OutdoorLightButton: {
             title: "Уличное освещение",
             type: "switch",
-            value: dev[gmHouse.OutdoorLightState]
+            value: dev[gmHouseOutdoorLightState]
         }
     }
 })
 
 defineRule({
-    whenChanged: gmHouse.Temp,
+    whenChanged: gmHouseTemp,
     then: function(value) {
         dev["grandmas-house/Temperature"] = value;
     }
 });
 
 defineRule({
-    whenChanged: gmHouse.Hum,
+    whenChanged: gmHouseHum,
     then: function(value) {
         dev["grandmas-house/Humidity"] = value;
     }
