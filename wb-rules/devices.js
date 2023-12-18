@@ -146,20 +146,20 @@ Device.prototype.globalButton = function() {
 }
 
 var mainOutdoorLight = new Device(
-    globalLightSet,
-    globalOutdoorLightLux,
-    mainRoomOutdoorLightState,
-    mainRoomOutdoorLightButton,
-    globalIlluminanceHisteresis,
-    globalLightButton);
+    global.globalLightSet,
+    global.globalOutdoorLightLux,
+    global.mainRoomOutdoorLightState,
+    global.mainRoomOutdoorLightButton,
+    global.globalIlluminanceHisteresis,
+    global.globalLightButton);
 
 var gmOutdoorLight = new Device(
-    globalLightSet,
-    globalOutdoorLightLux,
-    gmHouseOutdoorLightState,
-    gmHouseOutdoorLightButton,
-    globalIlluminanceHisteresis,
-    globalLightButton);
+    global.globalLightSet,
+    global.globalOutdoorLightLux,
+    global.gmHouseOutdoorLightState,
+    global.gmHouseOutdoorLightButton,
+    global.globalIlluminanceHisteresis,
+    global.globalLightButton);
 
 // var mainRoomHeater = new Device(mainRoomTempSet, 
 //                                 mainRoomTemp, 
