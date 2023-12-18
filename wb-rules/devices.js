@@ -177,7 +177,7 @@ Device.prototype.updateState = function () {
 
 
 function update_state(device) {
-    defineRule({
+    defineRule(device.getDeviceControl(),{
         whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
         then: function (newValue, devName, cellName) {
             if (device.getModeAuto()) {
@@ -189,7 +189,7 @@ function update_state(device) {
 }
 
 function update_mode(device, global_button) {
-    defineRule({
+    defineRule(device.getDeviceControl(),{
         when: function() {
             return cron("@every 1s");
         },
@@ -205,7 +205,7 @@ function update_mode(device, global_button) {
 }
 
 function button(device) {
-    defineRule({
+    defineRule(device.getDeviceControl(),{
         whenChanged: device.getButtonControl(),
         then: function () {
             log("Button {} pressed:", device.getButtonControl());
@@ -219,7 +219,7 @@ function button(device) {
 
 function global_button(devices, global_button) {
 
-    defineRule({
+    defineRule(device.getDeviceControl(),{
         whenChanged: global_button,
         then: function (newValue, devName, cellName) {
             log("{}/{} pressed:", devName, cellName);
