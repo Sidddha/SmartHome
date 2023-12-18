@@ -155,14 +155,16 @@ var mainOutdoorLight = new Device(
     global.OutdoorLightLux,
     mainRoom.OutdoorLightState,
     mainRoom.OutdoorLightButton,
-    global.IlluminanceHisteresis);
+    global.IlluminanceHisteresis,
+    global.LightButton);
 
 var gmOutdoorLight = new Device(
     global.LightSet,
     global.OutdoorLightLux,
     gmHouse.OutdoorLightState,
     gmHouse.OutdoorLightButton,
-    global.IlluminanceHisteresis);
+    global.IlluminanceHisteresis,
+    global.LightButton);
 
 // var mainRoomHeater = new Device(mainRoomTempSet, 
 //                                 mainRoomTemp, 
@@ -177,6 +179,7 @@ var mainRoomTamburCarpet = new Device(
     mainRoom.TamburCarpetState,
     mainRoom.TamburCarpetButton,
     global.HeaterHisteresis,
+    global.HeaterButton,
     mainRoom.TamburCarpetAuto);
 
 var mainRoomTamburHeater = new Device(
@@ -184,21 +187,24 @@ var mainRoomTamburHeater = new Device(
     mainRoom.Temp,
     mainRoom.TamburHeaterState,
     mainRoom.TamburHeaterButton,
-    global.HeaterHisteresis);
+    global.HeaterHisteresis,
+    global.HeaterButton);
 
 var baniaMainHeater = new Device(
     bania.restRoomTempSet,
     bania.restRoomTemp,
     bania.mainHeaterState,
     bania.mainHeaterButton,
-    global.HeaterHisteresis);
+    global.HeaterHisteresis,
+    global.HeaterButton);
 
 var baniaMediumHeater = new Device(
     bania.restRoomTempSet,
     bania.restRoomTemp,
     bania.mediumHeaterState,
     bania.mediumHeaterButton,
-    global.HeaterHisteresis);
+    global.HeaterHisteresis,
+    global.HeaterButton);
 
 var baniaTamburHeater = new Device(
     bania.restRoomTempSet,
@@ -206,6 +212,7 @@ var baniaTamburHeater = new Device(
     bania.tamburHeaterState,
     bania.tamburHeaterButton,
     global.HeaterHisteresis,
+    global.HeaterButton,
     bania.TamburHeaterAuto);
 
 var waterPrepareHeater = new Device(
@@ -213,14 +220,16 @@ var waterPrepareHeater = new Device(
     bania.waterPrepareTemp,
     bania.waterPrepareHeaterState,
     bania.waterPrepareHeaterButton,
-    global.HeaterHisteresis);
+    global.HeaterHisteresis,
+    global.HeaterButton);
 
 var gmHouseHeater = new Device(
     gmHouse.TempSet,
     gmHouse.Temp,
     gmHouse.HeaterState,
     gmHouse.HeaterButton,
-    global.HeaterHisteresis);
+    global.HeaterHisteresis,
+    global.HeaterButton);
 
 var heaters = [
     baniaMainHeater,
