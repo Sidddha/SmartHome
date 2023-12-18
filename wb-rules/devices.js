@@ -106,12 +106,13 @@ var Device = function (set_param, actual_param, device_control, button_control, 
 }
 
 Device.prototype.setModeAuto = function (mode) {
-    if(this.getSelfAutoValue()) 
+    if(this.getSelfAuto()) 
         getDevice(this.button_header).getControl(this.button_control).setReadonly(false);    
     else 
         getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);
     log("{} auto mode set to {}", this.button, mode);
 }
+
 Device.prototype.setDeviceValue = function (value) {
     getDevice(this.device_header).getControl(this.device_control).setValue(value);
     log("{} set to {}", this.device, value);
@@ -149,16 +150,15 @@ Device.prototype.getButtonValue = function () {
 Device.prototype.getDeviceControl = function () {
     return this.device_control;
 }
-Device.prototype.getSelfAutoValue = function() {
+Device.prototype.getSelfAuto = function() {
     if(this.is_self_auto)
         return getDevice(this.self_auto_header).getControl(this.self_auto_control).getValue();
     else 
         return false;
 }
-Device.prototype.getGlobalButtonValue = function() {
-    return getDevice(this.global_button_header).getControl(this.global_button_control).getValue();
-}
-Device.prototype.updateState = function () {
+
+Device.prototype.updateState = function (funcName) {
+    log("Function {}:", funcName);
     if (this.getModeAuto()) {
         if (this.getActualParamValue() > (this.getSetParamValue() + this.histeresis)) {
             this.setButtonValue(false);
@@ -175,9 +175,8 @@ Device.prototype.updateState = function () {
     }
 }
 
-
 function update_state(device) {
-    defineRule(device.getDeviceControl(),{
+    defineRule({
         whenChanged: [device.getSetParamControl(), device.getActualParamControl()],
         then: function (newValue, devName, cellName) {
             if (device.getModeAuto()) {
@@ -189,7 +188,7 @@ function update_state(device) {
 }
 
 function update_mode(device, global_button) {
-    defineRule(device.getDeviceControl(),{
+    defineRule({
         when: function() {
             return cron("@every 1s");
         },
@@ -198,14 +197,14 @@ function update_mode(device, global_button) {
             if(dev[global_button]) {
                 device.setModeAuto(true);            
             } else {
-                device.setModeAuto(false);
+                device.setModeAuto(false)
             }
         }
     });
 }
 
 function button(device) {
-    defineRule(device.getDeviceControl(),{
+    defineRule({
         whenChanged: device.getButtonControl(),
         then: function () {
             log("Button {} pressed:", device.getButtonControl());
