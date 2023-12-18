@@ -121,6 +121,9 @@ Device.prototype.setDeviceValue = function (value) {
 Device.prototype.setButtonValue = function (value) {
     getDevice(this.button_header).getControl(this.button_control).setValue(value);
 }
+Device.prototype.setSetParamValue = function (value) {
+    return getDevice(this.set_param_header).getControl(this.set_param_control).setValue(value);
+}
 Device.prototype.getModeAuto = function () {
     return getDevice(this.button_header).getControl(this.button_control).getReadonly();
 }
