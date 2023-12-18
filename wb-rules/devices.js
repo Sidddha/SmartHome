@@ -66,7 +66,7 @@ var mainHeaterButton = "bania-widget/MainHeaterButton";
 var mediumHeaterButton = "bania-widget/MediumHeaterButton";
 var tamburHeaterButton = "bania-widget/TamburHeaterButton";
 var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
-var tamburHeaterAuto = "bania-widget/TamburHeaterAuto";
+var baniaTamburHeaterAuto = "bania-widget/TamburHeaterAuto";
 
 var restRoomTempSet = "bania-widget/MainHeaterControl";
 var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
@@ -253,7 +253,8 @@ var mainRoomTamburCarpet = new Device(
     mainRoomTemp,
     mainRoomTamburCarpetState,
     mainRoomTamburCarpetButton,
-    heaterHisteresis);
+    heaterHisteresis,
+    mainRoomTamburCarpetAuto);
 
 var mainRoomTamburHeater = new Device(
     mainRoomTempSet,
@@ -281,7 +282,8 @@ var baniaTamburHeater = new Device(
     restRoomTemp,
     tamburHeaterState,
     tamburHeaterButton,
-    heaterHisteresis);
+    heaterHisteresis,
+    baniaTamburHeaterAuto);
 
 var waterPrepareHeater = new Device(
     waterPrepareTempSet,
