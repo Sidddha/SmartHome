@@ -23,6 +23,16 @@ defineVirtualDevice("global", {
         value: 11,
         min: 0,
         max: 100
+      },
+      GoingDacha: {
+        title: "Сценарий 'Едем на дачу'",
+        type: "pushbutton",
+        value: false
+      },
+      GoingHome: {
+        title: "Сценарий 'Едем домой'",
+        type: "pushbutton",
+        value: false
       }
     }
 })
