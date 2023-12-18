@@ -146,20 +146,20 @@ Device.prototype.globalButton = function() {
 }
 
 var mainOutdoorLight = new Device(
-    global.globalLightSet,
-    global.globalOutdoorLightLux,
-    global.mainRoomOutdoorLightState,
-    global.mainRoomOutdoorLightButton,
-    global.globalIlluminanceHisteresis,
-    global.globalLightButton);
+    globalLightSet,
+    globalOutdoorLightLux,
+    mainRoomOutdoorLightState,
+    mainRoomOutdoorLightButton,
+    globalIlluminanceHisteresis,
+    globalLightButton);
 
 var gmOutdoorLight = new Device(
-    global.globalLightSet,
-    global.globalOutdoorLightLux,
-    global.gmHouseOutdoorLightState,
-    global.gmHouseOutdoorLightButton,
-    global.globalIlluminanceHisteresis,
-    global.globalLightButton);
+    globalLightSet,
+    globalOutdoorLightLux,
+    gmHouseOutdoorLightState,
+    gmHouseOutdoorLightButton,
+    globalIlluminanceHisteresis,
+    globalLightButton);
 
 // var mainRoomHeater = new Device(mainRoomTempSet, 
 //                                 mainRoomTemp, 
@@ -169,62 +169,62 @@ var gmOutdoorLight = new Device(
 //                                 globalHeaterHisteresis,);
 
 var mainRoomTamburCarpet = new Device(
-    global.mainRoomTempSet,
-    global.mainRoomTemp,
-    global.mainRoomTamburCarpetState,
-    global.mainRoomTamburCarpetButton,
-    global.globalHeaterHisteresis,
-    global.globalHeaterButton,
-    global.mainRoomTamburCarpetAuto);
+    mainRoomTempSet,
+    mainRoomTemp,
+    mainRoomTamburCarpetState,
+    mainRoomTamburCarpetButton,
+    globalHeaterHisteresis,
+    globalHeaterButton,
+    mainRoomTamburCarpetAuto);
 
 var mainRoomTamburHeater = new Device(
-    global.mainRoomTempSet,
-    global.mainRoomTemp,
-    global.mainRoomTamburHeaterState,
-    global.mainRoomTamburHeaterButton,
-    global.globalHeaterHisteresis,
-    global.globalHeaterButton);
+    mainRoomTempSet,
+    mainRoomTemp,
+    mainRoomTamburHeaterState,
+    mainRoomTamburHeaterButton,
+    globalHeaterHisteresis,
+    globalHeaterButton);
 
 var baniaMainHeater = new Device(
-    global.baniaRestRoomTempSet,
-    global.baniaRestRoomTemp,
-    global.baniaMainHeaterState,
-    global.baniaMainHeaterButton,
-    global.globalHeaterHisteresis,
-    global.globalHeaterButton);
+    baniaRestRoomTempSet,
+    baniaRestRoomTemp,
+    baniaMainHeaterState,
+    baniaMainHeaterButton,
+    globalHeaterHisteresis,
+    globalHeaterButton);
 
 var baniaMediumHeater = new Device(
-    global.baniaRestRoomTempSet,
-    global.baniaRestRoomTemp,
-    global.baniaMediumHeaterState,
-    global.baniaMediumHeaterButton,
-    global.globalHeaterHisteresis,
-    global.globalHeaterButton);
+    baniaRestRoomTempSet,
+    baniaRestRoomTemp,
+    baniaMediumHeaterState,
+    baniaMediumHeaterButton,
+    globalHeaterHisteresis,
+    globalHeaterButton);
 
 var baniaTamburHeater = new Device(
-    global.baniaRestRoomTempSet,
-    global.baniaRestRoomTemp,
-    global.baniaTamburHeaterState,
-    global.baniaTamburHeaterButton,
-    global.globalHeaterHisteresis,
-    global.globalHeaterButton,
-    global.baniaTamburHeaterAuto);
+    baniaRestRoomTempSet,
+    baniaRestRoomTemp,
+    baniaTamburHeaterState,
+    baniaTamburHeaterButton,
+    globalHeaterHisteresis,
+    globalHeaterButton,
+    baniaTamburHeaterAuto);
 
 var waterPrepareHeater = new Device(
-    global.baniaWaterPrepareTempSet,
-    global.baniaWaterPrepareTemp,
-    global.baniaWaterPrepareHeaterState,
-    global.baniaWaterPrepareHeaterButton,
-    global.globalHeaterHisteresis,
-    gglobal.lobalHeaterButton);
+    baniaWaterPrepareTempSet,
+    baniaWaterPrepareTemp,
+    baniaWaterPrepareHeaterState,
+    baniaWaterPrepareHeaterButton,
+    globalHeaterHisteresis,
+    globalHeaterButton);
 
 var gmHouseHeater = new Device(
-    global.gmHouseTempSet,
-    global.gmHouseTemp,
-    global.gmHouseHeaterState,
-    global.gmHouseHeaterButton,
-    global.globalHeaterHisteresis,
-    global.globalHeaterButton);
+    gmHouseTempSet,
+    gmHouseTemp,
+    gmHouseHeaterState,
+    gmHouseHeaterButton,
+    globalHeaterHisteresis,
+    globalHeaterButton);
 
 var heaters = [
     baniaMainHeater,
