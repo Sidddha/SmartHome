@@ -164,7 +164,7 @@ function update_state(device) {
 
 function update_mode(device, global_button) {
     defineRule({
-        whenChanged: dev[global_button],
+        whenChanged: global_button,
         then: function (value) {
             device.setModeAuto(value);            
         }
