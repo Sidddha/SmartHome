@@ -164,9 +164,11 @@ function update_state(device) {
 
 function update_mode(device, global_button) {
     defineRule({
-        whenChanged: global_button,
+        whenChanged: function () {
+            return dev[global_button];
+        },
         then: function (value) {
-            device.setModeAuto(value);            
+            device.setModeAuto(value);
         }
     });
 }
@@ -283,14 +285,14 @@ var lights = [
 // global_button(heaters, globalHeaterButton);
 // global_button(lights, globalLightButton);
 
-for(var i = 0; i < heaters.length; i++) {
+for (var i = 0; i < heaters.length; i++) {
     update_mode(heaters[i], globalHeaterButton);
     button(heaters[i]);
-    update_state(heaters[i], globalHeaterButton);    
+    update_state(heaters[i]);
 }
 
-for(var i = 0; i < lights.length; i++) {
+for (var i = 0; i < lights.length; i++) {
     update_mode(lights[i], globalLightButton);
     button(lights[i]);
-    update_state(lights[i], globalLightButton);    
+    update_state(lights[i]);
 }
