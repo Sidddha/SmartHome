@@ -168,6 +168,7 @@ function update_mode(device, global_button) {
             return dev[global_button];
         },
         then: function (value) {
+            log("update_mode: device: {}, value: {}", device.getDeviceControl, value);
             device.setModeAuto(value);
         }
     });
