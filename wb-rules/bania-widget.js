@@ -121,6 +121,7 @@ defineVirtualDevice("bania-widget", {
 defineRule({
     whenChanged: restRoomTemp,
     then: function(value) {
+        log("wb-msw-v3_49/Temperature: {}", value);
         dev["bania-widget/TemperatureRestRoom"] = value;
     }
 });
