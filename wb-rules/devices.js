@@ -163,12 +163,10 @@ function update_state(device) {
 }
 
 function update_mode(device, global_button) {
-    defineRule("crontest_hourly", {
-        when: function() {
-            return cron("@every 1s") && dev[global_button];
-        },
-        then: function () {
-            device.setModeAuto(true);            
+    defineRule({
+        whenChanged: dev[global_button],
+        then: function (value) {
+            device.setModeAuto(value);            
         }
     });
 }
