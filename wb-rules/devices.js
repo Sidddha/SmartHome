@@ -181,18 +181,18 @@ function button(device) {
     });
 }
 
-function global_button(devices, global_button) {
+// function global_button(devices, global_button) {
 
-    defineRule({
-        whenChanged: global_button,
-        then: function (newValue, devName, cellName) {
-            log("{}/{} pressed:", devName, cellName);
-            devices.forEach(function (device) {
-                device.setModeAuto(newValue);
-            });
-        }
-    });
-}
+//     defineRule({
+//         whenChanged: global_button,
+//         then: function (newValue, devName, cellName) {
+//             log("{}/{} pressed:", devName, cellName);
+//             devices.forEach(function (device) {
+//                 device.setModeAuto(newValue);
+//             });
+//         }
+//     });
+// }
 
 var mainOutdoorLight = new Device(
     globalLightSet,
@@ -280,17 +280,17 @@ var lights = [
     gmOutdoorLight
 ];
 
-global_button(heaters, globalHeaterButton);
-global_button(lights, globalLightButton);
+// global_button(heaters, globalHeaterButton);
+// global_button(lights, globalLightButton);
 
 for(var i = 0; i < heaters.length; i++) {
     update_mode(heaters[i], globalHeaterButton);
     button(heaters[i]);
-    update_state(heaters[i]);    
+    update_state(heaters[i], globalHeaterButton);    
 }
 
 for(var i = 0; i < lights.length; i++) {
     update_mode(lights[i], globalLightButton);
     button(lights[i]);
-    update_state(lights[i]);    
+    update_state(lights[i], globalLightButton);    
 }
