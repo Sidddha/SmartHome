@@ -1,75 +1,75 @@
-////////////////////////////////////
-//*********Global variables****** */
-////////////////////////////////////
+// ////////////////////////////////////
+// //*********Global variables****** */
+// ////////////////////////////////////
 
-var heaterHisteresis = 0.5;
+// var heaterHisteresis = 0.5;
 
-var globalHeaterButton = "global/GlobalHeaterButton";
-var outdoorLightLux = "wb-ms_138/Illuminance";
+// var globalHeaterButton = "global/GlobalHeaterButton";
+// var outdoorLightLux = "wb-ms_138/Illuminance";
 
-var illuminanceHisteresis = 2;
+// var illuminanceHisteresis = 2;
 
-var globalLightButton = "global/GlobalLightButton";
-var globalLightSet = "global/LightControl";
+// var globalLightButton = "global/GlobalLightButton";
+// var globalLightSet = "global/LightControl";
 
-////////////////////////////////////
-//*********Main room variables*****/
-////////////////////////////////////
+// ////////////////////////////////////
+// //*********Main room variables*****/
+// ////////////////////////////////////
 
-var mainRoomTamburCarpetState = "wb-mr6c_24/K3";
-var mainRoomTamburHeaterState = "wb-mr6c_24/K2";
-var mainRoomHeaterState = "cmnd/tasmota_C6208D/POWER";
-var mainRoomOutdoorLightState = "wb-mr6c_24/K4";
+// var mainRoomTamburCarpetState = "wb-mr6c_24/K3";
+// var mainRoomTamburHeaterState = "wb-mr6c_24/K2";
+// var mainRoomHeaterState = "cmnd/tasmota_C6208D/POWER";
+// var mainRoomOutdoorLightState = "wb-mr6c_24/K4";
 
-var mainRoomTemp = "wb-msw-v3_201/Temperature";
-var mainRoomHum = "wb-msw-v3_201/Humidity";
-var mainRoomTempSet = "main-room/HeaterControl";
+// var mainRoomTemp = "wb-msw-v3_201/Temperature";
+// var mainRoomHum = "wb-msw-v3_201/Humidity";
+// var mainRoomTempSet = "main-room/HeaterControl";
 
-var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
-var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
-var mainRoomHeaterButton = "main-room/HeaterButton";
-var mainOutdoorLightButton = "main-room/OutdoorLightButton";
+// var mainRoomTamburCarpetButton = "main-room/TamburCarpetButton";
+// var mainRoomTamburHeaterButton = "main-room/TamburHeaterButton";
+// var mainRoomHeaterButton = "main-room/HeaterButton";
+// var mainOutdoorLightButton = "main-room/OutdoorLightButton";
 
-////////////////////////////////////
-//***Grandmothers hous variables****/
-////////////////////////////////////
+// ////////////////////////////////////
+// //***Grandmothers hous variables****/
+// ////////////////////////////////////
 
-var gmHouseTemp = "wb-ms_132/Temperature";
-var gmHouseHum = "wb-ms_132/Humidity";
-var gmHouseHeaterState = "wb-mr3_34/K1";
-var gmHouseTempSet = "grandmas-house/HeaterControl";
-var gmHouseHeaterButton = "grandmas-house/HeaterButton";
+// var gmHouseTemp = "wb-ms_132/Temperature";
+// var gmHouseHum = "wb-ms_132/Humidity";
+// var gmHouseHeaterState = "wb-mr3_34/K1";
+// var gmHouseTempSet = "grandmas-house/HeaterControl";
+// var gmHouseHeaterButton = "grandmas-house/HeaterButton";
 
-var gmOutdoorLightState = "wb-mr3_34/K3";
-var gmOutdoorLightButton = "grandmas-house/OutdoorLightButton";
+// var gmOutdoorLightState = "wb-mr3_34/K3";
+// var gmOutdoorLightButton = "grandmas-house/OutdoorLightButton";
 
-////////////////////////////////////
-//*********Bania variables*********/
-////////////////////////////////////
+// ////////////////////////////////////
+// //*********Bania variables*********/
+// ////////////////////////////////////
 
-var mainHeaterState = "wb-mr6c_214/K3";
-var mediumHeaterState = "wb-mr6c_214/K4";
-var tamburHeaterState = "wb-mr6c_214/K5";
-var waterPrepareHeaterState = "wb-mr6c_214/K6";
+// var mainHeaterState = "wb-mr6c_214/K3";
+// var mediumHeaterState = "wb-mr6c_214/K4";
+// var tamburHeaterState = "wb-mr6c_214/K5";
+// var waterPrepareHeaterState = "wb-mr6c_214/K6";
 
-var restRoomTemp = "wb-msw-v3_49/Temperature";
-var restRoomHum = "wb-msw-v3_49/Humidity";
-var waterPrepareTemp = "wb-ms_187/Temperature";
-var waterPrepareHum = "wb-ms_187/Humidity";
-var tempBarrel1 = "wb-ms_187/External Sensor 1";
-var tempBarrel2 = "wb-ms_187/External Sensor 2"
-var underfloorTemperature = "wb-ms_239/Temperature";
-var underfloorHumidity = "wb-ms_239/Humidity";
+// var restRoomTemp = "wb-msw-v3_49/Temperature";
+// var restRoomHum = "wb-msw-v3_49/Humidity";
+// var waterPrepareTemp = "wb-ms_187/Temperature";
+// var waterPrepareHum = "wb-ms_187/Humidity";
+// var tempBarrel1 = "wb-ms_187/External Sensor 1";
+// var tempBarrel2 = "wb-ms_187/External Sensor 2"
+// var underfloorTemperature = "wb-ms_239/Temperature";
+// var underfloorHumidity = "wb-ms_239/Humidity";
 
-var mainHeaterButton = "bania-widget/MainHeaterButton";
-var mediumHeaterButton = "bania-widget/MediumHeaterButton";
-var tamburHeaterButton = "bania-widget/TamburHeaterButton";
-var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
+// var mainHeaterButton = "bania-widget/MainHeaterButton";
+// var mediumHeaterButton = "bania-widget/MediumHeaterButton";
+// var tamburHeaterButton = "bania-widget/TamburHeaterButton";
+// var waterPrepareHeaterButton = "bania-widget/WaterPrepareHeaterButton";
 
-var restRoomTempSet = "bania-widget/MainHeaterControl";
-var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
+// var restRoomTempSet = "bania-widget/MainHeaterControl";
+// var waterPrepareTempSet = "bania-widget/WaterPrepareHeaterControl";
 
-/////////////////////////////////////////
+// /////////////////////////////////////////
 
 var Device = function (set_param, actual_param, device_control, button_control, histeresis) {
     var dev = device_control.split("/");
@@ -285,6 +285,7 @@ var lights = [
 
 // global_button(heaters, globalHeaterButton);
 // global_button(lights, globalLightButton);
+
 
 for (var i = 0; i < heaters.length; i++) {
     update_mode(heaters[i], globalHeaterButton);
