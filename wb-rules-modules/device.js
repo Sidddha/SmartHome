@@ -114,6 +114,7 @@
     };
 
     Device.prototype.updateRule = function () {
+        log("Update rule {}", this.title)
         defineRule(("Update state " + this.title), {
             whenChanged: [this.getSetpointParamControl(), this.getActualParamControl()],
             then: function (newValue, devName, cellName) {
@@ -126,6 +127,7 @@
     };
 
     Device.prototype.updateMode = function () {
+        log("Update mode {}", this.title)
         defineRule(("Update mode " + this.title), {
             whenChanged: function () {
                 return dev[this.getGlobalButton()];
@@ -139,6 +141,7 @@
     };
 
     Device.prototype.checkButton = function () {
+        log("Check button {}", this.title)
         defineRule(("Check button " + this.title), {
             whenChanged: function () {
                 return dev[this.getButtonControl()];
@@ -151,6 +154,7 @@
     };
 
     Device.prototype.checkGlobalButton = function () {
+        log("Check global button {}", this.title)
         this.globBtnRule = defineRule(("Check global button {}", this.title), {
             whenChanged: function () {
                 return dev[this.getGlobalButton()];
