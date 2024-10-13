@@ -1,5 +1,5 @@
 
-var DeviceModule = (function() {
+// var DeviceModule = (function() {
 
     var Device = function (title, setpoint_param, actual_param, device, button, global_button, histeresis) {
         this.title = title;
@@ -173,12 +173,12 @@ var DeviceModule = (function() {
         setAutoMode(false);
     };
 
-    return {
-        Device: Device
-    };
-})();
+//     return {
+//         Device: Device
+//     };
+// })();
 
-exports.Device = DeviceModule.Device;
+exports.Device = Device;
 
 
 
