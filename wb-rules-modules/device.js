@@ -144,10 +144,10 @@
         log("Check button {}", this.title)
         defineRule(("Check button " + this.title), {
             whenChanged: function () {
-                return dev[this.getButtonControl()];
+                return dev["wb-mr6c_214/K3"];//this.getButtonControl()];
             },
             then: function () {
-                log("Button {} pressed:", this.getButtonControl());
+                log("Button {} pressed:", "wb-mr6c_214/K3");//this.getButtonControl());
                 // this.updateState();
             }
         });
