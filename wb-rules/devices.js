@@ -98,7 +98,7 @@ var devices = [
 ];
 
 
-devices.forEach(device => {
+devices.forEach(function(device) {
     device.updateRule();
     device.updateMode();
     device.checkButton();
