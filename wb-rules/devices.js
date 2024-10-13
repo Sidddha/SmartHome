@@ -180,7 +180,7 @@ var devices = [
 devices.forEach(function(device) {
     log("Run rules for {}", device.title);
     device.updateRule();
-    device.updateMode();
+    // device.updateMode();
     // device.checkButton();
     // device.checkGlobalButton();
 });
