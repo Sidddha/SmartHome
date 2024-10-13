@@ -178,9 +178,9 @@ var devices = [
 
 
 devices.forEach(function(device) {
-    // device.updateRule();
-    // device.updateMode();
+    device.updateRule();
+    device.updateMode();
     device.checkButton();
-    // device.checkGlobalButton();
+    device.checkGlobalButton();
 });
 

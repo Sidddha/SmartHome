@@ -122,7 +122,7 @@
                     log("{}/{} changed:", devName, cellName);
                     this.updateState();
                 }
-            }
+            }.bind(this)
         });
     };
 
@@ -131,12 +131,12 @@
         defineRule(("Update mode " + this.title), {
             whenChanged: function () {
                 return dev[this.getGlobalButton()];
-            },
+            }.bind(this),
             then: function (value) {
                 log("New value: {}", value);
                 this.getAutoMode(value);
                 this.updateState();
-            }
+            }.bind(this)
         });
     };
 
@@ -158,12 +158,12 @@
         this.globBtnRule = defineRule(("Check global button {}", this.title), {
             whenChanged: function () {
                 return dev[this.getGlobalButton()];
-            },
+            }.bind(this),
             then: function (newValue, devName, cellName) {
                 log("{}/{} pressed:", devName, cellName);
                 this.setAutoMode(newValue);
                 this.updateState();
-            }
+            }.bind(this)
         });
     };
 
