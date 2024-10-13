@@ -146,8 +146,8 @@
             whenChanged: function () {
                 return dev[this.getButtonControl()];
             }.bind(this),
-            then: function () {
-                log("Button {} pressed:", this.getButtonControl());
+            then: function (newValue, devName, cellName) {
+                log("Button {}/{} pressed:", devName, cellName);
                 this.updateState();
             }.bind(this)
         });
