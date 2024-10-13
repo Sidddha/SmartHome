@@ -29,81 +29,81 @@
     };
     /** Privat methods **/
 
-    function setAutoMode(mode) {
+    Device.prototype.setAutoMode = function(mode) {
         getDevice(this.button_header).getControl(this.button_control).setReadonly(mode);  
         log("{} auto mode set to {}", this.button, mode);
         this.autoMode = mode;
     };
 
-    function getAutoMode() {
+    Device.prototype.getAutoMode = function() {
         return this.autoMode;
         // return getDevice(this.global_button_header).getControl(this.global_button_control).getValue();
     };
 
-    function getGlobalButton() {
+    Device.prototype.getGlobalButton = function() {
         return this.global_button;
     }
 
-    function setDeviceState(value) {
+    Device.prototype.setDeviceState = function(value) {
         getDevice(this.device_header).getControl(this.device_control).setValue(value);
         log("{} set to {}", this.device, value);
     };
 
-    function getDeviceState() {
+    Device.prototype.getDeviceState = function() {
         return getDevice(this.device_header).getControl(this.device_control).getValue();
     };
 
-    function setButtonState(value) {
+    Device.prototype.setButtonState = function(value) {
         getDevice(this.button_header).getControl(this.button_control).setValue(value);
     };
     
-    function getButtonState() {
+    Device.prototype.getButtonState = function() {
         return getDevice(this.button_header).getControl(this.button_control).getValue();
     };
 
-    function getActualParamValue() {
+    Device.prototype.getActualParamValue = function() {
         return getDevice(this.actual_param_header).getControl(this.actual_param_control).getValue();
     };
 
-    function getSetpointParamValue() {
+    Device.prototype.getSetpointParamValue = function() {
         return getDevice(this.setpoint_param_header).getControl(this.setpoint_param_control).getValue();
     };
 
-    function getActualParamControl() {
+    Device.prototype.getActualParamControl = function() {
         return this.actual_param;
     };
 
-    function getSetpointParamControl() {
+    Device.prototype.getSetpointParamControl = function() {
         return this.setpoint_param;
     };
 
-    function getButtonControl() {
+    Device.prototype.getButtonControl = function() {
         return this.button;
     };
     
-    function getDeviceControl() {
+    Device.prototype.getDeviceControl = function() {
         return this.device_control;
     };
     
-    function getDevice() {
+    Device.prototype.getDevice = function() {
         return this.device;
     };
     
-    function updateState() {
-        if (getAutoMode()) {
-            if (getActualParamValue() > (getSetpointParamValue() + this.histeresis)) {
-                setButtonState(false);
-                setDeviceState(false);
+    Device.prototype.updateState = function() {
+        if (this.getAutoMode()) {
+            if (this.getActualParamValue() > (this.getSetpointParamValue() + this.histeresis)) {
+                this.setButtonState(false);
+                this.setDeviceState(false);
     
                 return;
             }
-            if (getActualParamValue() < (getSetpointParamValue() - this.histeresis)) {
-                setButtonState(true);
-                setDeviceState(true);
+            if (this.getActualParamValue() < (this.getSetpointParamValue() - this.histeresis)) {
+                this.setButtonState(true);
+                this.setDeviceState(true);
                 return;
             }
         } else {
-            setDeviceState(getButtonState());
+            this.setDeviceState(this.getButtonState());
         }
     };
 
@@ -115,11 +115,11 @@
 
     Device.prototype.updateRule = function () {
         defineRule(("Update state {}", this.title), {
-            whenChanged: [getSetpointParamControl(), getActualParamControl()],
+            whenChanged: [this.getSetpointParamControl(), this.getActualParamControl()],
             then: function (newValue, devName, cellName) {
-                if (getAutoMode()) {
+                if (this.getAutoMode()) {
                     log("{}/{} changed:", devName, cellName);
-                    updateState();
+                    this.updateState();
                 }
             }
         });
