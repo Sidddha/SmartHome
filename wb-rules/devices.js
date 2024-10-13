@@ -75,6 +75,7 @@ var DeviceModule = require("../wb-rules-modules/device");
 
 
 var mainOutdoorLight = new DeviceModule.Device(
+    "Уличное освещение",
     globalLightSet,
     outdoorLightLux,
     mainRoomOutdoorLightState,
@@ -83,6 +84,7 @@ var mainOutdoorLight = new DeviceModule.Device(
     illuminanceHisteresis);
 
 var gmOutdoorLight = new DeviceModule.Device(
+    "Освещение домика",
     globalLightSet,
     outdoorLightLux,
     gmHouseOutdoorLightState,
@@ -99,6 +101,7 @@ var gmOutdoorLight = new DeviceModule.Device(
 //                                 heaterHisteresis,);
 
 var mainRoomTamburCarpet = new DeviceModule.Device(
+    "Коврик в тамбуре",
     mainRoomTempSet,
     mainRoomTemp,
     mainRoomTamburCarpetState,
@@ -107,6 +110,7 @@ var mainRoomTamburCarpet = new DeviceModule.Device(
     heaterHisteresis);
 
 var mainRoomTamburHeater = new DeviceModule.Device(
+    "Радиатор в тамбуре",
     mainRoomTempSet,
     mainRoomTemp,
     mainRoomTamburHeaterState,
@@ -115,6 +119,7 @@ var mainRoomTamburHeater = new DeviceModule.Device(
     heaterHisteresis);
 
 var baniaMainHeater = new DeviceModule.Device(
+    "Радиатор в комнате отдыха",
     baniaRestRoomTempSet,
     baniaRestRoomTemp,
     baniaMainHeaterState,
@@ -123,6 +128,7 @@ var baniaMainHeater = new DeviceModule.Device(
     heaterHisteresis);
 
 var baniaMediumHeater = new DeviceModule.Device(
+    "Средний радиатор",
     baniaRestRoomTempSet,
     baniaRestRoomTemp,
     baniaMediumHeaterState,
@@ -131,6 +137,7 @@ var baniaMediumHeater = new DeviceModule.Device(
     heaterHisteresis);
 
 var baniaTamburHeater = new DeviceModule.Device(
+    "Радиатор в тамбуре (баня)",
     baniaRestRoomTempSet,
     baniaRestRoomTemp,
     baniaTamburHeaterState,
@@ -139,6 +146,7 @@ var baniaTamburHeater = new DeviceModule.Device(
     heaterHisteresis);
 
 var waterPrepareHeater = new DeviceModule.Device(
+    "Радиатор в КВП",
     baniaWaterPrepareTempSet,
     baniaWaterPrepareTemp,
     baniaWaterPrepareHeaterState,
@@ -147,6 +155,7 @@ var waterPrepareHeater = new DeviceModule.Device(
     heaterHisteresis);
 
 var gmHouseHeater = new DeviceModule.Device(
+    "Радиатор в домике",
     gmHouseTempSet,
     gmHouseTemp,
     gmHouseHeaterState,
