@@ -78,15 +78,15 @@ var mainOutdoorLight = new DeviceModule.Device(
     globalLightSet,
     outdoorLightLux,
     mainRoomOutdoorLightState,
-    mainOutdoorLightButton,
+    mainRoomOutdoorLightButton,
     globalLightButton,
     illuminanceHisteresis);
 
 var gmOutdoorLight = new DeviceModule.Device(
     globalLightSet,
     outdoorLightLux,
-    gmOutdoorLightState,
-    gmOutdoorLightButton,
+    gmHouseOutdoorLightState,
+    gmHouseOutdoorLightButton,
     globalLightButton,
     illuminanceHisteresis);
 
@@ -115,34 +115,34 @@ var mainRoomTamburHeater = new DeviceModule.Device(
     heaterHisteresis);
 
 var baniaMainHeater = new DeviceModule.Device(
-    restRoomTempSet,
-    restRoomTemp,
-    mainHeaterState,
-    mainHeaterButton,
+    baniaRestRoomTempSet,
+    baniaRestRoomTemp,
+    baniaMainHeaterState,
+    baniaMainHeaterButton,
     globalHeaterButton,
     heaterHisteresis);
 
 var baniaMediumHeater = new DeviceModule.Device(
-    restRoomTempSet,
-    restRoomTemp,
-    mediumHeaterState,
-    mediumHeaterButton,
+    baniaRestRoomTempSet,
+    baniaRestRoomTemp,
+    baniaMediumHeaterState,
+    baniaMediumHeaterButton,
     globalHeaterButton,
     heaterHisteresis);
 
 var baniaTamburHeater = new DeviceModule.Device(
-    restRoomTempSet,
-    restRoomTemp,
-    tamburHeaterState,
-    tamburHeaterButton,
+    baniaRestRoomTempSet,
+    baniaRestRoomTemp,
+    baniaTamburHeaterState,
+    baniaTamburHeaterButton,
     globalHeaterButton,
     heaterHisteresis);
 
 var waterPrepareHeater = new DeviceModule.Device(
-    waterPrepareTempSet,
-    waterPrepareTemp,
-    waterPrepareHeaterState,
-    waterPrepareHeaterButton,
+    baniaWaterPrepareTempSet,
+    baniaWaterPrepareTemp,
+    baniaWaterPrepareHeaterState,
+    baniaWaterPrepareHeaterButton,
     globalHeaterButton,
     heaterHisteresis);
 
