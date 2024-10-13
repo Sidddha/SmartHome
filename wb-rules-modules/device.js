@@ -148,7 +148,7 @@
             },
             then: function () {
                 log("Button {} pressed:", this.getButtonControl());
-                this.updateState();
+                // this.updateState();
             }
         });
     };

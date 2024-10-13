@@ -178,10 +178,9 @@ var devices = [
 
 
 devices.forEach(function(device) {
-    log("Debug {}", device.title);
     // device.updateRule();
     // device.updateMode();
-    // device.checkButton();
+    device.checkButton();
     // device.checkGlobalButton();
 });
 
