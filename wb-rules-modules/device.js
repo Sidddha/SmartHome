@@ -128,12 +128,12 @@
     Device.prototype.updateMode = function () {
         defineRule(("Update mode " + this.title), {
             whenChanged: function () {
-                return dev[getGlobalButton()];
+                return dev[this.getGlobalButton()];
             },
             then: function (value) {
                 log("New value: {}", value);
-                setAutoMode(value);
-                updateState();
+                sthis.etAutoMode(value);
+                this.updateState();
             }
         });
     };
@@ -141,11 +141,11 @@
     Device.prototype.checkButton = function () {
         defineRule(("Check button " + this.title), {
             whenChanged: function () {
-                return dev[getButtonControl()];
+                return dev[this.getButtonControl()];
             },
             then: function () {
-                log("Button {} pressed:", getButtonControl());
-                updateState();
+                log("Button {} pressed:", this.getButtonControl());
+                this.updateState();
             }
         });
     };
@@ -153,24 +153,24 @@
     Device.prototype.checkGlobalButton = function () {
         this.globBtnRule = defineRule(("Check global button {}", this.title), {
             whenChanged: function () {
-                return dev[getGlobalButton()];
+                return dev[this.getGlobalButton()];
             },
             then: function (newValue, devName, cellName) {
                 log("{}/{} pressed:", devName, cellName);
-                setAutoMode(newValue);
-                updateState();
+                this.setAutoMode(newValue);
+                this.updateState();
             }
         });
     };
 
     Device.prototype.enableGlobalOperation = function () {
         enableRule(this.globBtnRule);
-        setAutoMode(true);
+        this.setAutoMode(true);
     };
 
     Device.prototype.disableGlobalOperation = function () {
         disableRule(this.globBtnRule);
-        setAutoMode(false);
+        this.setAutoMode(false);
     };
 
 //     return {
