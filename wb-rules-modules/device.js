@@ -115,7 +115,7 @@
 
     Device.prototype.updateRule = function () {
         log("Update rule {}", this.title)
-        defineRule(("Update state " + this.title), {
+        defineRule( { //("Update state " + this.title), {
             whenChanged: [this.getSetpointParamControl(), this.getActualParamControl()],
             then: function (newValue, devName, cellName) {
                 if (this.getAutoMode()) {
