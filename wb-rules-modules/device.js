@@ -36,8 +36,8 @@
     };
 
     Device.prototype.getAutoMode = function() {
-        return this.autoMode;
-        // return getDevice(this.global_button_header).getControl(this.global_button_control).getValue();
+        // return this.autoMode;
+        return getDevice(this.global_button_header).getControl(this.global_button_control).getValue();
     };
 
     Device.prototype.getGlobalButton = function() {
@@ -115,7 +115,7 @@
 
     Device.prototype.updateRule = function () {
         log("Update rule {}", this.title)
-        defineRule( { //("Update state " + this.title), {
+        defineRule(("Update state " + this.title), {
             whenChanged: [this.getSetpointParamControl(), this.getActualParamControl()],
             then: function (newValue, devName, cellName) {
                 if (this.getAutoMode()) {
@@ -134,7 +134,7 @@
             },
             then: function (value) {
                 log("New value: {}", value);
-                sthis.etAutoMode(value);
+                this.getAutoMode(value);
                 this.updateState();
             }
         });
