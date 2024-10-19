@@ -1,14 +1,14 @@
-var Cell = function (id) {
+var Control = function (id) {
     this.dev = id.split("/")[0];
     this.ctrl = id.split("/")[1];
 };
 
-Cell.prototype.getValue = function () {
+Control.prototype.getValue = function () {
     return getDevice(this.dev).getControl(this.ctrl).getValue();
 };
 
-Cell.prototype.setValue = function (value) {
+Control.prototype.setValue = function (value) {
     getDevice(this.dev).getControl(this.ctrl).setValue(value);
 };
 
-exports.Cell = Cell;
+exports.Control = Control;
